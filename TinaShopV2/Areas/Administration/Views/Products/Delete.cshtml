@@ -1,0 +1,65 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@model TinaShopV2.Areas.Administration.Models.Product.ProductViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Delete, Resources.Commons.Product);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@Resources.Commons.Delete</h2>
+<h3>@Resources.Commons.DeleteConfirm</h3>
+<div>
+    <h4>@Resources.Commons.Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.ImagePath)</dt>
+        <dd>
+            @foreach (var image in Model.GetImages())
+            {
+                <div class="col-sm-6 col-md-3">
+                    <a href="@GlobalObjects.HrefBlankPath" class="thumbnail">
+                        <img src="@Path.Combine(GlobalObjects.MediaImageFolderPath,image.ThumbPath)" alt="@Model.ProductName">
+                    </a>
+                </div>
+            }
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.ProductCode)</dt>
+        <dd>@Html.DisplayFor(model => model.ProductCode)</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.ProductName)</dt>
+        <dd>@Html.DisplayFor(model => model.ProductName)</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.BrandCode)</dt>
+        <dd>@Model.GetBrand().Name</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Price)</dt>
+        <dd>@Model.Price.ToString("C0")</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>
+            @{
+                string description = Html.Encode(Model.Description);
+                description = description.Replace("\r\n", "<br />\r\n");
+            }
+            @Html.Raw(description)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ProductCode)
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.Commons.Delete" class="btn btn-default" /> |
+            @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+        </div>
+    }
+</div>

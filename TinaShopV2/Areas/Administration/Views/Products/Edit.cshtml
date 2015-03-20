@@ -1,0 +1,111 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@model TinaShopV2.Areas.Administration.Models.Product.ProductViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Edit, Resources.Commons.Product);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+@Html.SmartValidationSummary()
+
+<h2>@Resources.Commons.Edit</h2>
+
+@using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Resources.Commons.Product</h4>
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @foreach (var image in Model.GetImages())
+                {
+                    string imgUrl = image.Id != GlobalObjects.Media_NoImage_Id ? Url.Action("Edit", "Medias", new { @area = "Administration", @Id = image.Id }) : GlobalObjects.HrefBlankPath;
+                    
+                    <div class="col-sm-6 col-md-3">
+                        <a href="@imgUrl" class="thumbnail">
+                            <img src="@Path.Combine(GlobalObjects.MediaImageFolderPath,image.ThumbPath)" alt="@Model.ProductName">
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ProductCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartDropDownListFor(m => m.BrandCode, ViewBag.Brands as IEnumerable<SelectListItem>, null, true)
+                @Html.ValidationMessageFor(model => model.BrandCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.TextAreaFor(model => model.Description, 8, 1, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CanSale, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartCheckboxFor(m => m.CanSale, null)
+                @Html.ValidationMessageFor(model => model.CanSale, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartCheckboxFor(m => m.IsPublish, null)
+                @Html.ValidationMessageFor(model => model.IsPublish, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsDeleted, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartCheckboxFor(m => m.IsDeleted, new { @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.IsDeleted, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-actions no-color">
+        <input type="submit" value="@Resources.Commons.Save" class="btn btn-default" /> |
+        @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

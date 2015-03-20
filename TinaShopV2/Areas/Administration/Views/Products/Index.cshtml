@@ -1,0 +1,145 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Areas.Administration.Models.Product.ProductIndexViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Index, Resources.Commons.Product);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@ViewBag.Title</h2>
+
+<p>@Html.ActionLink(Resources.Commons.Create, "Create", ViewContext.LocalizeRouteValues())</p>
+
+<div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-sm-12">
+
+        <div class="jarviswidget jarviswidget-color-blueDark">
+            <header>
+                <span class="widget-icon"> <i class="fa fa-search"></i> </span>
+                <h2>@Resources.Commons.Search</h2>
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+                <!-- widget content -->
+                <div class="widget-body">
+                    @using (Html.BeginForm("Index", "Products", FormMethod.Post, null))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ProductCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.BrandCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.SmartDropDownListFor(m => m.BrandCode, ViewBag.Brands as IEnumerable<SelectListItem>, null, true)
+                                    @Html.ValidationMessageFor(model => model.BrandCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.IsPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.EnumDropDownListFor(m => m.IsPublish, new { @class = "select2" })
+                                    @Html.ValidationMessageFor(model => model.IsPublish, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.IsDeleted, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.EnumDropDownListFor(m => m.IsDeleted, new { @class = "select2" })
+                                    @Html.ValidationMessageFor(model => model.IsDeleted, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.CanSale, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.EnumDropDownListFor(m => m.CanSale, new { @class = "select2" })
+                                    @Html.ValidationMessageFor(model => model.CanSale, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions no-color">
+                            <button type="submit" value="@Resources.Commons.Search" title="@Resources.Commons.Search" class="btn btn-default">
+                                <i class="fa fa-search"></i>
+                                @Resources.Commons.Search
+                            </button>
+                        </div>
+                    }
+                </div>
+                <!-- end widget body-->
+
+            </div>
+            <!-- end widget content -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped responsive-utilities">
+        <tr>
+            <th>@Resources.Commons.Image</th>
+            <th>@Html.DisplayNameFor(model => model.ProductCode)</th>
+            <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+            <th>@*Html.DisplayNameFor(model => model.UpdatedUser)*@</th>
+            <th>@*@Html.DisplayNameFor(model => model.UpdatedDatetime)*@</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td><img src="@item.ImageThumbPath" style="max-width:150px;" class="thumbnail" /></td>
+                <td>@Html.DisplayFor(modelItem => item.ProductCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>@Html.DisplayFor(modelItem => item.UpdatedUser.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.UpdatedDatetime)</td>
+                <td>
+                    @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { @productCode = item.ProductCode })) |
+                    @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { @productCode = item.ProductCode })) |
+                    @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { @productCode = item.ProductCode }))
+                </td>
+            </tr>
+        }
+    </table>
+</div>

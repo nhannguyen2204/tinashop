@@ -1,0 +1,44 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Areas.Administration.Models.TinaAction.TinaActionViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Detail, Resources.Commons.TinaAction);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Resources.Commons.Detail</h2>
+
+<div>
+    <h4>@Resources.Commons.TinaAction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Controller)</dt>
+        <dd>@Html.DisplayFor(model => model.Controller)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Action)</dt>
+        <dd>@Html.DisplayFor(model => model.Action)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Area)</dt>
+        <dd>@Html.DisplayFor(model => model.Area)</dd>
+        <dt>@Html.DisplayNameFor(model => model.IsAnonymous)</dt>
+        <dd>@Html.DisplayFor(model => model.IsAnonymous)</dd>
+        <dt>@Html.DisplayNameFor(model => model.RoleIds)</dt>
+        <dd>
+            @{
+                string roles = string.Empty;
+                foreach (var item in Model.Roles)
+                {
+                    roles += string.Format("{0}, ", item.Name);
+                }
+                roles = roles.Trim().Trim(',');
+            }
+            @roles
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(@Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { id = Model.Id })) |
+    @Html.ActionLink(@Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+</p>

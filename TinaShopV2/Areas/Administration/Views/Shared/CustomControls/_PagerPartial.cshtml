@@ -1,0 +1,57 @@
+﻿@model TinaShopV2.Areas.Administration.Models.CustomControls.PagerViewModel
+
+@{
+    int left = 2;
+    int right = 2;
+
+    while (Model.CurrentPage - left <= 0)
+    {
+        left--;
+        right++;
+    }
+
+    while (Model.CurrentPage + right > Model.PageTotal)
+    {
+        right--;
+        if (Model.CurrentPage - (left + 1) > 0)
+        {
+            left++;
+        }
+    }
+}
+
+<div class="text-center">
+    <ul class="pagination pagination-lg">
+        <li class="@((Model.CurrentPage - left - 1) > 0 ? string.Empty : "disabled")">
+            <a href="@((Model.CurrentPage - left - 1) > 0 ? Url.RouteUrl(new { @Page = Model.CurrentPage - left - 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-left"></i></a>
+        </li>
+
+        @if (left > 0)
+        {
+            for (int i = left; i > 0; i--)
+            {
+                <li>
+                    <a href="@Url.RouteUrl(new { @Page = Model.CurrentPage - i })">@(Model.CurrentPage - i)</a>
+                </li>
+            }
+        }
+
+        <li class="active">
+            <a href="javascript:void(0);">@Model.CurrentPage</a>
+        </li>
+
+        @if (right > 0)
+        {
+            for (int i = 1; i <= right; i++)
+            {
+                <li>
+                    <a href="@Url.RouteUrl(new { @Page = Model.CurrentPage + i })">@(Model.CurrentPage + i)</a>
+                </li>
+            }
+        }
+
+        <li class="@((Model.CurrentPage + right + 1) <= Model.PageTotal ? string.Empty : "disabled")">
+            <a href="@((Model.CurrentPage + right + 1) <= Model.PageTotal ? Url.RouteUrl(new { @Page = Model.CurrentPage + right + 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-right"></i></a>
+        </li>
+    </ul>
+</div>

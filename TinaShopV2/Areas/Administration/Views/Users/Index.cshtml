@@ -1,0 +1,42 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model IEnumerable<TinaShopV2.Areas.Administration.Models.User.UserViewModel>
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Index, Resources.Commons.Users);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@ViewBag.Title</h2>
+<p>@Html.ActionLink(Resources.Commons.Create, "Create", ViewContext.LocalizeRouteValues())</p>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped responsive-utilities">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.UserName)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.LockoutEnabled)</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                <td>
+                    @if (item.LockoutEnabled)
+                    {
+                        <span class="btn btn-danger"><i class="fa-fw fa fa-times"></i><strong>Locked</strong></span>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { id = item.Id })) |
+                    @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { id = item.Id })) |
+                    @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { id = item.Id }))
+                </td>
+            </tr>
+        }
+    </table>
+</div>

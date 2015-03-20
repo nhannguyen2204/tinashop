@@ -1,0 +1,15 @@
+﻿@using TinaShopV2.Common
+
+@model TinaShopV2.Models.ApplicationUser
+@if (Model != null)
+{
+    <div class="login-info">
+        <span>
+            <!-- User image size is adjusted inside CSS, it should stay as it -->
+            <a href="@Url.Action("Manage", "Account", new { @area = "Administration" })" id="show-shortcut">
+                <img src="@(AdminGlobalObjects.AvatarDefaultPath)" alt="me" class="online" />
+                <span>@Model.UserName</span>
+            </a>
+        </span>
+    </div>
+}

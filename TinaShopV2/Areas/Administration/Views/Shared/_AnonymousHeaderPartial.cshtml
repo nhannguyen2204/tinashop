@@ -1,0 +1,10 @@
+﻿@{
+    if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        <span id="extr-page-header-space"> <a href="@Url.Action("LogOff", "Account", new { @area = "Administration" })" class="btn btn-danger">@Resources.Commons.LogOff</a> <a href="@Url.Action("Index", "Home", new { @area = "Administration" })" class="btn btn-danger">@Resources.Commons.SystemManagement</a> </span>
+    }
+    else
+    {
+        <span id="extr-page-header-space"> <a href="@Url.Action("LogIn", "Account", new { @area = "Administration" })" class="btn btn-danger">@Resources.Commons.LogIn</a> <a href="@Url.Action("Register", "Account", new { @area = "Administration" })" class="btn btn-danger">@Resources.Commons.CreateAccount</a> </span>
+    }
+}

@@ -1,0 +1,16 @@
+﻿@model TinaShopV2.Areas.Administration.Models.CustomControls.SmartCheckbox
+
+@{
+    string name = Model != null ? Model.Name : string.Empty;
+    bool value = Model != null ? Model.Value : false;
+
+    bool disabled = (Model.HtmlAttributes != null && Model.HtmlAttributes.ContainsKey("disabled"));
+}
+
+<div class="checkbox">
+    <label>
+        <input name="@name" type="checkbox" class="checkbox style-0" @(value ? "checked" : string.Empty) value="true" @(disabled ? "disabled" : string.Empty)>
+        <span></span>
+        <input name="@name" type="hidden" value="false">
+    </label>
+</div>

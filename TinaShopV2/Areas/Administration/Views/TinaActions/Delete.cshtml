@@ -1,0 +1,36 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@model TinaShopV2.Areas.Administration.Models.TinaAction.TinaActionViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Delete, Resources.Commons.TinaAction);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@Resources.Commons.Delete</h2>
+<h3>@Resources.Commons.DeleteConfirm</h3>
+<div>
+    <h4>@Resources.Commons.TinaAction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Controller)</dt>
+        <dd>@Html.DisplayFor(model => model.Controller)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Action)</dt>
+        <dd>@Html.DisplayFor(model => model.Action)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Area)</dt>
+        <dd>@Html.DisplayFor(model => model.Area)</dd>
+    </dl>
+
+    @using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.Commons.Delete" class="btn btn-default" /> |
+            @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+        </div>
+    }
+</div>

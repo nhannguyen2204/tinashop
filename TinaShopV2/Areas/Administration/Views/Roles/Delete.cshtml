@@ -1,0 +1,30 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Areas.Administration.Models.RoleViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Delete, Resources.Commons.Roles);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@Resources.Commons.Delete</h2>
+<h3>@Resources.Commons.DeleteConfirm</h3>
+<div>
+    <h4>@Resources.Commons.Roles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+    </dl>
+
+    @using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.Commons.Delete" class="btn btn-default" /> |
+            @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+        </div>
+    }
+</div>

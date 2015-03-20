@@ -1,0 +1,66 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Areas.Administration.Models.TinaMenu.IndexTinaMenuViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Index, Resources.Commons.TinaMenu);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@ViewBag.Title</h2>
+<p>
+    <a id="createMenuType" href="@Url.Action("Create", "TinaMenus", new { @area = "Administration"})" title="@Resources.Commons.Create">
+        @Resources.Commons.Create
+    </a>
+</p>
+<div class="row">
+    @using (Html.BeginForm("Create", "TinaMenus", FormMethod.Get, new { id = "menuTypeForm", @area = "Administration" }))
+    {
+        <div class="col-sm-5">
+        </div>
+        <div class="col-sm-1">
+            <div class="form-group">
+                <label>@Html.DisplayNameFor(m => m.MenuTypeId)</label>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.SmartDropDownListFor(m => m.MenuTypeId, ViewBag.MenuTypes as IEnumerable<SelectListItem>)
+            </div>
+        </div>
+    }
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped responsive-utilities">
+        <tr>
+            <th>@Resources.Commons.Name</th>
+            <th>@Resources.Commons.UpdatedUser</th>
+            <th>@Resources.Commons.UpdatedDatetime</th>
+            <th></th>
+        </tr>
+        @if (Model != null && Model.TinaMenus != null)
+        {
+            foreach (var item in Model.TinaMenus)
+            {
+        <tr>
+            <td>@item.Name @(item.IsHidden ? MvcHtmlString.Create("<b>[Hidden]</b>") : null)</td>
+            <td>@item.UpdatedUser.UserName</td>
+            <td>@item.UpdatedDatetime</td>
+            <td>
+                @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { id = item.Id })) |
+                @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { id = item.Id })) |
+                @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { id = item.Id }))
+            </td>
+        </tr>
+            }
+        }
+    </table>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $("#MenuTypeId").change(function () {
+            window.location = "@Url.Action("Index", "TinaMenus", new { @area = "Administration", @menuTypeId = "" })" + "/" + $("#MenuTypeId").val();
+        });
+    </script>
+}

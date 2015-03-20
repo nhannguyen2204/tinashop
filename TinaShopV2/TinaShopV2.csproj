@@ -1,0 +1,1505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F3A82B51-48B7-4107-96D4-7EAAB9BA68A6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TinaShopV2</RootNamespace>
+    <AssemblyName>TinaShopV2</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=3.3.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.0\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="MVC Foolproof Validation">
+      <HintPath>..\packages\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_GlobalResources\Commons.en-US.designer.cs">
+      <DependentUpon>Commons.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\Commons.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Commons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Errors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Errors.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Errors.en-US.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Errors.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Administration\Controllers\AddressesController.cs" />
+    <Compile Include="Areas\Administration\Controllers\BrandsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ColorsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ErrorsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MediasController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MediaTypesController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MenuTypesController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ProductsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\RolesController.cs" />
+    <Compile Include="Areas\Administration\Controllers\TinaActionsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\TinaMenusController.cs" />
+    <Compile Include="Areas\Administration\Controllers\TinaSystemsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\UsersController.cs" />
+    <Compile Include="Areas\Administration\Models\AccountViewModels.cs" />
+    <Compile Include="Areas\Administration\Models\Address\AddressViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Brand\BrandViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Color\ColorViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\CustomControls\PagerViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\CustomControls\SmartCheckbox.cs" />
+    <Compile Include="Areas\Administration\Models\IndexBasicViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\MediaType\MediaTypeViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Media\MediaIndexViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Media\MediaViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\MenuType\MenuTypeViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Product\ProductIndexViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Product\ProductViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\RoleViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\TinaAction\TinaActionViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\TinaMenu\TinaMenuViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\User\CreateUserViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\User\EditUserViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\User\UserViewModel.cs" />
+    <Compile Include="Common\AdminGlobalObjects.cs" />
+    <Compile Include="Common\AdminHelpers.cs" />
+    <Compile Include="Common\Attributes\TinaAdminAuthorizationAttribute.cs" />
+    <Compile Include="Common\Attributes\Validation\FileExtensionsAttribute.cs" />
+    <Compile Include="Common\Attributes\Validation\NotEqualAttribute.cs" />
+    <Compile Include="Common\Extensions\AdminHtmlHelperExtentions.cs" />
+    <Compile Include="Common\Extensions\ApplicationDbContextExtensions.cs" />
+    <Compile Include="Common\Extensions\ControllerContextExtensions.cs" />
+    <Compile Include="Common\Extensions\HttpContextBaseExtensions.cs" />
+    <Compile Include="Common\Extensions\ViewContextExtensions.cs" />
+    <Compile Include="Common\Extentions.cs" />
+    <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Common\GlobalObjects.cs" />
+    <Compile Include="Common\Attributes\InternationalizationAttribute.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\Entity\Address.cs" />
+    <Compile Include="Models\Entity\Bill.cs" />
+    <Compile Include="Models\Entity\BillDetail.cs" />
+    <Compile Include="Models\Entity\BillType.cs" />
+    <Compile Include="Models\Entity\Brand.cs" />
+    <Compile Include="Models\Entity\Color.cs" />
+    <Compile Include="Models\Entity\Mapping\AddressMap.cs" />
+    <Compile Include="Models\Entity\Mapping\BillDetailMap.cs" />
+    <Compile Include="Models\Entity\Mapping\BillMap.cs" />
+    <Compile Include="Models\Entity\Mapping\BillTypeMap.cs" />
+    <Compile Include="Models\Entity\Mapping\BrandMap.cs" />
+    <Compile Include="Models\Entity\Mapping\ColorMap.cs" />
+    <Compile Include="Models\Entity\Mapping\MediaMap.cs" />
+    <Compile Include="Models\Entity\Mapping\MediaTypeMap.cs" />
+    <Compile Include="Models\Entity\Mapping\MenuTypeMap.cs" />
+    <Compile Include="Models\Entity\Mapping\ProductDetailMap.cs" />
+    <Compile Include="Models\Entity\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Entity\Mapping\TinaActionMap.cs" />
+    <Compile Include="Models\Entity\Mapping\TinaAuthorizeMap.cs" />
+    <Compile Include="Models\Entity\Mapping\TinaMenuMap.cs" />
+    <Compile Include="Models\Entity\Media.cs" />
+    <Compile Include="Models\Entity\MediaType.cs" />
+    <Compile Include="Models\Entity\MenuType.cs" />
+    <Compile Include="Models\Entity\Product.cs" />
+    <Compile Include="Models\Entity\ProductDetail.cs" />
+    <Compile Include="Models\Entity\TinaAction.cs" />
+    <Compile Include="Models\Entity\TinaAuthorize.cs" />
+    <Compile Include="Models\Entity\TinaMenu.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\MessageSummary.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="appSettings.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="bundles\fonts\fontawesome-webfont.svg" />
+    <Content Include="bundles\fonts\fontawesome4.2\fontawesome-webfont.svg" />
+    <Content Include="bundles\fonts\fontawesome4.2\readme.txt" />
+    <Content Include="bundles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="bundles\img\ajax-loader.gif" />
+    <Content Include="bundles\img\alpha.png" />
+    <Content Include="bundles\img\avatars\1.png" />
+    <Content Include="bundles\img\avatars\2.png" />
+    <Content Include="bundles\img\avatars\3.png" />
+    <Content Include="bundles\img\avatars\4.png" />
+    <Content Include="bundles\img\avatars\5.png" />
+    <Content Include="bundles\img\avatars\copyright.txt" />
+    <Content Include="bundles\img\avatars\female.png" />
+    <Content Include="bundles\img\avatars\male.png" />
+    <Content Include="bundles\img\avatars\sunny-big.png" />
+    <Content Include="bundles\img\avatars\sunny.png" />
+    <Content Include="bundles\img\blank.gif" />
+    <Content Include="bundles\img\clear.png" />
+    <Content Include="bundles\img\demo\64x64.png" />
+    <Content Include="bundles\img\demo\basic.png" />
+    <Content Include="bundles\img\demo\chat.png" />
+    <Content Include="bundles\img\demo\copyright.txt" />
+    <Content Include="bundles\img\demo\demo-smartbig-alert.png" />
+    <Content Include="bundles\img\demo\demo-smartmedium-alert.png" />
+    <Content Include="bundles\img\demo\demo-smartsmall-alert.png" />
+    <Content Include="bundles\img\demo\hero.png" />
+    <Content Include="bundles\img\demo\image-placeholder-64x64.png" />
+    <Content Include="bundles\img\demo\iphoneview.png" />
+    <Content Include="bundles\img\demo\m1.jpg" />
+    <Content Include="bundles\img\demo\m2.jpg" />
+    <Content Include="bundles\img\demo\m3.jpg" />
+    <Content Include="bundles\img\demo\newsletter.png" />
+    <Content Include="bundles\img\demo\responseimg.png" />
+    <Content Include="bundles\img\demo\s1.jpg" />
+    <Content Include="bundles\img\demo\s2.jpg" />
+    <Content Include="bundles\img\demo\s3.jpg" />
+    <Content Include="bundles\img\demo\sa-demo.png" />
+    <Content Include="bundles\img\demo\sample.jpg" />
+    <Content Include="bundles\img\demo\sidebar.png" />
+    <Content Include="bundles\img\demo\sidebarhero.png" />
+    <Content Include="bundles\img\demo\site-1.jpg" />
+    <Content Include="bundles\img\demo\site-2.jpg" />
+    <Content Include="bundles\img\demo\widget-colorpicker.png" />
+    <Content Include="bundles\img\dropzone\spritemap%402x.png" />
+    <Content Include="bundles\img\dropzone\spritemap.png" />
+    <Content Include="bundles\img\favicon\1favicon.ico" />
+    <Content Include="bundles\img\favicon\favicon.ico" />
+    <Content Include="bundles\img\favicon\favicon.png" />
+    <Content Include="bundles\img\flags\de.png" />
+    <Content Include="bundles\img\flags\es.png" />
+    <Content Include="bundles\img\flags\flags.png" />
+    <Content Include="bundles\img\flags\us.png" />
+    <Content Include="bundles\img\glass.jpg" />
+    <Content Include="bundles\img\gradient\login.png" />
+    <Content Include="bundles\img\hue.png" />
+    <Content Include="bundles\img\invoice\americanexpress.png" />
+    <Content Include="bundles\img\invoice\license.txt" />
+    <Content Include="bundles\img\invoice\mastercard.png" />
+    <Content Include="bundles\img\invoice\paypal.png" />
+    <Content Include="bundles\img\invoice\visa.png" />
+    <Content Include="bundles\img\jcrop\Jcrop.gif" />
+    <Content Include="bundles\img\jqueryui\ui-bg_flat_0_999999_40x100.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="bundles\img\jqueryui\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_222222_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_2e83ff_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_428bca_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_454545_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_555555_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_888888_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_999999_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_f0ad4e_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_f6cf3b_256x240.png" />
+    <Content Include="bundles\img\jqueryui\ui-icons_ffffff_256x240.png" />
+    <Content Include="bundles\img\loading.gif" />
+    <Content Include="bundles\img\logo-blacknwhite.png" />
+    <Content Include="bundles\img\logo-blue.png" />
+    <Content Include="bundles\img\logo-o.png" />
+    <Content Include="bundles\img\logo-pale.png" />
+    <Content Include="bundles\img\logo-white.png" />
+    <Content Include="bundles\img\logo.png" />
+    <Content Include="bundles\img\mappin-default.png" />
+    <Content Include="bundles\img\minus.png" />
+    <Content Include="bundles\img\mybg.png" />
+    <Content Include="bundles\img\pattern\divider.jpg" />
+    <Content Include="bundles\img\pattern\graphy-xs.png" />
+    <Content Include="bundles\img\pattern\graphy.png" />
+    <Content Include="bundles\img\pattern\license-info.txt" />
+    <Content Include="bundles\img\pattern\lightpaperfibers.png" />
+    <Content Include="bundles\img\pattern\movable.png" />
+    <Content Include="bundles\img\pattern\nistri-xs.png" />
+    <Content Include="bundles\img\pattern\nistri.png" />
+    <Content Include="bundles\img\pattern\overlay-pattern.png" />
+    <Content Include="bundles\img\pattern\paper-xs.png" />
+    <Content Include="bundles\img\pattern\paper.png" />
+    <Content Include="bundles\img\pattern\pattern.png" />
+    <Content Include="bundles\img\pattern\sneaker_mesh_fabric-xs.png" />
+    <Content Include="bundles\img\pattern\sneaker_mesh_fabric.png" />
+    <Content Include="bundles\img\pattern\tileable_wood_texture-xs.png" />
+    <Content Include="bundles\img\pattern\tileable_wood_texture.png" />
+    <Content Include="bundles\img\plus.png" />
+    <Content Include="bundles\img\ribbon.png" />
+    <Content Include="bundles\img\sa-dark.png" />
+    <Content Include="bundles\img\sa-default.png" />
+    <Content Include="bundles\img\saturation.png" />
+    <Content Include="bundles\img\select2-spinner.gif" />
+    <Content Include="bundles\img\sort_asc.png" />
+    <Content Include="bundles\img\sort_asc_disabled.png" />
+    <Content Include="bundles\img\sort_both.png" />
+    <Content Include="bundles\img\sort_desc.png" />
+    <Content Include="bundles\img\sort_desc_disabled.png" />
+    <Content Include="bundles\img\splash\ipad-landscape.png" />
+    <Content Include="bundles\img\splash\ipad-portrait.png" />
+    <Content Include="bundles\img\splash\iphone.png" />
+    <Content Include="bundles\img\splash\sptouch-icon-iphone.png" />
+    <Content Include="bundles\img\splash\touch-icon-ipad-retina.png" />
+    <Content Include="bundles\img\splash\touch-icon-ipad.png" />
+    <Content Include="bundles\img\splash\touch-icon-iphone-retina.png" />
+    <Content Include="bundles\img\superbox\superbox-full-1.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-10.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-11.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-12.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-13.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-14.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-15.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-16.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-17.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-18.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-19.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-2.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-20-bw.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-20.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-21.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-22.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-23.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-24.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-3.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-4.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-5.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-6.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-7.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-8.jpg" />
+    <Content Include="bundles\img\superbox\superbox-full-9.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-1.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-10.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-11.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-12.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-13.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-14.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-15.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-16.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-17.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-18.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-19.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-2.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-20.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-21.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-22.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-23.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-24.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-3.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-4.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-5.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-6.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-7.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-8.jpg" />
+    <Content Include="bundles\img\superbox\superbox-thumb-9.jpg" />
+    <Content Include="bundles\img\versions\ajaxversion.png" />
+    <Content Include="bundles\img\versions\angularversion.png" />
+    <Content Include="bundles\img\versions\dotnetversion.png" />
+    <Content Include="bundles\img\versions\htmlversion.png" />
+    <Content Include="bundles\img\versions\phpversion.png" />
+    <Content Include="bundles\img\versions\reactversion.png" />
+    <Content Include="bundles\img\violate.jpg" />
+    <Content Include="bundles\img\voicecommand\active-btn.gif" />
+    <Content Include="bundles\img\vt-menu.png" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\SmartAdminPackage\ajax\email-compose.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\email-opened.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\email-reply.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\email-template.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\email\email-list.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\modal-content\modal-voicecommand.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\notify\mail.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\notify\notifications.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\notify\tasks.html" />
+    <Content Include="Content\SmartAdminPackage\ajax\website-template.html" />
+    <Content Include="Content\SmartAdminPackage\applayout.html" />
+    <Content Include="Content\SmartAdminPackage\blank_.html" />
+    <Content Include="Content\SmartAdminPackage\blog.html" />
+    <Content Include="Content\SmartAdminPackage\bootstrap-forms.html" />
+    <Content Include="Content\SmartAdminPackage\bootstrap-validator.html" />
+    <Content Include="Content\SmartAdminPackage\buttons.html" />
+    <Content Include="Content\SmartAdminPackage\calendar.html" />
+    <Content Include="Content\SmartAdminPackage\chartjs.html" />
+    <Content Include="Content\SmartAdminPackage\chat.html" />
+    <Content Include="Content\SmartAdminPackage\ckeditor.html" />
+    <Content Include="Content\SmartAdminPackage\css\bootstrap.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\demo.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\font-awesome.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\invoice.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\lockscreen.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\smartadmin-production-plugins.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\smartadmin-production.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\smartadmin-rtl.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\smartadmin-skins.min.css" />
+    <Content Include="Content\SmartAdminPackage\css\your_style.css" />
+    <Content Include="Content\SmartAdminPackage\datatables.html" />
+    <Content Include="Content\SmartAdminPackage\difver.html" />
+    <Content Include="Content\SmartAdminPackage\dropzone.html" />
+    <Content Include="Content\SmartAdminPackage\dygraphs.html" />
+    <Content Include="Content\SmartAdminPackage\email-template.html" />
+    <Content Include="Content\SmartAdminPackage\error404.html" />
+    <Content Include="Content\SmartAdminPackage\error500.html" />
+    <Content Include="Content\SmartAdminPackage\fa.html" />
+    <Content Include="Content\SmartAdminPackage\flags.html" />
+    <Content Include="Content\SmartAdminPackage\flot.html" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\fontawesome-webfont.svg" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\readme.txt" />
+    <Content Include="Content\SmartAdminPackage\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\SmartAdminPackage\forgotpassword.html" />
+    <Content Include="Content\SmartAdminPackage\form-elements.html" />
+    <Content Include="Content\SmartAdminPackage\form-templates.html" />
+    <Content Include="Content\SmartAdminPackage\forum-post.html" />
+    <Content Include="Content\SmartAdminPackage\forum-topic.html" />
+    <Content Include="Content\SmartAdminPackage\forum.html" />
+    <Content Include="Content\SmartAdminPackage\gallery.html" />
+    <Content Include="Content\SmartAdminPackage\general-elements.html" />
+    <Content Include="Content\SmartAdminPackage\glyph.html" />
+    <Content Include="Content\SmartAdminPackage\gmap-xml.html" />
+    <Content Include="Content\SmartAdminPackage\grid.html" />
+    <Content Include="Content\SmartAdminPackage\image-editor.html" />
+    <Content Include="Content\SmartAdminPackage\img\ajax-loader.gif" />
+    <Content Include="Content\SmartAdminPackage\img\alpha.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\1.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\2.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\3.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\4.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\5.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\copyright.txt" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\female.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\male.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\sunny-big.png" />
+    <Content Include="Content\SmartAdminPackage\img\avatars\sunny.png" />
+    <Content Include="Content\SmartAdminPackage\img\blank.gif" />
+    <Content Include="Content\SmartAdminPackage\img\clear.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\64x64.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\basic.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\chat.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\copyright.txt" />
+    <Content Include="Content\SmartAdminPackage\img\demo\demo-smartbig-alert.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\demo-smartmedium-alert.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\demo-smartsmall-alert.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\hero.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\image-placeholder-64x64.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\iphoneview.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\m1.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\m2.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\m3.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\newsletter.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\responseimg.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\s1.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\s2.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\s3.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\sa-demo.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\sample.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\sidebar.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\sidebarhero.png" />
+    <Content Include="Content\SmartAdminPackage\img\demo\site-1.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\site-2.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\demo\widget-colorpicker.png" />
+    <Content Include="Content\SmartAdminPackage\img\dropzone\spritemap%402x.png" />
+    <Content Include="Content\SmartAdminPackage\img\dropzone\spritemap.png" />
+    <Content Include="Content\SmartAdminPackage\img\favicon\1favicon.ico" />
+    <Content Include="Content\SmartAdminPackage\img\favicon\favicon.ico" />
+    <Content Include="Content\SmartAdminPackage\img\favicon\favicon.png" />
+    <Content Include="Content\SmartAdminPackage\img\flags\de.png" />
+    <Content Include="Content\SmartAdminPackage\img\flags\es.png" />
+    <Content Include="Content\SmartAdminPackage\img\flags\flags.png" />
+    <Content Include="Content\SmartAdminPackage\img\flags\us.png" />
+    <Content Include="Content\SmartAdminPackage\img\glass.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\gradient\login.png" />
+    <Content Include="Content\SmartAdminPackage\img\hue.png" />
+    <Content Include="Content\SmartAdminPackage\img\invoice\americanexpress.png" />
+    <Content Include="Content\SmartAdminPackage\img\invoice\license.txt" />
+    <Content Include="Content\SmartAdminPackage\img\invoice\mastercard.png" />
+    <Content Include="Content\SmartAdminPackage\img\invoice\paypal.png" />
+    <Content Include="Content\SmartAdminPackage\img\invoice\visa.png" />
+    <Content Include="Content\SmartAdminPackage\img\jcrop\Jcrop.gif" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_flat_0_999999_40x100.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_222222_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_428bca_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_454545_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_555555_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_888888_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_999999_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_f0ad4e_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_f6cf3b_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\jqueryui\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\SmartAdminPackage\img\loading.gif" />
+    <Content Include="Content\SmartAdminPackage\img\logo-blacknwhite.png" />
+    <Content Include="Content\SmartAdminPackage\img\logo-blue.png" />
+    <Content Include="Content\SmartAdminPackage\img\logo-o.png" />
+    <Content Include="Content\SmartAdminPackage\img\logo-pale.png" />
+    <Content Include="Content\SmartAdminPackage\img\logo-white.png" />
+    <Content Include="Content\SmartAdminPackage\img\logo.png" />
+    <Content Include="Content\SmartAdminPackage\img\mappin-default.png" />
+    <Content Include="Content\SmartAdminPackage\img\minus.png" />
+    <Content Include="Content\SmartAdminPackage\img\mybg.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\divider.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\graphy-xs.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\graphy.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\license-info.txt" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\lightpaperfibers.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\movable.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\nistri-xs.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\nistri.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\overlay-pattern.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\paper-xs.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\paper.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\pattern.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\sneaker_mesh_fabric-xs.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\sneaker_mesh_fabric.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\tileable_wood_texture-xs.png" />
+    <Content Include="Content\SmartAdminPackage\img\pattern\tileable_wood_texture.png" />
+    <Content Include="Content\SmartAdminPackage\img\plus.png" />
+    <Content Include="Content\SmartAdminPackage\img\ribbon.png" />
+    <Content Include="Content\SmartAdminPackage\img\sa-dark.png" />
+    <Content Include="Content\SmartAdminPackage\img\sa-default.png" />
+    <Content Include="Content\SmartAdminPackage\img\saturation.png" />
+    <Content Include="Content\SmartAdminPackage\img\select2-spinner.gif" />
+    <Content Include="Content\SmartAdminPackage\img\sort_asc.png" />
+    <Content Include="Content\SmartAdminPackage\img\sort_asc_disabled.png" />
+    <Content Include="Content\SmartAdminPackage\img\sort_both.png" />
+    <Content Include="Content\SmartAdminPackage\img\sort_desc.png" />
+    <Content Include="Content\SmartAdminPackage\img\sort_desc_disabled.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\ipad-landscape.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\ipad-portrait.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\iphone.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\sptouch-icon-iphone.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\touch-icon-ipad-retina.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\touch-icon-ipad.png" />
+    <Content Include="Content\SmartAdminPackage\img\splash\touch-icon-iphone-retina.png" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-1.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-10.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-11.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-12.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-13.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-14.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-15.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-16.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-17.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-18.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-19.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-2.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-20-bw.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-20.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-21.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-22.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-23.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-24.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-3.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-4.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-5.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-6.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-7.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-8.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-full-9.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-1.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-10.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-11.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-12.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-13.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-14.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-15.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-16.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-17.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-18.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-19.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-2.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-20.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-21.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-22.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-23.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-24.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-3.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-4.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-5.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-6.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-7.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-8.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\superbox\superbox-thumb-9.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\versions\ajaxversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\versions\angularversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\versions\dotnetversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\versions\htmlversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\versions\phpversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\versions\reactversion.png" />
+    <Content Include="Content\SmartAdminPackage\img\violate.jpg" />
+    <Content Include="Content\SmartAdminPackage\img\voicecommand\active-btn.gif" />
+    <Content Include="Content\SmartAdminPackage\img\vt-menu.png" />
+    <Content Include="Content\SmartAdminPackage\inbox.html" />
+    <Content Include="Content\SmartAdminPackage\index.html" />
+    <Content Include="Content\SmartAdminPackage\index_ie8_prototype.html" />
+    <Content Include="Content\SmartAdminPackage\inline-charts.html" />
+    <Content Include="Content\SmartAdminPackage\invoice.html" />
+    <Content Include="Content\SmartAdminPackage\jqgrid.html" />
+    <Content Include="Content\SmartAdminPackage\jqui.html" />
+    <Content Include="Content\SmartAdminPackage\js\app.config.js" />
+    <Content Include="Content\SmartAdminPackage\js\app.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\demo.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\libs\jquery-2.1.1.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\libs\jquery-ui-1.10.3.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\notification\SmartNotification.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-duallistbox\jquery.bootstrap-duallistbox.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-progressbar\bootstrap-progressbar.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-slider\bootstrap-slider.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-tags\bootstrap-tagsinput-angular.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-tags\bootstrap-tagsinput.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-timepicker\bootstrap-timepicker.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstraptree\bootstrap-tree.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\bootstrapValidator.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\ar_MA.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\be_NL.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\bg_BG.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\cs_CZ.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\da_DK.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\de_DE.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\en_US.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\es_CL.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\es_ES.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\fr_FR.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\gr_EL.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\hu_HU.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\it_IT.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\nl_NL.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\pl_PL.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\pt_BR.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\tr_TR.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\vi_VN.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\zh_CN.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\bootstrapvalidator\language\zh_TW.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\chartjs\chart.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\adapters\jquery.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\build-config.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\ckeditor.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\config.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\contents.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\af.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ar.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\bg.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\bn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\bs.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\cs.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\cy.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\da.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\de.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\el.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\en-au.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\en-ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\en-gb.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\en.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\eo.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\es.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\et.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\eu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\fa.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\fi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\fo.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\fr-ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\fr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\gl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\gu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\he.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\hi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\hr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\hu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\id.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\is.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\it.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ja.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ka.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\km.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ko.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ku.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\lt.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\lv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\mk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\mn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ms.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\nb.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\nl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\no.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\pl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\pt-br.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\pt.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ro.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ru.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\si.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sq.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sr-latn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\sv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\th.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\tr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\ug.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\uk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\vi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\zh-cn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\lang\zh.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ar.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\bg.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\cs.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\cy.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\da.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\de.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\el.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\en.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\eo.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\es.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\et.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\fa.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\fi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\fr-ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\fr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\gl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\gu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\he.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\hi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\hr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\hu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\id.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\it.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ja.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\km.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ko.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ku.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\lt.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\lv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\mk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\mn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\nb.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\nl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\no.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\pl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\pt-br.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\pt.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ro.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ru.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\si.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sq.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sr-latn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\sv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\th.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\tr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\ug.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\uk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\colordialog\dialogs\colordialog.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\div\dialogs\div.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\fakeobjects\images\spacer.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\find\dialogs\find.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\flash\dialogs\flash.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\flash\images\placeholder.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\button.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\checkbox.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\form.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\hiddenfield.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\radio.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\select.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\textarea.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\dialogs\textfield.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\icons.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\iframe\dialogs\iframe.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\iframe\images\placeholder.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\liststyle\dialogs\liststyle.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\magicline\images\hidpi\icon.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\pagebreak\images\pagebreak.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\preview\preview.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_address.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_blockquote.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_div.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h1.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h2.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h3.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h4.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h5.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_h6.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_p.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\showblocks\images\block_pre.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\dialogs\smiley.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\angel_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\angry_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\broken_heart.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\confused_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\cry_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\devil_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\embaressed_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\embarrassed_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\envelope.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\heart.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\kiss.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\lightbulb.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\omg_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\regular_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\sad_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\shades_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\teeth_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\thumbs_down.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\thumbs_up.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\tongue_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\tounge_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\whatchutalkingabout_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\smiley\images\wink_smile.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ar.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\bg.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\cs.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\cy.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\de.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\el.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\en.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\eo.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\es.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\et.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\fa.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\fi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\fr-ca.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\fr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\gl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\he.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\hr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\hu.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\id.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\it.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ja.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ku.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\lv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\nb.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\nl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\no.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\pl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\pt-br.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\pt.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ru.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\si.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\sk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\sl.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\sq.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\sv.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\th.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\tr.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\ug.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\uk.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\vi.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\dialogs\templates.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\dialogs\templates.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\templates\default.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\templates\images\template1.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\templates\images\template2.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\templates\templates\images\template3.gif" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\tmp.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\dialogs\wsc_ie.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\ajax.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\api.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\appendto.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\inlineall\logo.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\outputxhtml\outputxhtml.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\sample.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\sample.jpg" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\uilanguages\languages.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\datafiltering.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\divreplace.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\index.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\inlineall.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\inlinebycode.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\inlinetextarea.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\jquery.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\dialog\assets\my_dialog.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\dialog\dialog.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\enterkey\enterkey.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.swf" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\swfobject.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\htmlwriter\outputforflash.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\htmlwriter\outputhtml.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\magicline\magicline.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\toolbar\toolbar.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\wysiwygarea\fullpage.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\readonly.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\replacebyclass.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\replacebycode.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\sample.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\sample.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\tabindex.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\uicolor.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\uilanguages.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\xhtmlstyle.html" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog_ie.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog_ie7.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog_ie8.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog_iequirks.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\dialog_opera.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor_gecko.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor_ie.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor_ie7.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor_ie8.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\editor_iequirks.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\icons.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\icons_hidpi.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\arrow.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\close.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\hidpi\close.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\hidpi\lock-open.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\hidpi\lock.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\hidpi\refresh.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\lock-open.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\lock.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\images\refresh.png" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\styles.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\clockpicker\clockpicker.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\colorpicker\bootstrap-colorpicker.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\cssemotions\jquery.cssemoticons.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatable-responsive\datatables.responsive.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\dataTables.bootstrap.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\dataTables.colReorder.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\dataTables.colVis.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\dataTables.tableTools.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\jquery.dataTables.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\swf\copy_csv_xls.swf" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\datatables\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\delete-table-row\delete-table-row.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\dropzone\dropzone.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\dygraphs\demo-data.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\dygraphs\dygraph-combined.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\fastclick\fastclick.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.colorhelpers.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.canvas.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.categories.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.crosshair.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.cust.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.errorbars.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.fillbetween.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.image.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.navigate.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.orderBar.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.pie.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.resize.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.selection.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.stack.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.symbol.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.threshold.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.time.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\fuelux\wizard\wizard.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\fullcalendar\jquery.fullcalendar.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\gmap3\gmap3.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ie-placeholder_\jquery.placeholder.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ion-slider\ion.rangeSlider.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jcrop\jquery.color.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jcrop\jquery.Jcrop.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jqgrid\grid.locale-en.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jqgrid\jquery.jqGrid.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jquery-form\jquery-form.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jquery-nestable\jquery.nestable.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jquery-touch\jquery.ui.touch-punch.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\jquery-validate\jquery.validate.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\js-migrate\jquery-migrate-1.2.1.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\knob\jquery.knob.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\markdown\bootstrap-markdown.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\markdown\markdown.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\markdown\to-markdown.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\masked-input\jquery.maskedinput.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\maxlength\bootstrap-maxlength.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\moment\moment.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\morris\morris-chart-settings.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\morris\morris.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\morris\raphael.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\msie-fix\jquery.mb.browser.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\multiselect\bootstrap-multiselect.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\noUiSlider\jquery.nouislider.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\noUiSlider\jquery.nouislider.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\pace\pace.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\select2\readme.txt" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\select2\select2.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\selectToUISlider\selectToUISlider.jQuery.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\summernote\summernote.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\superbox\superbox.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\throttle-denounce\jquery.ba-throttle-debounce.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\typeahead\typeahead.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\typeahead\typeaheadjs.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\vectormap\jquery-jvectormap-1.1.1.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\vectormap\jquery-jvectormap-1.1.1.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\vectormap\jquery-jvectormap-1.2.2.css" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\vectormap\jquery-jvectormap-1.2.2.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\vectormap\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\x-editable\jquery.mockjax.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\x-editable\moment.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\x-editable\x-editable.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\smart-chat-ui\smart.chat.manager.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\smart-chat-ui\smart.chat.ui.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\smartwidgets\jarvis.widget.min.js" />
+    <Content Include="Content\SmartAdminPackage\js\speech\voicecommand.min.js" />
+    <Content Include="Content\SmartAdminPackage\lock.html" />
+    <Content Include="Content\SmartAdminPackage\login.html" />
+    <Content Include="Content\SmartAdminPackage\morris.html" />
+    <Content Include="Content\SmartAdminPackage\nestable-list.html" />
+    <Content Include="Content\SmartAdminPackage\other-editors.html" />
+    <Content Include="Content\SmartAdminPackage\plugins.html" />
+    <Content Include="Content\SmartAdminPackage\pricing-table.html" />
+    <Content Include="Content\SmartAdminPackage\profile.html" />
+    <Content Include="Content\SmartAdminPackage\projects.html" />
+    <Content Include="Content\SmartAdminPackage\register.html" />
+    <Content Include="Content\SmartAdminPackage\search.html" />
+    <Content Include="Content\SmartAdminPackage\sound\bigbox.mp3" />
+    <Content Include="Content\SmartAdminPackage\sound\license.txt" />
+    <Content Include="Content\SmartAdminPackage\sound\messagebox.mp3" />
+    <Content Include="Content\SmartAdminPackage\sound\smallbox.mp3" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_alert.mp3" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_off.mp3" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_on.mp3" />
+    <Content Include="Content\SmartAdminPackage\table.html" />
+    <Content Include="Content\SmartAdminPackage\timeline.html" />
+    <Content Include="Content\SmartAdminPackage\treeview.html" />
+    <Content Include="Content\SmartAdminPackage\typography.html" />
+    <Content Include="Content\SmartAdminPackage\validation.html" />
+    <Content Include="Content\SmartAdminPackage\widgets.html" />
+    <Content Include="Content\SmartAdminPackage\wizard.html" />
+    <Content Include="Content\SmartAdminPackage\xml\gmap\pins.xml" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\Administration\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\Administration\Views\TinaActions\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaActions\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaActions\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaActions\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaActions\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuTypes\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuTypes\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuTypes\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Errors\Http404.cshtml" />
+    <Content Include="Areas\Administration\Views\Errors\Http500.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuTypes\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuTypes\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\CustomControls\_SmartCheckboxPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_AnonymousLayout.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_AnonymousHeaderPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Errors\Http401.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\CustomControls\_SmartValidationSummaryPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_UserInfoPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaMenus\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaMenus\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaMenus\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaMenus\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaMenus\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\TinaSystems\_MainMenuPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Colors\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Colors\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Colors\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Colors\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Colors\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Addresses\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Addresses\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Addresses\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Addresses\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Addresses\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Brands\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Brands\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Brands\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Brands\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Brands\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\MediaTypes\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\MediaTypes\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\MediaTypes\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\MediaTypes\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\MediaTypes\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Medias\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Medias\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Medias\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Medias\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Medias\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Products\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Products\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Products\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Products\Delete.cshtml" />
+    <Content Include="bundles\fonts\fontawesome-webfont.eot" />
+    <Content Include="bundles\fonts\fontawesome-webfont.ttf" />
+    <Content Include="bundles\fonts\fontawesome-webfont.woff" />
+    <Content Include="bundles\fonts\FontAwesome.otf" />
+    <Content Include="bundles\fonts\fontawesome4.2\fontawesome-webfont.eot" />
+    <Content Include="bundles\fonts\fontawesome4.2\fontawesome-webfont.ttf" />
+    <Content Include="bundles\fonts\fontawesome4.2\fontawesome-webfont.woff" />
+    <Content Include="bundles\fonts\fontawesome4.2\FontAwesome.otf" />
+    <Content Include="bundles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="bundles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="bundles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Areas\Administration\Views\Shared\CustomControls\_PagerPartial.cshtml" />
+    <None Include="connectionStrings.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Areas\Administration\Models\Scripts\bootstrap.js" />
+    <Content Include="Areas\Administration\Models\Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Administration\Views\Roles\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Roles\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Roles\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Roles\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Roles\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\Index.cshtml" />
+    <None Include="Areas\Administration\Models\Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-1.10.2.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-1.10.2.min.js" />
+    <None Include="Areas\Administration\Models\Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-2.1.1.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-2.1.1.min.map" />
+    <None Include="Areas\Administration\Models\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery.validate.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery.validate.min.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Areas\Administration\Models\Scripts\modernizr-2.7.2.js" />
+    <Content Include="Areas\Administration\Models\Scripts\respond.js" />
+    <Content Include="Areas\Administration\Models\Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Areas\Administration\Models\Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Areas\Administration\Models\Scripts\respond.min.js" />
+    <Content Include="Content\SmartAdminPackage\ajax\demowidget.php" />
+    <Content Include="Content\SmartAdminPackage\data\dataList.json" />
+    <Content Include="Content\SmartAdminPackage\dummy.php" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\SmartAdminPackage\fonts\FontAwesome.otf" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\fontawesome-webfont.eot" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\fontawesome-webfont.ttf" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\fontawesome-webfont.woff" />
+    <Content Include="Content\SmartAdminPackage\fonts\fontawesome4.2\FontAwesome.otf" />
+    <Content Include="Content\SmartAdminPackage\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\SmartAdminPackage\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\SmartAdminPackage\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\SmartAdminPackage\js\libs\jquery-2.1.1.min.map" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\CHANGES.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\LICENSE.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\scayt\LICENSE.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\scayt\README.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\LICENSE.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\plugins\wsc\README.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\README.md" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\assets\posteddata.php" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\samples\sample_posteddata.php" />
+    <Content Include="Content\SmartAdminPackage\js\plugin\ckeditor\skins\moono\readme.md" />
+    <Content Include="Content\SmartAdminPackage\php\demo-comment.php" />
+    <Content Include="Content\SmartAdminPackage\php\demo-contacts.php" />
+    <Content Include="Content\SmartAdminPackage\php\demo-register.php" />
+    <Content Include="Content\SmartAdminPackage\sound\bigbox.ogg" />
+    <Content Include="Content\SmartAdminPackage\sound\messagebox.ogg" />
+    <Content Include="Content\SmartAdminPackage\sound\smallbox.ogg" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_alert.ogg" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_off.ogg" />
+    <Content Include="Content\SmartAdminPackage\sound\voice_on.ogg" />
+    <Content Include="Content\SmartAdminPackage\upload.php" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.3.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Scripts\MvcFoolproofValidation.min.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Validation\fileextensions.js" />
+    <Content Include="Scripts\Validation\notequal.js" />
+    <Content Include="sound\bigbox.mp3" />
+    <Content Include="sound\license.txt" />
+    <Content Include="sound\messagebox.mp3" />
+    <Content Include="sound\smallbox.mp3" />
+    <Content Include="sound\voice_alert.mp3" />
+    <Content Include="sound\voice_off.mp3" />
+    <Content Include="sound\voice_on.mp3" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Areas\Administration\Models\Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="sound\bigbox.ogg" />
+    <Content Include="sound\messagebox.ogg" />
+    <Content Include="sound\smallbox.ogg" />
+    <Content Include="sound\voice_alert.ogg" />
+    <Content Include="sound\voice_off.ogg" />
+    <Content Include="sound\voice_on.ogg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Administration\Content\" />
+    <Folder Include="Areas\Administration\Models\TinaSystems\" />
+    <Folder Include="Areas\Administration\Views\CustomEditorControls\" />
+    <Folder Include="MediaFiles\Images\" />
+    <Folder Include="MediaFiles\Others\" />
+    <Folder Include="MediaFiles\Videos\" />
+    <Folder Include="Views\Base\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\Administration\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\_RemoveAccountPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\Login.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\Manage.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\Register.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ResetPassword.cshtml" />
+    <Content Include="Areas\Administration\Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Areas\Administration\Views\Home\About.cshtml" />
+    <Content Include="Areas\Administration\Views\Home\Contact.cshtml" />
+    <Content Include="Areas\Administration\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_LoginPartial.cshtml" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\Commons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Commons.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\Commons.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Commons.en-US.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\Errors.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\Errors.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.en-US.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>11027</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:11027/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\AutoMapper.3.3.0\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.0\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

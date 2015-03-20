@@ -1,0 +1,33 @@
+﻿@model IEnumerable<TinaShopV2.Areas.Administration.Models.TinaMenu.TinaMenuViewModel>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            string rootMenuCssClass = item.ParentId == null ? string.Format("fa fa-lg fa-fw {0}", item.CssClass) : string.Empty;
+            string actionLink = item.ActionObj != null ? Url.Action(item.ActionObj.Action, item.ActionObj.Controller, new { @area = item.ActionObj.Area }) : "javascript:void(0);";
+            int currentMenuId = HttpContext.Current.Request.RequestContext.RouteData.Values["TinaMenuId"] != null ? (int)HttpContext.Current.Request.RequestContext.RouteData.Values["TinaMenuId"] : 0;
+            var childrens = item.GetChildrens(false);
+
+            <li class="@(item.Id == currentMenuId ? "active" : string.Empty)">
+                <a href="@actionLink" title="@item.Name">
+                    <i class="@rootMenuCssClass"></i>
+                    @if (item.ParentId == null)
+                    {
+                        <span class="menu-item-parent">@item.Name</span>
+                    }
+                    else
+                    {
+                        @item.Name
+                    }
+                </a>
+                @if (childrens.Count > 0)
+                {
+                    @Html.Action("MainMenu", "TinaSystems", new { @area = "Administration", @parentId = item.Id })
+                }
+            </li>
+        }
+    </ul>
+}
+

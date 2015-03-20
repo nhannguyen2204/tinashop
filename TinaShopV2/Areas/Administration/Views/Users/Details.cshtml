@@ -1,0 +1,30 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Areas.Administration.Models.User.UserViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Detail, Resources.Commons.Users);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Resources.Commons.Detail</h2>
+
+<div>
+    <h4>@Resources.Commons.Users</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.UserName)</dt>
+        <dd>@Html.DisplayFor(model => model.UserName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd>@Html.DisplayFor(model => model.Email)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.PhoneNumber)</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(@Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { id = Model.Id })) |
+    @Html.ActionLink(@Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+</p>
