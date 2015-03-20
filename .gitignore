@@ -1,3 +1,6 @@
 TinaShopV2.v12.suo
-bin
-obj
+TinaShopV2/bin/*
+TinaShopV2/obj/*
+TinaTest/bin/*
+TinaTest/obj/*
+packages/*
