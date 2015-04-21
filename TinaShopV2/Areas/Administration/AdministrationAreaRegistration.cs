@@ -157,6 +157,28 @@ namespace TinaShopV2.Areas.Administration
             );
 
             context.MapRoute(
+                name: "Administration_Products_Index",
+                url: "Administration/Products/Index/{Page}/{IsPublish}/{IsDeleted}/{CanSale}/{BrandCode}/{ProductCode}",
+                defaults: new
+                {
+                    area = AreaName,
+                    controller = "Products",
+                    action = "Index",
+                    Page = 1,
+                    IsPublish = 0,
+                    IsDeleted = 0,
+                    CanSale = 0,
+                    PageTotal = 0,
+                    Total = 0,
+                    BrandCode = "all",
+                    ProductCode = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+                //,constraints: new { IsPublish = new TinaShopV2.Common.Helpers.EnumConstraint("TinaShopV2.Areas.Administration.Models.Product.PublishStatus") }
+            );
+
+            context.MapRoute(
                 "Administration_TinaMenua_Create",
                 "Administration/TinaMenus/Create/{MenuTypeId}",
                 new

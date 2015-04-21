@@ -1,19 +1,19 @@
-﻿@model TinaShopV2.Areas.Administration.Models.CustomControls.PagerViewModel
+﻿@model TinaShopV2.Areas.Administration.Models.IndexBasicViewModel
 
 @{
     int left = 2;
     int right = 2;
 
-    while (Model.CurrentPage - left <= 0)
+    while (Model.Page - left <= 0)
     {
         left--;
         right++;
     }
 
-    while (Model.CurrentPage + right > Model.PageTotal)
+    while (Model.Page + right > Model.PageTotal)
     {
         right--;
-        if (Model.CurrentPage - (left + 1) > 0)
+        if (Model.Page - (left + 1) > 0)
         {
             left++;
         }
@@ -22,36 +22,49 @@
 
 <div class="text-center">
     <ul class="pagination pagination-lg">
-        <li class="@((Model.CurrentPage - left - 1) > 0 ? string.Empty : "disabled")">
-            <a href="@((Model.CurrentPage - left - 1) > 0 ? Url.RouteUrl(new { @Page = Model.CurrentPage - left - 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-left"></i></a>
+        <li class="@((Model.Page - left - 1) > 0 ? string.Empty : "disabled")">
+            <a href="@((Model.Page - left - 1) > 0 ? Url.RouteUrl(new { @Page = Model.Page - left - 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-left"></i></a>
         </li>
 
         @if (left > 0)
         {
             for (int i = left; i > 0; i--)
             {
+                RouteValueDictionary routeValues = new RouteValueDictionary(ViewContext.RouteData.Values);
+                routeValues.Remove("TinaMenuId");
+                routeValues["Page"] = Model.Page - i;
                 <li>
-                    <a href="@Url.RouteUrl(new { @Page = Model.CurrentPage - i })">@(Model.CurrentPage - i)</a>
+                    <a href="@Url.RouteUrl(routeValues)">@(Model.Page - i)</a>
                 </li>
             }
         }
 
         <li class="active">
-            <a href="javascript:void(0);">@Model.CurrentPage</a>
+            <a href="javascript:void(0);">@Model.Page</a>
         </li>
 
         @if (right > 0)
         {
             for (int i = 1; i <= right; i++)
             {
+                RouteValueDictionary routeValues = new RouteValueDictionary(ViewContext.RouteData.Values);
+                routeValues.Remove("TinaMenuId");
+                if (routeValues.ContainsKey("Page"))
+                {
+                    routeValues["Page"] = Model.Page + i;
+                }
+                else
+                {
+                    routeValues.Add("Page", Model.Page + i);
+                }
                 <li>
-                    <a href="@Url.RouteUrl(new { @Page = Model.CurrentPage + i })">@(Model.CurrentPage + i)</a>
+                    <a href="@Url.RouteUrl(routeValues)">@(Model.Page + i)</a>
                 </li>
             }
         }
 
-        <li class="@((Model.CurrentPage + right + 1) <= Model.PageTotal ? string.Empty : "disabled")">
-            <a href="@((Model.CurrentPage + right + 1) <= Model.PageTotal ? Url.RouteUrl(new { @Page = Model.CurrentPage + right + 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-right"></i></a>
+        <li class="@((Model.Page + right + 1) <= Model.PageTotal ? string.Empty : "disabled")">
+            <a href="@((Model.Page + right + 1) <= Model.PageTotal ? Url.RouteUrl(new { @Page = Model.Page + right + 1 }) : "javascript:void(0);")"><i class="fa fa-chevron-right"></i></a>
         </li>
     </ul>
 </div>

@@ -10,23 +10,20 @@ namespace TinaShopV2.Areas.Administration.Models.Product
     public class ProductIndexViewModel : IndexBasicViewModel
     {
         [MaxLength(128, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(Errors))]
-        [Display(Name = "Product", ResourceType = typeof(Commons))]
+        [Display(Name = "ProductCode", ResourceType = typeof(Commons))]
         public string ProductCode { get; set; }
-
-        [Display(Name = "ProductName", ResourceType = typeof(Commons))]
-        public string ProductName { get; set; }
 
         [Display(Name = "Brand", ResourceType = typeof(Commons))]
         public string BrandCode { get; set; }
 
         [Display(Name = "Publish", ResourceType = typeof(Commons))]
-        public PublishStatus IsPublish { get; set; }
+        public int IsPublish { get; set; }
 
         [Display(Name = "Delete", ResourceType = typeof(Commons))]
-        public DeleteStatus IsDeleted { get; set; }
+        public int IsDeleted { get; set; }
 
         [Display(Name = "CanSale", ResourceType = typeof(Commons))]
-        public SaleState CanSale { get; set; }
+        public int CanSale { get; set; }
 
         public IEnumerable<ProductViewModel> Products { get; set; }
     }
@@ -34,30 +31,30 @@ namespace TinaShopV2.Areas.Administration.Models.Product
     public enum PublishStatus
     {
         [Display(Name = "NoState", ResourceType = typeof(Commons))]
-        NoState = 0,
+        Null,
         [Display(Name = "Published", ResourceType = typeof(Commons))]
-        Published = 1,
+        Published,
         [Display(Name = "NonPublished", ResourceType = typeof(Commons))]
-        NonPublish = 2
+        NonPublish
     }
 
     public enum DeleteStatus
     {
         [Display(Name = "NoState", ResourceType = typeof(Commons))]
-        NoState = 0,
+        Null,
         [Display(Name = "Deleted", ResourceType = typeof(Commons))]
-        Deleted = 1,
+        Deleted,
         [Display(Name = "NonDeleted", ResourceType = typeof(Commons))]
-        NoDelete = 2
+        NoDelete
     }
 
     public enum SaleState
     {
         [Display(Name = "NoState", ResourceType = typeof(Commons))]
-        NoState = 0,
+        Null,
         [Display(Name = "CanSale", ResourceType = typeof(Commons))]
-        CanSale = 1,
+        CanSale,
         [Display(Name = "CanNotSale", ResourceType = typeof(Commons))]
-        CanNotSale = 2
+        CanNotSale
     }
 }

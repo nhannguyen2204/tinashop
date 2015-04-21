@@ -20,13 +20,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Medias
         public ActionResult Index(MediaIndexViewModel model)
         {
-            int total = 0;
-            model.Medias = ApplicationDbContext.Instance.GetMediaViewModels(out total, model.Page, model.TypeId, model.ProductCode);
+            // Init Medias
+            ApplicationDbContext.Instance.GetMediasByIndexViewModel(ref model);
+            
+            // Init Media Types
             var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
-            ViewBag.Pager = new PagerViewModel() { CurrentPage = model.Page, PageTotal = total };
-
+            // Response
             return View(model);
         }
 

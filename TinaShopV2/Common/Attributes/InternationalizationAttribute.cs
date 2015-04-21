@@ -13,7 +13,7 @@ namespace TinaShopV2.Common.Attributes
         {
             string language = (string)filterContext.RouteData.Values["language"] ?? "vi";
             string culture = (string)filterContext.RouteData.Values["culture"] ?? "VN";
-            string fullCulture =string.Format("{0}-{1}", language, culture);
+            string fullCulture = string.Format("{0}-{1}", language, culture);
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(fullCulture);
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(fullCulture);
@@ -29,7 +29,7 @@ namespace TinaShopV2.Common.Attributes
             if (tinaAction != null)
             {
                 var tinaMenu = ApplicationDbContext.Instance.TinaMenus.FirstOrDefault(m => m.ActionId == tinaAction.Id);
-                
+
                 while (tinaMenu != null && tinaMenu.IsHidden)
                 {
                     int? parentId = tinaMenu.ParentId;

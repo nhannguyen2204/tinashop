@@ -10,6 +10,9 @@ using TinaShopV2.Areas.Administration.Models.CustomControls;
 using TinaShopV2.Areas.Administration.Models.TinaMenu;
 using TinaShopV2.Common.Extensions;
 using TinaShopV2.Models;
+using TinaShopV2.Common;
+using TinaShopV2.Areas.Administration.Models.Product;
+using TinaShopV2.Areas.Administration.Models;
 
 namespace TinaShopV2.Common.Extensions
 {
@@ -80,7 +83,7 @@ namespace TinaShopV2.Common.Extensions
         #endregion
 
         #region Listbox
-        
+
         public static MvcHtmlString SmartListBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression,
             IEnumerable<SelectListItem> selectList, object htmlAttributes)
         {
@@ -99,7 +102,7 @@ namespace TinaShopV2.Common.Extensions
 
         #region Enum
 
-        public static MvcHtmlString SmartEnumListBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes)
+        public static MvcHtmlString SmartEnumListBoxFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes, bool isEnableLabel = false)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
 
@@ -109,7 +112,7 @@ namespace TinaShopV2.Common.Extensions
             //(SmartStyle) Add attribute with value 'select2'
             attributes = attributes.AddAttributes("class", "select2");
 
-            return htmlHelper.EnumDropDownListFor(expression, attributes);
+            return isEnableLabel ? htmlHelper.EnumDropDownListFor(expression, string.Format(App_GlobalResources.Commons.SelectOptionLabelFormat, htmlHelper.DisplayNameFor(expression)), attributes) : htmlHelper.EnumDropDownListFor(expression, attributes);
         }
 
         #endregion
@@ -237,9 +240,9 @@ namespace TinaShopV2.Common.Extensions
 
         #region Pager
 
-        public static MvcHtmlString Pager(this HtmlHelper htmlHelper, PagerViewModel model)
+        public static MvcHtmlString Pager(this HtmlHelper htmlHelper, IndexBasicViewModel model)
         {
-            if (model != null && model.PageTotal > 1 && model.CurrentPage > 0)
+            if (model != null && model.PageTotal > 1 && model.Page > 0)
             {
                 return htmlHelper.Partial("CustomControls/_PagerPartial", model);
             }

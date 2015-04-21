@@ -11,6 +11,7 @@ using TinaShopV2.Common.Extensions;
 using TinaShopV2.Common.Attributes;
 using TinaShopV2.Common;
 using TinaShopV2.App_GlobalResources;
+using TinaShopV2.Areas.Administration.Models.CustomControls;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
@@ -30,11 +31,24 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Products
         public ActionResult Index(ProductIndexViewModel model)
         {
-            model.Products = ApplicationDbContext.Instance.GetAllProductViewModels();
+            // Init Products
+            ApplicationDbContext.Instance.GetProductsByIndexViewModel(ref model);
 
-
+            // Init Lists for View
+            ViewBag.PublishStatusList = EnumHelper<PublishStatus>.EnumToList();
+            ViewBag.DeleteStatusList = EnumHelper<DeleteStatus>.EnumToList();
+            ViewBag.SaleStateList = EnumHelper<SaleState>.EnumToList();
             ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+
+            // Response
             return View(model);
+        }
+
+        [ActionName("Index"),HttpPost,ValidateAntiForgeryToken]
+        public ActionResult SearchProduct(ProductIndexViewModel model)
+        {
+            model.Page = 1;
+            return Redirect(Url.Action("Index", "Products", model));
         }
 
         // GET: Administration/Products/Details/5

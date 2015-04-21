@@ -331,7 +331,7 @@
     <value>Không xuất bản</value>
   </data>
   <data name="CanNotSale" xml:space="preserve">
-    <value>Không thể xóa</value>
+    <value>Không thể bán</value>
   </data>
   <data name="NonDeleted" xml:space="preserve">
     <value>Không xóa</value>

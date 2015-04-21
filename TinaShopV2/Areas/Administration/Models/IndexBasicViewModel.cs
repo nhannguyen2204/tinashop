@@ -5,6 +5,10 @@ namespace TinaShopV2.Areas.Administration.Models
 {
     public class IndexBasicViewModel
     {
+
+       /// <summary>
+       /// Current Page
+       /// </summary>
         private int page = 1;
         [Range(1, int.MaxValue)]
         [Display(Name = "Page", ResourceType = typeof(Commons))]
@@ -13,5 +17,26 @@ namespace TinaShopV2.Areas.Administration.Models
             get { return page; }
             set { page = value; }
         }
+
+        /// <summary>
+        /// Total Of Page
+        /// </summary>
+        private int pageTotal = 0;
+        public int PageTotal
+        {
+            get { return pageTotal; }
+            set { pageTotal = value; }
+        }
+
+        /// <summary>
+        /// Total Of Items
+        /// </summary>
+        private int total = 0;
+        public int Total
+        {
+            get { return total; }
+            set { total = value; }
+        }
+
     }
 }

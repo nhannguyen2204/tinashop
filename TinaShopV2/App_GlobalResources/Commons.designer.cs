@@ -106,7 +106,7 @@ namespace TinaShopV2.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không thể xóa.
+        ///   Looks up a localized string similar to Không thể bán.
         /// </summary>
         public static string CanNotSale {
             get {

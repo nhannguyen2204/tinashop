@@ -5,6 +5,8 @@ namespace TinaShopV2.Common
 {
     public static class GlobalObjects
     {
+        public const string MainDomainProtocol = "http://localhost:11027/";
+        public const string MainDomain = "localhost:11027";
         public const string SuccesMessageKey = "success_messages";
         public const string ErrorMessageKey = "error_messages";
         public const string ErrorMessFormat = "[ERROR] message : {0}";

@@ -36,6 +36,61 @@ namespace TinaShopV2.Common.Extensions
             return model;
         }
 
+        public static void GetProductsByIndexViewModel(this ApplicationDbContext context, ref ProductIndexViewModel indexViewModel)
+        {
+            if (context == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            // Init List
+            List<ProductViewModel> models = new List<ProductViewModel>();
+            var products = context.Products.AsEnumerable();
+
+            // Filter By Brand Code
+            string brandCode = indexViewModel.BrandCode;
+            if (!string.IsNullOrEmpty(brandCode) && brandCode.ToLower() != "all")
+                products = products.Where(m => m.BrandCode == brandCode);
+
+            // Filter By Product Code
+            string productCode = indexViewModel.ProductCode;
+            if (!string.IsNullOrEmpty(productCode))
+                products = products.Where(m => m.ProductCode.ToLower().Contains(productCode.ToLower()));
+
+            // Filter By IsPublish
+            if ((PublishStatus)indexViewModel.IsPublish != PublishStatus.Null)
+            {
+                bool isPublish = (PublishStatus)indexViewModel.IsPublish == PublishStatus.Published;
+                products = products.Where(m => m.IsPublish == isPublish);
+            }
+
+            // Filter By IsDeleted
+            if ((DeleteStatus)indexViewModel.IsDeleted != DeleteStatus.Null)
+            {
+                bool isDeleted = (DeleteStatus)indexViewModel.IsDeleted == DeleteStatus.Deleted;
+                products = products.Where(m => m.IsDeleted == isDeleted);
+            }
+
+            // Filter By CanSale
+            if ((SaleState)indexViewModel.CanSale != SaleState.Null)
+            {
+                bool canSale = (SaleState)indexViewModel.CanSale == SaleState.CanSale;
+                products = products.Where(m => m.CanSale == canSale);
+            }
+
+            // Sort By UpdatedDatetime
+            products = products.OrderByDescending(m => m.UpdatedDatetime);
+
+            indexViewModel.PageTotal = products.Count() / AdminGlobalObjects.PageSize + (products.Count() % AdminGlobalObjects.PageSize > 0 ? 1 : 0);
+            indexViewModel.Total = products.Count();
+
+            if (indexViewModel.Page != 0)
+                products = products.Skip((indexViewModel.Page - 1) * AdminGlobalObjects.PageSize).Take(AdminGlobalObjects.PageSize);
+
+            if (indexViewModel.Page > 1 && products.Count() == 0)
+                throw new HttpException(404, "ContentNotFound");
+
+            indexViewModel.Products = AutoMapper.Mapper.Map(products, models);
+        }
+
         public static IEnumerable<ProductViewModel> FindProductViewModelById(this ApplicationDbContext context, string productCode)
         {
             if (context == null || string.IsNullOrEmpty(productCode))
@@ -156,31 +211,33 @@ namespace TinaShopV2.Common.Extensions
             return models;
         }
 
-        public static IEnumerable<MediaViewModel> GetMediaViewModels(this ApplicationDbContext context,out int pageToal, int page = 0, int? typeId = null, string productCode = null)
+        public static void GetMediasByIndexViewModel(this ApplicationDbContext context, ref MediaIndexViewModel indexViewModel)
         {
             if (context == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
             List<MediaViewModel> models = new List<MediaViewModel>();
             var medias = context.Medias.AsEnumerable();
-            if (typeId != null && typeId != 0)
+
+            int? typeId = indexViewModel.TypeId;
+            if (indexViewModel.TypeId != null && indexViewModel.TypeId != 0)
                 medias = medias.Where(m => m.TypeId == typeId);
 
-            if (!string.IsNullOrEmpty(productCode))
+            string productCode = indexViewModel.ProductCode;
+            if (!string.IsNullOrEmpty(indexViewModel.ProductCode))
                 medias = medias.Where(m => m.ProductCode == productCode);
 
             medias = medias.OrderByDescending(m => m.UpdatedDatetime);
 
-            pageToal = medias.Count() / AdminGlobalObjects.PageSize + (medias.Count() % AdminGlobalObjects.PageSize > 0 ? 1 : 0);
+            indexViewModel.PageTotal = medias.Count() / AdminGlobalObjects.PageSize + (medias.Count() % AdminGlobalObjects.PageSize > 0 ? 1 : 0);
 
-            if (page != 0)
-                medias = medias.Skip((page - 1) * AdminGlobalObjects.PageSize).Take(AdminGlobalObjects.PageSize);
+            if (indexViewModel.Page != 0)
+                medias = medias.Skip((indexViewModel.Page - 1) * AdminGlobalObjects.PageSize).Take(AdminGlobalObjects.PageSize);
 
-            if (page > 1 && medias.Count() == 0)
+            if (indexViewModel.Page > 1 && medias.Count() == 0)
                 throw new HttpException(404, "ContentNotFound");
 
-            AutoMapper.Mapper.Map(medias, models);
-            return models;
+            indexViewModel.Medias = AutoMapper.Mapper.Map(medias, models);
         }
 
         public static MediaViewModel GetMediaViewModelById(this ApplicationDbContext context, int id)

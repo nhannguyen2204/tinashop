@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
+using System.Web.Routing;
+using System.Collections;
+using TinaShopV2.App_GlobalResources;
 
 namespace TinaShopV2.Common
 {
@@ -61,5 +66,28 @@ namespace TinaShopV2.Common
         }
 
         #endregion
+
+        #region ResourceManager
+
+        static System.Resources.ResourceManager rmCommons;
+        public static string GetResxNameByValue_Commons(string key)
+        {
+            if (rmCommons == null)
+                rmCommons = new System.Resources.ResourceManager(typeof(Commons));
+
+            return rmCommons.GetString(key);
+        }
+
+        static System.Resources.ResourceManager rmErrors;
+        public static string GetResxNameByValue_Errors(string key)
+        {
+            if (rmErrors == null)
+                rmErrors = new System.Resources.ResourceManager(typeof(Errors));
+
+            return rmErrors.GetString(key);
+        }
+
+        #endregion
+
     }
 }
