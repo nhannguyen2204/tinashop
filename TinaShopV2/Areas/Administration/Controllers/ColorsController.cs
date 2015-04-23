@@ -23,9 +23,9 @@ namespace TinaShopV2.Areas.Administration.Controllers
         }
 
         // GET: Administration/Colors/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorById(id);
+            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
             return View(model);
         }
 
@@ -62,9 +62,9 @@ namespace TinaShopV2.Areas.Administration.Controllers
         }
 
         // GET: Administration/Colors/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorById(id);
+            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
             return View(model);
         }
 
@@ -95,21 +95,21 @@ namespace TinaShopV2.Areas.Administration.Controllers
         }
 
         // GET: Administration/Colors/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorById(id);
+            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
             return View(model);
         }
 
         // POST: Administration/Colors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string colorKey)
         {
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteColorById(id);
+                ApplicationDbContext.Instance.DeleteColorByKey(colorKey);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -118,7 +118,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                var model = ApplicationDbContext.Instance.GetColorById(id);
+                var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
                 return View(model);
             }
         }

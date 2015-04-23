@@ -7,7 +7,7 @@ namespace TinaShopV2.Models.Entity
     {
         public string ProductCode { get; set; }
         public int AddressId { get; set; }
-        public int ColorId { get; set; }
+        public string ColorKey { get; set; }
         public int Quantity { get; set; }
         public virtual Address Address { get; set; }
         public virtual Color Color { get; set; }

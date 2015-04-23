@@ -656,14 +656,14 @@ namespace TinaShopV2.Common.Extensions
             return models;
         }
 
-        public static ColorViewModel GetColorById(this ApplicationDbContext context, int id)
+        public static ColorViewModel GetColorByKey(this ApplicationDbContext context, string colorKey)
         {
             if (context == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
             try
             {
-                var color = context.Colors.Find(id);
+                var color = context.Colors.Find(colorKey);
                 if (color == null)
                     throw new HttpException(404, "ContentNotFound");
 
@@ -706,11 +706,11 @@ namespace TinaShopV2.Common.Extensions
 
             try
             {
-                var color = context.Colors.Find(model.Id);
+                var color = context.Colors.Find(model.ColorKey);
                 if (color == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                if (context.Colors.Any(m => m.Name == model.Name && m.Id != model.Id))
+                if (context.Colors.Any(m => m.Name == model.Name && m.ColorKey != model.ColorKey))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 model.CreatedDatetime = color.CreatedDatetime;
@@ -726,14 +726,14 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteColorById(this ApplicationDbContext context, int id)
+        public static void DeleteColorByKey(this ApplicationDbContext context, string colorKey)
         {
             if (context == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
             try
             {
-                var color = context.Colors.Find(id);
+                var color = context.Colors.Find(colorKey);
                 if (color == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 

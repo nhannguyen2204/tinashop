@@ -10,7 +10,8 @@ namespace TinaTest.Models
             this.ProductDetails = new List<ProductDetail>();
         }
 
-        public int Id { get; set; }
+        public string ColorKey { get; set; }
+        public string ColorCode { get; set; }
         public string Name { get; set; }
         public string CreatedUserId { get; set; }
         public string UpdatedUserId { get; set; }

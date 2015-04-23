@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -54,6 +56,20 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var emailExisting = UserManager.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim());
+                    if (emailExisting != null)
+                    {
+                        ModelState.AddModelError("", "Email's existing");
+                        goto responseToClient;
+                    }
+
+                    var phoneNumberExisting = UserManager.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim());
+                    if (phoneNumberExisting != null)
+                    {
+                        ModelState.AddModelError("", "Phone Number's existing");
+                        goto responseToClient;
+                    }
+
                     var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, PhoneNumber = model.PhoneNumber };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
@@ -71,8 +87,17 @@ namespace TinaShopV2.Areas.Administration.Controllers
                         AddErrors(result);
                 }
 
-                var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                responseToClient:
+
+                if (model.RoleId != null)
+                {
+                    var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
+                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                }
+                else
+                {
+                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
+                }
 
                 return View(model);
             }
@@ -117,6 +142,22 @@ namespace TinaShopV2.Areas.Administration.Controllers
                     if (user == null)
                         throw new HttpException(404, "ContentNotFound");
 
+                    var emailExisting = UserManager.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim() && m.Id != model.Id);
+                    if (emailExisting != null)
+                    {
+#warning localize message
+                        ModelState.AddModelError("", "Email's existing");
+                        goto responseToClient;
+                    }
+
+                    var phoneNumberExisting = UserManager.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim() && m.Id != model.Id);
+                    if (phoneNumberExisting != null)
+                    {
+#warning localize message
+                        ModelState.AddModelError("", "Phone Number's existing");
+                        goto responseToClient;
+                    }
+
                     user.UserName = model.UserName;
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
@@ -146,8 +187,20 @@ namespace TinaShopV2.Areas.Administration.Controllers
                         AddErrors(result);
                 }
 
-                var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                responseToClient:
+
+                //var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
+                //ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+
+                if (model.RoleId != null)
+                {
+                    var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
+                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                }
+                else
+                {
+                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
+                }
 
                 return View(model);
             }

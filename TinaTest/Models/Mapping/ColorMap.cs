@@ -8,9 +8,16 @@ namespace TinaTest.Models.Mapping
         public ColorMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.ColorKey);
 
             // Properties
+            this.Property(t => t.ColorKey)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            this.Property(t => t.ColorCode)
+                .HasMaxLength(50);
+
             this.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(150);
@@ -25,7 +32,8 @@ namespace TinaTest.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("Color");
-            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.ColorKey).HasColumnName("ColorKey");
+            this.Property(t => t.ColorCode).HasColumnName("ColorCode");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.CreatedUserId).HasColumnName("CreatedUserId");
             this.Property(t => t.UpdatedUserId).HasColumnName("UpdatedUserId");

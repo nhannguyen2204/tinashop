@@ -179,7 +179,7 @@ namespace TinaShopV2.Areas.Administration
             );
 
             context.MapRoute(
-                "Administration_TinaMenua_Create",
+                "Administration_TinaMenus_Create",
                 "Administration/TinaMenus/Create/{MenuTypeId}",
                 new
                 {
@@ -193,7 +193,7 @@ namespace TinaShopV2.Areas.Administration
             );
 
             context.MapRoute(
-                "Administration_TinaMenua_Index",
+                "Administration_TinaMenus_Index",
                 "Administration/TinaMenus/{MenuTypeId}",
                 new
                 {
@@ -201,6 +201,61 @@ namespace TinaShopV2.Areas.Administration
                     controller = "TinaMenus",
                     action = "Index",
                     MenuTypeId = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Colors_Delete",
+                "Administration/Colors/Delete/{ColorKey}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Colors",
+                    action = "Delete",
+                    ColorKey = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Colors_Details",
+                "Administration/Colors/Details/{ColorKey}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Colors",
+                    action = "Details",
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Colors_Edit",
+                "Administration/Colors/Edit/{ColorKey}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Colors",
+                    action = "Edit",
+                    ColorKey = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Colors_Create",
+                "Administration/Colors/Create/{ColorKey}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Colors",
+                    action = "Create",
+                    ColorKey = UrlParameter.Optional,
                     language = "vi",
                     culture = "VN"
                 }
