@@ -19,6 +19,9 @@ namespace TinaShopV2.Models.Entity.Mapping
                 .IsRequired()
                 .HasMaxLength(100);
 
+            this.Property(t => t.CatCode)
+                .HasMaxLength(150);
+
             this.Property(t => t.BrandCode)
                 .IsRequired()
                 .HasMaxLength(150);
@@ -36,6 +39,7 @@ namespace TinaShopV2.Models.Entity.Mapping
             this.Property(t => t.ProductCode).HasColumnName("ProductCode");
             this.Property(t => t.ProductName).HasColumnName("ProductName");
             this.Property(t => t.Description).HasColumnName("Description");
+            this.Property(t => t.CatCode).HasColumnName("CatCode");
             this.Property(t => t.BrandCode).HasColumnName("BrandCode");
             this.Property(t => t.CanSale).HasColumnName("CanSale");
             this.Property(t => t.Price).HasColumnName("Price");
@@ -50,6 +54,9 @@ namespace TinaShopV2.Models.Entity.Mapping
             this.HasRequired(t => t.Brand)
                 .WithMany(t => t.Products)
                 .HasForeignKey(d => d.BrandCode);
+            this.HasOptional(t => t.Category)
+                .WithMany(t => t.Products)
+                .HasForeignKey(d => d.CatCode);
 
         }
     }

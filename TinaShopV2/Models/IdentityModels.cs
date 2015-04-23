@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using TinaShopV2.Models.Entity;
 using TinaShopV2.Models.Entity.Mapping;
 
@@ -47,6 +47,7 @@ namespace TinaShopV2.Models
         public virtual DbSet<BillDetail> BillDetails { get; set; }
         public virtual DbSet<BillType> BillTypes { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Color> Colors { get; set; }
         public DbSet<Media> Medias { get; set; }
         public DbSet<MediaType> MediaTypes { get; set; }
@@ -75,6 +76,7 @@ namespace TinaShopV2.Models
             modelBuilder.Configurations.Add(new BillDetailMap());
             modelBuilder.Configurations.Add(new BillTypeMap());
             modelBuilder.Configurations.Add(new BrandMap());
+            modelBuilder.Configurations.Add(new CategoryMap());
             modelBuilder.Configurations.Add(new ColorMap());
             modelBuilder.Configurations.Add(new MediaMap());
             modelBuilder.Configurations.Add(new MediaTypeMap());

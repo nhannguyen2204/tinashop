@@ -1,21 +1,23 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using TinaShopV2.Models.Entity;
 
 namespace TinaShopV2.Models.Entity
 {
-    public partial class MediaType
+    public partial class Category
     {
-        public MediaType()
+        public Category()
         {
-            this.Medias = new List<Media>();
+            this.Products = new List<Product>();
         }
 
-        public int Id { get; set; }
+        public string CatCode { get; set; }
+        public string CatParentCode { get; set; }
         public string Name { get; set; }
         public string CreatedUserId { get; set; }
         public string UpdatedUserId { get; set; }
         public System.DateTime CreatedDatetime { get; set; }
         public System.DateTime UpdatedDatetime { get; set; }
-        public virtual ICollection<Media> Medias { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

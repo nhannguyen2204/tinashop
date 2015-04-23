@@ -7,7 +7,7 @@ namespace TinaTest.Models
     {
         public MediaType()
         {
-            this.Media = new List<Media>();
+            this.Medias = new List<Media>();
         }
 
         public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace TinaTest.Models
         public string UpdatedUserId { get; set; }
         public System.DateTime CreatedDatetime { get; set; }
         public System.DateTime UpdatedDatetime { get; set; }
-        public virtual ICollection<Media> Media { get; set; }
+        public virtual ICollection<Media> Medias { get; set; }
     }
 }

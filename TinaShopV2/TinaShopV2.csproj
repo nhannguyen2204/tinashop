@@ -283,12 +283,14 @@
     <Compile Include="Models\Entity\BillDetail.cs" />
     <Compile Include="Models\Entity\BillType.cs" />
     <Compile Include="Models\Entity\Brand.cs" />
+    <Compile Include="Models\Entity\Category.cs" />
     <Compile Include="Models\Entity\Color.cs" />
     <Compile Include="Models\Entity\Mapping\AddressMap.cs" />
     <Compile Include="Models\Entity\Mapping\BillDetailMap.cs" />
     <Compile Include="Models\Entity\Mapping\BillMap.cs" />
     <Compile Include="Models\Entity\Mapping\BillTypeMap.cs" />
     <Compile Include="Models\Entity\Mapping\BrandMap.cs" />
+    <Compile Include="Models\Entity\Mapping\CategoryMap.cs" />
     <Compile Include="Models\Entity\Mapping\ColorMap.cs" />
     <Compile Include="Models\Entity\Mapping\MediaMap.cs" />
     <Compile Include="Models\Entity\Mapping\MediaTypeMap.cs" />

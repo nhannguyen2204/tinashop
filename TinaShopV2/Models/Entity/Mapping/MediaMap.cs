@@ -46,7 +46,7 @@ namespace TinaShopV2.Models.Entity.Mapping
 
             // Relationships
             this.HasRequired(t => t.MediaType)
-                .WithMany(t => t.Media)
+                .WithMany(t => t.Medias)
                 .HasForeignKey(d => d.TypeId);
             this.HasOptional(t => t.Product)
                 .WithMany(t => t.Medias)

@@ -102,6 +102,7 @@
     <Compile Include="Models\BillDetail.cs" />
     <Compile Include="Models\BillType.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\Mapping\AddressMap.cs" />
     <Compile Include="Models\Mapping\AspNetRoleMap.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Models\Mapping\BillMap.cs" />
     <Compile Include="Models\Mapping\BillTypeMap.cs" />
     <Compile Include="Models\Mapping\BrandMap.cs" />
+    <Compile Include="Models\Mapping\CategoryMap.cs" />
     <Compile Include="Models\Mapping\ColorMap.cs" />
     <Compile Include="Models\Mapping\MediaTypeMap.cs" />
     <Compile Include="Models\Mapping\MediaMap.cs" />
