@@ -40,7 +40,8 @@ namespace TinaShopV2.Controllers
             if (!Request.IsLocal && !Request.Url.Host.ToLower().Equals(GlobalObjects.MainDomain))
                 Response.Redirect(string.Format("{0}{1}", GlobalObjects.MainDomainProtocol, Request.Url.PathAndQuery));
 
-            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal && !Request.Url.PathAndQuery.ToLower().Equals(Url.Action("ComingSoon", "Home", new { area = "" }).ToLower()))
+            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal &&
+                !Request.Url.PathAndQuery.ToLower().Equals(Url.Action("ComingSoon", "Home", new { area = "" }).ToLower()))
                 Response.Redirect(Url.Action("ComingSoon", "Home", new { area = "" }));
 
             base.OnActionExecuting(filterContext);
