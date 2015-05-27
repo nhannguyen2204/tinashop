@@ -5,3 +5,5 @@ TinaTest/bin/*
 TinaTest/obj/*
 packages/*
 *.user
+TinaShopV2/Properties/PublishProfiles/TinaShopV2.pubxml
+TinaShopV2/TinaShopV2.csproj.user

@@ -9,6 +9,7 @@ namespace TinaShopV2.Models.Entity
         {
             this.Medias = new List<Media>();
             this.ProductDetails = new List<ProductDetail>();
+            this.Catalogs = new List<Catalog>();
         }
 
         public string ProductCode { get; set; }
@@ -28,5 +29,6 @@ namespace TinaShopV2.Models.Entity
         public virtual Category Category { get; set; }
         public virtual ICollection<Media> Medias { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
+        public virtual ICollection<Catalog> Catalogs { get; set; }
     }
 }

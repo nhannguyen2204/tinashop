@@ -25,6 +25,7 @@ namespace TinaTest.Models
         public DbSet<BillDetail> BillDetails { get; set; }
         public DbSet<BillType> BillTypes { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Media> Media { get; set; }
@@ -48,6 +49,7 @@ namespace TinaTest.Models
             modelBuilder.Configurations.Add(new BillDetailMap());
             modelBuilder.Configurations.Add(new BillTypeMap());
             modelBuilder.Configurations.Add(new BrandMap());
+            modelBuilder.Configurations.Add(new CatalogMap());
             modelBuilder.Configurations.Add(new CategoryMap());
             modelBuilder.Configurations.Add(new ColorMap());
             modelBuilder.Configurations.Add(new MediaMap());
