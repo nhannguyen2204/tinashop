@@ -303,6 +303,7 @@
     <Compile Include="Models\Entity\Mapping\MenuTypeMap.cs" />
     <Compile Include="Models\Entity\Mapping\ProductDetailMap.cs" />
     <Compile Include="Models\Entity\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Entity\Mapping\SliderMap.cs" />
     <Compile Include="Models\Entity\Mapping\TinaActionMap.cs" />
     <Compile Include="Models\Entity\Mapping\TinaAuthorizeMap.cs" />
     <Compile Include="Models\Entity\Mapping\TinaMenuMap.cs" />
@@ -311,6 +312,7 @@
     <Compile Include="Models\Entity\MenuType.cs" />
     <Compile Include="Models\Entity\Product.cs" />
     <Compile Include="Models\Entity\ProductDetail.cs" />
+    <Compile Include="Models\Entity\Slider.cs" />
     <Compile Include="Models\Entity\TinaAction.cs" />
     <Compile Include="Models\Entity\TinaAuthorize.cs" />
     <Compile Include="Models\Entity\TinaMenu.cs" />

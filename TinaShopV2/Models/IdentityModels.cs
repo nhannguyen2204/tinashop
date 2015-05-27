@@ -50,10 +50,11 @@ namespace TinaShopV2.Models
         public virtual DbSet<Catalog> Catalogs { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Color> Colors { get; set; }
-        public DbSet<Media> Medias { get; set; }
-        public DbSet<MediaType> MediaTypes { get; set; }
+        public virtual DbSet<Media> Medias { get; set; }
+        public virtual DbSet<MediaType> MediaTypes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
+        public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<TinaAction> TinaActions { get; set; }
         public virtual DbSet<TinaAuthorize> TinaAuthorizes { get; set; }
         public virtual DbSet<MenuType> MenuTypes { get; set; }
@@ -85,6 +86,7 @@ namespace TinaShopV2.Models
             modelBuilder.Configurations.Add(new MenuTypeMap());
             modelBuilder.Configurations.Add(new ProductMap());
             modelBuilder.Configurations.Add(new ProductDetailMap());
+            modelBuilder.Configurations.Add(new SliderMap());
             modelBuilder.Configurations.Add(new TinaActionMap());
             modelBuilder.Configurations.Add(new TinaAuthorizeMap());
             modelBuilder.Configurations.Add(new TinaMenuMap());

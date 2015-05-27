@@ -28,11 +28,12 @@ namespace TinaTest.Models
         public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Color> Colors { get; set; }
-        public DbSet<Media> Media { get; set; }
+        public DbSet<Media> Medias { get; set; }
         public DbSet<MediaType> MediaTypes { get; set; }
         public DbSet<MenuType> MenuTypes { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<TinaAction> TinaActions { get; set; }
         public DbSet<TinaAuthorize> TinaAuthorizes { get; set; }
@@ -57,6 +58,7 @@ namespace TinaTest.Models
             modelBuilder.Configurations.Add(new MenuTypeMap());
             modelBuilder.Configurations.Add(new ProductMap());
             modelBuilder.Configurations.Add(new ProductDetailMap());
+            modelBuilder.Configurations.Add(new SliderMap());
             modelBuilder.Configurations.Add(new sysdiagramMap());
             modelBuilder.Configurations.Add(new TinaActionMap());
             modelBuilder.Configurations.Add(new TinaAuthorizeMap());

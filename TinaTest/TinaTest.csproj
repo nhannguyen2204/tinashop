@@ -122,6 +122,7 @@
     <Compile Include="Models\Mapping\MenuTypeMap.cs" />
     <Compile Include="Models\Mapping\ProductDetailMap.cs" />
     <Compile Include="Models\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Mapping\SliderMap.cs" />
     <Compile Include="Models\Mapping\sysdiagramMap.cs" />
     <Compile Include="Models\Mapping\TinaActionMap.cs" />
     <Compile Include="Models\Mapping\TinaAuthorizeMap.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Models\MenuType.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetail.cs" />
+    <Compile Include="Models\Slider.cs" />
     <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="Models\TinaAction.cs" />
     <Compile Include="Models\TinaAuthorize.cs" />
