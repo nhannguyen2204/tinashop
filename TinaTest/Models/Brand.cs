@@ -12,6 +12,7 @@ namespace TinaTest.Models
 
         public string BrandCode { get; set; }
         public string Name { get; set; }
+        public Nullable<int> MediaId { get; set; }
         public string CreatedUserId { get; set; }
         public string UpdatedUserId { get; set; }
         public System.DateTime CreatedDatetime { get; set; }

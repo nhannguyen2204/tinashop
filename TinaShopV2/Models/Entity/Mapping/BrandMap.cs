@@ -34,6 +34,7 @@ namespace TinaShopV2.Models.Entity.Mapping
             this.ToTable("Brand");
             this.Property(t => t.BrandCode).HasColumnName("BrandCode");
             this.Property(t => t.Name).HasColumnName("Name");
+            this.Property(t => t.MediaId).HasColumnName("MediaId");
             this.Property(t => t.CreatedUserId).HasColumnName("CreatedUserId");
             this.Property(t => t.UpdatedUserId).HasColumnName("UpdatedUserId");
             this.Property(t => t.CreatedDatetime).HasColumnName("CreatedDatetime");
