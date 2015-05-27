@@ -13,7 +13,9 @@ namespace TinaTest.Models
         public string CatCode { get; set; }
         public string CatParentCode { get; set; }
         public int OrderNumber { get; set; }
+        public Nullable<int> MediaId { get; set; }
         public string Name { get; set; }
+        public bool IsPublish { get; set; }
         public string CreatedUserId { get; set; }
         public string UpdatedUserId { get; set; }
         public System.DateTime CreatedDatetime { get; set; }

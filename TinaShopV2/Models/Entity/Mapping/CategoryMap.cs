@@ -37,6 +37,7 @@ namespace TinaShopV2.Models.Entity.Mapping
             this.Property(t => t.CatCode).HasColumnName("CatCode");
             this.Property(t => t.CatParentCode).HasColumnName("CatParentCode");
             this.Property(t => t.OrderNumber).HasColumnName("OrderNumber");
+            this.Property(t => t.MediaId).HasColumnName("MediaId");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.IsPublish).HasColumnName("IsPublish");
             this.Property(t => t.CreatedUserId).HasColumnName("CreatedUserId");

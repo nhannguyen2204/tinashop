@@ -14,6 +14,7 @@ namespace TinaShopV2.Models.Entity
         public string CatCode { get; set; }
         public string CatParentCode { get; set; }
         public int OrderNumber { get; set; }
+        public Nullable<int> MediaId { get; set; }
         public string Name { get; set; }
         public bool IsPublish { get; set; }
         public string CreatedUserId { get; set; }
