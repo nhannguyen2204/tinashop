@@ -124,6 +124,33 @@ namespace TinaShopV2.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã thể loại.
+        /// </summary>
+        public static string CatCode {
+            get {
+                return ResourceManager.GetString("CatCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thể loại.
+        /// </summary>
+        public static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thể loại cha.
+        /// </summary>
+        public static string CatParentCode {
+            get {
+                return ResourceManager.GetString("CatParentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thay đổi mật khẩu.
         /// </summary>
         public static string ChangePassword {
@@ -138,6 +165,24 @@ namespace TinaShopV2.App_GlobalResources {
         public static string Color {
             get {
                 return ResourceManager.GetString("Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã màu.
+        /// </summary>
+        public static string ColorCode {
+            get {
+                return ResourceManager.GetString("ColorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Từ khóa màu.
+        /// </summary>
+        public static string ColorKey {
+            get {
+                return ResourceManager.GetString("ColorKey", resourceCulture);
             }
         }
         

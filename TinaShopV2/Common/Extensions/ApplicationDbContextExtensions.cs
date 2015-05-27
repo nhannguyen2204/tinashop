@@ -12,6 +12,7 @@ using TinaShopV2.App_GlobalResources;
 using TinaShopV2.Areas.Administration.Models;
 using TinaShopV2.Areas.Administration.Models.Address;
 using TinaShopV2.Areas.Administration.Models.Brand;
+using TinaShopV2.Areas.Administration.Models.Category;
 using TinaShopV2.Areas.Administration.Models.Color;
 using TinaShopV2.Areas.Administration.Models.Media;
 using TinaShopV2.Areas.Administration.Models.MediaType;
@@ -552,6 +553,150 @@ namespace TinaShopV2.Common.Extensions
 
         #endregion
 
+        #region Category
+
+        public static IEnumerable<CategoryViewModel> GetCatViewModelByParent(this ApplicationDbContext context, string parentCode = null, bool? isPublished = null)
+        {
+            IEnumerable<Category> result = null;
+
+            if (string.IsNullOrEmpty(parentCode))
+                result = context.Categories.Where(m => m.CatParentCode == null || m.CatParentCode == string.Empty).OrderBy(m => m.OrderNumber);
+            else
+                result = context.Categories.Where(m => m.CatParentCode == parentCode).OrderBy(m => m.OrderNumber);
+
+            if (isPublished != null)
+                result = result.Where(m => m.IsPublish == isPublished);
+
+            IEnumerable<CategoryViewModel> model = new List<CategoryViewModel>();
+            AutoMapper.Mapper.Map(result, model);
+            return model ?? new List<CategoryViewModel>();
+        }
+
+        public static IEnumerable<string> GetParentCodesByCategoryViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        {
+            List<string> parentCodes = new List<string>();
+
+            Category parent = !string.IsNullOrEmpty(model.CatParentCode) ? context.Categories.Find(model.CatParentCode) : null;
+            while (parent != null)
+            {
+                parentCodes.Add(parent.CatCode);
+
+                if (!string.IsNullOrEmpty(parent.CatParentCode))
+                    parent = context.Categories.Find(parent.CatParentCode);
+                else
+                    break;
+            }
+
+            return parentCodes;
+        }
+
+        public static CategoryViewModel GetCategoryViewModelByCatCode(this ApplicationDbContext context, string catCode)
+        {
+            CategoryViewModel model = null;
+
+            Category cat = context.Categories.Find(catCode);
+            if (cat != null)
+            {
+                model = new CategoryViewModel();
+                AutoMapper.Mapper.Map(cat, model);
+            }
+
+            return model;
+        }
+
+        public static void CreateCategoryByViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        {
+            if (context == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            try
+            {
+                if (context.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim()))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.CatCode)));
+
+                if (context.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim()))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.Name)));
+
+                if (!string.IsNullOrEmpty(model.CatParentCode) && !context.Categories.Any(m => m.CatCode == model.CatParentCode))
+                    throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.CatParentCode)));
+
+                var categories = context.GetParentCodesByCategoryViewModel(model);
+                if (categories.Count() > 0 && categories.Contains(model.CatCode))
+                    throw new Exception(string.Format(Errors.NotSelectThisValueFormat, model.GetDisplayName(m => m.CatParentCode)));
+
+                Category newCat = new Category();
+                AutoMapper.Mapper.Map(model, newCat);
+
+                context.Categories.Add(newCat);
+                context.Entry<Category>(newCat).State = EntityState.Added;
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void EditCategoryByViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        {
+            if (context == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            Category category = context.Categories.Find(model.CatCode);
+            if (category == null)
+                throw new HttpException(404, "ContentNotFound");
+            
+            try
+            {
+                if (context.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim() && m.CatCode != model.CatCode))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.CatCode)));
+
+                if (context.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim() && m.CatCode != model.CatCode))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.Name)));
+
+                if (!string.IsNullOrEmpty(model.CatParentCode) && !context.Categories.Any(m => m.CatCode == model.CatParentCode))
+                    throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.CatParentCode)));
+
+                var categories = context.GetParentCodesByCategoryViewModel(model);
+                if (categories.Count() > 0 && categories.Contains(model.CatCode))
+                    throw new Exception(string.Format(Errors.NotSelectThisValueFormat, model.GetDisplayName(m => m.CatParentCode)));
+
+                model.CreatedDatetime = category.CreatedDatetime;
+                model.CreatedUserId = category.CreatedUserId;
+                AutoMapper.Mapper.Map(model, category);
+
+                context.Entry<Category>(category).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeleteCategoryByCatCode(this ApplicationDbContext context, string catCode)
+        {
+            if (context == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            try
+            {
+                var cat = context.Categories.Find(catCode);
+                if (cat == null)
+                    throw new HttpException(404, "ContentNotFound");
+
+                context.Categories.Remove(cat);
+                context.Entry<Category>(cat).State = EntityState.Deleted;
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
         #region Address
 
         public static IEnumerable<AddressViewModel> GetAllAddressViewModels(this ApplicationDbContext context)
@@ -837,7 +982,7 @@ namespace TinaShopV2.Common.Extensions
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
             IEnumerable<TinaActionViewModel> result = new List<TinaActionViewModel>();
-            AutoMapper.Mapper.Map(context.TinaActions, result);
+            AutoMapper.Mapper.Map(context.TinaActions.OrderByDescending(m => m.UpdatedDatetime), result);
             return result;
         }
 

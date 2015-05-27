@@ -20,28 +20,6 @@ namespace TinaShopV2.Common.Extensions
     {
         #region TinaMenu DropdownList
 
-        public static void GenerateTinaMenus(ref List<TinaMenuViewModel> models, int menuTypeId, int? parentId, int level = 0, bool? isHidden = null)
-        {
-            if (models == null)
-                models = new List<TinaMenuViewModel>();
-
-            var tinaMenus = ApplicationDbContext.Instance.GetTinaMenuViewModelByTypeAndParent(menuTypeId, parentId, isHidden);
-            foreach (var item in tinaMenus)
-            {
-                string levelStr = string.Empty;
-                for (int i = 0; i < level; i++)
-                {
-                    levelStr += "----------";
-                }
-
-                item.Name = string.Format("{0} {1}", levelStr, item.Name);
-                models.Add(item);
-                var menus = ApplicationDbContext.Instance.GetTinaMenuViewModelByTypeAndParent(menuTypeId, item.Id, isHidden);
-                if (menus.Count() > 0)
-                    GenerateTinaMenus(ref models, menuTypeId, item.Id, level + 1, isHidden);
-            }
-        }
-
         public static MvcHtmlString TinaMenuDropdownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, Expression<Func<TModel, int>> expressionMenuType, object htmlAttributes = null, bool isEnableLabel = false, bool? isHidden = null)
         {
             List<SelectListItem> selectList = new List<SelectListItem>();
@@ -55,7 +33,7 @@ namespace TinaShopV2.Common.Extensions
                     int menuId = 0;
                     int.TryParse(menuIdStr, out menuId);
                     List<TinaMenuViewModel> models = new List<TinaMenuViewModel>();
-                    GenerateTinaMenus(ref models, menuTypeId, null, 0, isHidden);
+                    AdminHelpers.GenerateTinaMenus(ref models, menuTypeId, null, 0, isHidden);
                     selectList = models.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == menuId }).ToList();
                 }
             }

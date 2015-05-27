@@ -4,3 +4,4 @@ TinaShopV2/obj/*
 TinaTest/bin/*
 TinaTest/obj/*
 packages/*
+*.user

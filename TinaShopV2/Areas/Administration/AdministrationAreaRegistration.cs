@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using TinaShopV2.Areas.Administration.Models;
 using TinaShopV2.Areas.Administration.Models.Address;
 using TinaShopV2.Areas.Administration.Models.Brand;
+using TinaShopV2.Areas.Administration.Models.Category;
 using TinaShopV2.Areas.Administration.Models.Color;
 using TinaShopV2.Areas.Administration.Models.Media;
 using TinaShopV2.Areas.Administration.Models.MediaType;
@@ -28,6 +29,48 @@ namespace TinaShopV2.Areas.Administration
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            context.MapRoute(
+                "Administration_Categories_Edit",
+                "Administration/Category/Edit/{CatCode}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Category",
+                    action = "Edit",
+                    CatCode = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Categories_Details",
+                "Administration/Category/Details/{CatCode}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Category",
+                    action = "Details",
+                    CatCode = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Categories_Delete",
+                "Administration/Category/Delete/{CatCode}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Category",
+                    action = "Delete",
+                    CatCode = UrlParameter.Optional,
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
             context.MapRoute(
                 "Administration_Brands_Delete",
                 "Administration/Brands/Delete/{BrandCode}",
@@ -327,6 +370,9 @@ namespace TinaShopV2.Areas.Administration
 
             AutoMapper.Mapper.CreateMap<Product, ProductViewModel>();
             AutoMapper.Mapper.CreateMap<ProductViewModel, Product>();
+
+            AutoMapper.Mapper.CreateMap<Category, CategoryViewModel>();
+            AutoMapper.Mapper.CreateMap<CategoryViewModel, Category>();
         }
     }
 }

@@ -5,8 +5,8 @@ namespace TinaShopV2.Common
 {
     public static class GlobalObjects
     {
-        public const string MainDomainProtocol = "http://localhost:11027/";
-        public const string MainDomain = "localhost:11027";
+        public const string MainDomainProtocol = "http://tina2012.vn";
+        public const string MainDomain = "tina2012.vn";
         public const string SuccesMessageKey = "success_messages";
         public const string ErrorMessageKey = "error_messages";
         public const string ErrorMessFormat = "[ERROR] message : {0}";
@@ -113,6 +113,26 @@ namespace TinaShopV2.Common
                 return media_NoImage_Id;
             }
         }
+
+        private static bool? isComingSoonMode;
+        public static bool IsComingSoonMode
+        {
+            get
+            {
+                if (isComingSoonMode == null)
+                {
+                    string valueStr = WebConfigurationManager.AppSettings["IsComingSoonMode"] ?? "false";
+                    bool boolValue = false;
+                    if (!bool.TryParse(valueStr,out boolValue))
+                        isComingSoonMode = false;
+
+                    isComingSoonMode = boolValue;
+                }
+
+                return isComingSoonMode.Value;
+            }
+        }
+
 
         private static TinaShopV2.Models.Entity.Media media_NoImage;
         public static TinaShopV2.Models.Entity.Media Media_NoImage

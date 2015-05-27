@@ -339,4 +339,19 @@
   <data name="BrandCode" xml:space="preserve">
     <value>Mã nhãn hiệu</value>
   </data>
+  <data name="ColorCode" xml:space="preserve">
+    <value>Mã màu</value>
+  </data>
+  <data name="ColorKey" xml:space="preserve">
+    <value>Từ khóa màu</value>
+  </data>
+  <data name="CatCode" xml:space="preserve">
+    <value>Mã thể loại</value>
+  </data>
+  <data name="CatParentCode" xml:space="preserve">
+    <value>Thể loại cha</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Thể loại</value>
+  </data>
 </root>

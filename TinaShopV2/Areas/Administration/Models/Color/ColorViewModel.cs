@@ -11,8 +11,11 @@ namespace TinaShopV2.Areas.Administration.Models.Color
 {
     public class ColorViewModel : BaseViewModel
     {
+        [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
+        [Display(Name = "ColorKey", ResourceType = typeof(Commons))]
         public string ColorKey { get; set; }
 
+        [Display(Name = "ColorCode", ResourceType = typeof(Commons))]
         public string ColorCode { get; set; }
 
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]

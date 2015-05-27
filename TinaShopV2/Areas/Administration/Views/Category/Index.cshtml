@@ -1,0 +1,42 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model IEnumerable<TinaShopV2.Areas.Administration.Models.Category.CategoryViewModel>
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Index, Resources.Commons.Category);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@ViewBag.Title</h2>
+<p>
+    <a href="@Url.Action("Create", "Category", new { @area = "Administration"})" title="@Resources.Commons.Create - @Resources.Commons.Category">
+        @Resources.Commons.Create
+    </a>
+</p>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped responsive-utilities">
+        <tr>
+            <th>@Resources.Commons.Name</th>
+            <th>@Resources.Commons.UpdatedUser</th>
+            <th>@Resources.Commons.UpdatedDatetime</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name @(item.IsPublish ? MvcHtmlString.Create("<b>[Published]</b>") : MvcHtmlString.Create("<i>[UnPublished]</i>"))</td>
+                <td>@item.UpdatedUser.UserName</td>
+                <td>@item.UpdatedDatetime</td>
+                <td>
+                    @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { catCode = item.CatCode })) |
+                    @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { catCode = item.CatCode })) |
+                    @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { catCode = item.CatCode }))
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@section Scripts {
+    
+}

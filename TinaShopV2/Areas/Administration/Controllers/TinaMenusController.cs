@@ -34,7 +34,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             IndexTinaMenuViewModel model = new IndexTinaMenuViewModel();
             model.MenuTypeId = menuTypeId;
             List<TinaMenuViewModel> tinaMenus = new List<TinaMenuViewModel>();
-            AdminHtmlHelperExtentions.GenerateTinaMenus(ref tinaMenus, menuTypeId ?? 0, null);
+            AdminHelpers.GenerateTinaMenus(ref tinaMenus, menuTypeId ?? 0, null);
             model.TinaMenus = tinaMenus;
 
             if (Request.IsAjaxRequest())

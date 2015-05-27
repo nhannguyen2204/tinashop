@@ -228,6 +228,7 @@
     <Compile Include="Areas\Administration\Controllers\AccountController.cs" />
     <Compile Include="Areas\Administration\Controllers\AddressesController.cs" />
     <Compile Include="Areas\Administration\Controllers\BrandsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Administration\Controllers\ColorsController.cs" />
     <Compile Include="Areas\Administration\Controllers\ErrorsController.cs" />
     <Compile Include="Areas\Administration\Controllers\HomeController.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Areas\Administration\Models\AccountViewModels.cs" />
     <Compile Include="Areas\Administration\Models\Address\AddressViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Brand\BrandViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Category\CategoryViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Color\ColorViewModel.cs" />
     <Compile Include="Areas\Administration\Models\CustomControls\PagerViewModel.cs" />
     <Compile Include="Areas\Administration\Models\CustomControls\SmartCheckbox.cs" />
@@ -272,6 +274,8 @@
     <Compile Include="Common\Extentions.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -519,6 +523,7 @@
     <Content Include="Content\LIMO\css\colors\color-scheme4.css" />
     <Content Include="Content\LIMO\css\colors\color-scheme5.css" />
     <Content Include="Content\LIMO\css\colors\color-scheme6.css" />
+    <Content Include="Content\LIMO\css\colors\color-scheme7.css" />
     <Content Include="Content\LIMO\css\styles.css" />
     <Content Include="Content\LIMO\delivery.html" />
     <Content Include="Content\LIMO\favicon.ico" />
@@ -579,6 +584,7 @@
     <Content Include="Content\LIMO\img\logo-scheme4.png" />
     <Content Include="Content\LIMO\img\logo-scheme5.png" />
     <Content Include="Content\LIMO\img\logo-scheme6.png" />
+    <Content Include="Content\LIMO\img\logo-scheme7.png" />
     <Content Include="Content\LIMO\img\logo.png" />
     <Content Include="Content\LIMO\img\media\1.jpg" />
     <Content Include="Content\LIMO\img\media\2.jpg" />
@@ -1399,6 +1405,10 @@
     <Content Include="Content\SmartAdminPackage\wizard.html" />
     <Content Include="Content\SmartAdminPackage\xml\gmap\pins.xml" />
     <Content Include="favicon.ico" />
+    <Content Include="favicon16x16.ico" />
+    <Content Include="favicon32x32.ico" />
+    <Content Include="favicon64x64.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Administration\Views\web.config">
@@ -1472,6 +1482,11 @@
     <Content Include="bundles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="bundles\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Areas\Administration\Views\Shared\CustomControls\_PagerPartial.cshtml" />
+    <Content Include="Areas\Administration\Views\Category\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Category\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Category\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Category\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Category\Delete.cshtml" />
     <None Include="connectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -1662,6 +1677,12 @@
     <Content Include="Content\LIMO\mailer\config.ini" />
     <Content Include="Content\LIMO\mailer\mailer.php" />
     <Content Include="Content\LIMO\prepros.cfg" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <None Include="Properties\PublishProfiles\TinaShopV2.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1694,6 +1715,9 @@
     <Content Include="sound\voice_alert.mp3" />
     <Content Include="sound\voice_off.mp3" />
     <Content Include="sound\voice_on.mp3" />
+    <Content Include="Views\Shared\__Error.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1712,6 +1736,17 @@
     <Content Include="sound\voice_alert.ogg" />
     <Content Include="sound\voice_off.ogg" />
     <Content Include="sound\voice_on.ogg" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Errors\HttpError.cshtml" />
+    <Content Include="Views\Errors\Http500.cshtml" />
+    <Content Include="Views\Errors\Http404.cshtml" />
+    <Content Include="Views\Home\ComingSoon.cshtml" />
+    <Content Include="Views\Shared\_LimoLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

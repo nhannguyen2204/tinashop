@@ -9,7 +9,7 @@ $(document).ready(function(e) {
 	
 	/*Countdown
 	*******************************************/
-	$('#timer').countdown('2015/8/10', function(event) {
+	$('#timer').countdown('2015/7/1', function(event) {
     $(this).html(event.strftime('%D:%H:%M:%S'));
   });
 	
