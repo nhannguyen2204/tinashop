@@ -22,6 +22,19 @@
         <dd>@Html.DisplayFor(model => model.Name)</dd>
     </dl>
     <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.MediaId)</dt>
+        <dd>
+            @if (Model.MediaId != null)
+            {
+                var media = Model.GetImage();
+                if (media != null)
+                {
+                    <img alt="@media.Name" src="@Path.Combine(GlobalObjects.MediaImageFolderPath, media.ThumbPath)" style="max-width:150px;" class="thumbnail" />
+                }
+            }
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.CatParentCode)</dt>
         <dd>
             @{

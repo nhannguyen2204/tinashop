@@ -8,6 +8,7 @@ using TinaShopV2.Common.Attributes.Validation;
 using TinaShopV2.Models;
 using TinaShopV2.Common.Extensions;
 using Microsoft.Owin;
+using TinaShopV2.Areas.Administration.Models.Media;
 
 namespace TinaShopV2.Areas.Administration.Models.Category
 {
@@ -24,6 +25,9 @@ namespace TinaShopV2.Areas.Administration.Models.Category
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "CatCode", ResourceType = typeof(Commons))]
         public string CatCode { get; set; }
+
+        [Display(Name = "Image", ResourceType = typeof(Commons))]
+        public Nullable<int> MediaId { get; set; }
 
         [Display(Name = "CatParentCode", ResourceType = typeof(Commons))]
         [NotEqual("CatCode", ErrorMessageResourceName = "NotSelectThisValue", ErrorMessageResourceType = typeof(App_GlobalResources.Errors))]
@@ -53,5 +57,14 @@ namespace TinaShopV2.Areas.Administration.Models.Category
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "Publish", ResourceType = typeof(Commons))]
         public bool IsPublish { get; set; }
+
+        public MediaViewModel GetImage()
+        {
+            MediaViewModel image = null;
+            if (MediaId != null)
+                image = _owinContext.GetMediaViewModelById(MediaId.Value);
+
+            return image;
+        }
     }
 }

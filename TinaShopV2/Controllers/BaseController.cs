@@ -2,6 +2,7 @@
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity.Owin;
 using System.Web;
+using System.Linq;
 using System.Web.Mvc;
 using TinaShopV2.Common;
 using TinaShopV2.Common.Extensions;
@@ -47,21 +48,14 @@ namespace TinaShopV2.Controllers
             if (!Request.IsLocal && !Request.Url.Host.ToLower().Equals(GlobalObjects.MainDomain))
                 Response.Redirect(string.Format("{0}{1}", GlobalObjects.MainDomainProtocol, Request.Url.PathAndQuery));
 
-            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal &&
+            var routeData = filterContext.RequestContext.RouteData;
+            string areaName = routeData.Values["area"] != null ? routeData.Values["area"].ToString() : string.Empty;
+
+            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal && !areaName.ToLower().Equals("administration") &&
                 !Request.Url.PathAndQuery.ToLower().Equals(Url.Action("ComingSoon", "Home", new { area = "" }).ToLower()))
                 Response.Redirect(Url.Action("ComingSoon", "Home", new { area = "" }));
 
             base.OnActionExecuting(filterContext);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (disposing)
-            {
-                //_dbContextService.Dispose();
-                //_userManagerService.Dispose();
-            }
         }
     }
 }

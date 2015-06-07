@@ -23,7 +23,16 @@
     </dl>
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.MediaId)</dt>
-        <dd>@Html.DisplayFor(model => model.MediaId)</dd>
+        <dd>
+            @if (Model.MediaId != null)
+            {
+                var media = Model.GetImage();
+                if (media != null)
+                {
+                    <img alt="@media.Name" src="@Path.Combine(GlobalObjects.MediaImageFolderPath, media.ThumbPath)" style="max-width:150px;" class="thumbnail" />
+                }
+            }
+        </dd>
     </dl>
 
     @using (Html.BeginForm(ViewContext.LocalizeRouteValues()))

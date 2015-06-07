@@ -1124,6 +1124,8 @@ namespace TinaShopV2.Common.Extensions
                 if (dbContext.Roles.Any(m => m.Name == model.Name && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
+                role.Name = model.Name;
+
                 dbContext.Entry<IdentityRole>(role).State = EntityState.Modified;
                 dbContext.SaveChanges();
             }
