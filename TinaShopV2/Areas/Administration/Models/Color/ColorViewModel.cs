@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,14 @@ namespace TinaShopV2.Areas.Administration.Models.Color
 {
     public class ColorViewModel : BaseViewModel
     {
+        public ColorViewModel() : base() { }
+
+        public ColorViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+            
+        }
+
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "ColorKey", ResourceType = typeof(Commons))]
         public string ColorKey { get; set; }

@@ -13,21 +13,27 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class MenuTypesController : BaseController
     {
+        public MenuTypesController()
+            : base()
+        {
+            
+        }
+
         // GET: Administration/MenuTypes
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllMenuTypeViewModel();
+            var model = _owinContext.GetAllMenuTypeViewModel();
             return View(model);
         }
 
         // GET: Administration/MenuTypes/Details/5
         public ActionResult Details(int id)
         {
-            var menuType = ApplicationDbContext.Instance.MenuTypes.Find(id);
+            var menuType = _dbContextService.MenuTypes.Find(id);
             if (menuType == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            MenuTypeViewModel model = new MenuTypeViewModel();
+            MenuTypeViewModel model = new MenuTypeViewModel(_owinContext);
             AutoMapper.Mapper.Map(menuType, model);
             
             return View(model);
@@ -50,7 +56,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateMenuTypeByViewModel(model);
+                    _owinContext.CreateMenuTypeByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -67,11 +73,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/MenuTypes/Edit/5
         public ActionResult Edit(int id)
         {
-            var menuType = ApplicationDbContext.Instance.MenuTypes.Find(id);
+            var menuType = _dbContextService.MenuTypes.Find(id);
             if (menuType == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            MenuTypeViewModel model = new MenuTypeViewModel();
+            MenuTypeViewModel model = new MenuTypeViewModel(_owinContext);
             AutoMapper.Mapper.Map(menuType, model);
 
             return View(model);
@@ -87,12 +93,12 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
-                    var menuType = ApplicationDbContext.Instance.MenuTypes.Find(model.Id);
+                    var menuType = _dbContextService.MenuTypes.Find(model.Id);
                     if (menuType == null)
                         throw new HttpException(400, "BadRequest");
 
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditMenuTypeByViewModel(model);
+                    _owinContext.EditMenuTypeByViewModel(model);
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
                 }
@@ -108,11 +114,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/MenuTypes/Delete/5
         public ActionResult Delete(int id)
         {
-            var menuType = ApplicationDbContext.Instance.MenuTypes.Find(id);
+            var menuType = _dbContextService.MenuTypes.Find(id);
             if (menuType == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            MenuTypeViewModel model = new MenuTypeViewModel();
+            MenuTypeViewModel model = new MenuTypeViewModel(_owinContext);
             AutoMapper.Mapper.Map(menuType, model);
 
             return View(model);
@@ -123,20 +129,20 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var menuType = ApplicationDbContext.Instance.MenuTypes.Find(id);
+            var menuType = _dbContextService.MenuTypes.Find(id);
             if (menuType == null)
                 throw new HttpException(400, "BadRequest");
 
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteMenuTypeByViewModel(id);
+                _owinContext.DeleteMenuTypeByViewModel(id);
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                MenuTypeViewModel model = new MenuTypeViewModel();
+                MenuTypeViewModel model = new MenuTypeViewModel(_owinContext);
                 AutoMapper.Mapper.Map(menuType, model);
 
                 ModelState.AddModelError("", ex.Message);

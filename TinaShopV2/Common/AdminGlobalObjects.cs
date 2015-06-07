@@ -4,7 +4,7 @@ namespace TinaShopV2.Common
 {
     public class AdminGlobalObjects
     {
-        public const int PageSize = 1;
+        public const int PageSize = 20;
 
         private static string contentRelativePath;
         public static string ContentRelativePath

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,14 @@ namespace TinaShopV2.Areas.Administration.Models.User
 {
     public class EditUserViewModel : BaseViewModel
     {
+        public EditUserViewModel() : base() { }
+
+        public EditUserViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+            
+        }
+
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Errors))]
         public string Id { get; set; }
 

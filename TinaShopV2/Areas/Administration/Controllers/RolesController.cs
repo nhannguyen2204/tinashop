@@ -6,24 +6,25 @@ using TinaShopV2.Areas.Administration.Models;
 using TinaShopV2.Common;
 using TinaShopV2.Common.Attributes;
 using TinaShopV2.Common.Extensions;
+using TinaShopV2.Controllers;
 using TinaShopV2.Models;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
     [TinaAdminAuthorization]
-    public class RolesController : Controller
+    public class RolesController : BaseController
     {
         // GET: Administration/Roles
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllRoleViewModel();
+            var model = _owinContext.GetAllRoleViewModel();
             return View(model);
         }
 
         // GET: Administration/Roles/Details/5
         public ActionResult Details(string id)
         {
-            var role = ApplicationDbContext.Instance.Roles.Find(id);
+            var role = _dbContextService.Roles.Find(id);
 
             if (role == null)
                 throw new HttpException(404, "ContentNotFound");
@@ -48,7 +49,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationDbContext.Instance.CreateRoleByViewModel(model);
+                    _owinContext.CreateRoleByViewModel(model);
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index", ControllerContext.LocalizeRouteValues());
                 }
@@ -64,7 +65,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Roles/Edit/5
         public ActionResult Edit(string id)
         {
-            var role = ApplicationDbContext.Instance.Roles.Find(id);
+            var role = _dbContextService.Roles.Find(id);
 
             if (role == null)
                 throw new HttpException(404, "ContentNotFound");
@@ -79,7 +80,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(RoleViewModel model)
         {
-            IdentityRole role = ApplicationDbContext.Instance.Roles.Find(model.Id);
+            IdentityRole role = _dbContextService.Roles.Find(model.Id);
 
             if (role == null)
                 throw new HttpException(400, "BadRequest");
@@ -88,7 +89,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationDbContext.Instance.EditRoleByViewModel(model);
+                    _owinContext.EditRoleByViewModel(model);
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index", ControllerContext.LocalizeRouteValues());
                 }
@@ -104,7 +105,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Roles/Delete/5
         public ActionResult Delete(string id)
         {
-            var role = ApplicationDbContext.Instance.Roles.Find(id);
+            var role = _dbContextService.Roles.Find(id);
 
             if (role == null)
                 throw new HttpException(404, "ContentNotFound");
@@ -119,14 +120,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            IdentityRole role = ApplicationDbContext.Instance.Roles.Find(id);
+            IdentityRole role = _dbContextService.Roles.Find(id);
 
             if (role == null)
                 throw new HttpException(400, "BadRequest");
 
             try
             {
-                ApplicationDbContext.Instance.DeleteRoleByViewModel(id);
+                _owinContext.DeleteRoleByViewModel(id);
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index", ControllerContext.LocalizeRouteValues());
             }

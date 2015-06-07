@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,14 @@ namespace TinaShopV2.Areas.Administration.Models.MediaType
 {
     public class MediaTypeViewModel : BaseViewModel
     {
+        public MediaTypeViewModel() : base() { }
+
+        public MediaTypeViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+            
+        }
+
         public int Id { get; set; }
 
         [Display(Name = "Name", ResourceType = typeof(Commons))]

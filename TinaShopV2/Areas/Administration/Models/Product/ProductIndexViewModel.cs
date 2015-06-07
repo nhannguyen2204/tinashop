@@ -1,14 +1,24 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using TinaShopV2.App_GlobalResources;
+using TinaShopV2.Models;
 
 namespace TinaShopV2.Areas.Administration.Models.Product
 {
     public class ProductIndexViewModel : IndexBasicViewModel
     {
+        public ProductIndexViewModel() : base() { }
+
+        public ProductIndexViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+
+        }
+
         [MaxLength(128, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "ProductCode", ResourceType = typeof(Commons))]
         public string ProductCode { get; set; }

@@ -7,11 +7,20 @@ using TinaShopV2.App_GlobalResources;
 using TinaShopV2.Common.Attributes.Validation;
 using TinaShopV2.Models;
 using TinaShopV2.Common.Extensions;
+using Microsoft.Owin;
 
 namespace TinaShopV2.Areas.Administration.Models.Category
 {
     public class CategoryViewModel : BaseViewModel
     {
+        public CategoryViewModel() : base() { }
+
+        public CategoryViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+            
+        }
+
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "CatCode", ResourceType = typeof(Commons))]
         public string CatCode { get; set; }
@@ -26,7 +35,7 @@ namespace TinaShopV2.Areas.Administration.Models.Category
 
             if (!string.IsNullOrEmpty(this.CatParentCode))
             {
-                CategoryViewModel cat = ApplicationDbContext.Instance.GetCategoryViewModelByCatCode(this.CatParentCode);
+                CategoryViewModel cat = _owinContext.GetCategoryViewModelByCatCode(this.CatParentCode);
                 if (cat != null)
                     parent = cat;
             }

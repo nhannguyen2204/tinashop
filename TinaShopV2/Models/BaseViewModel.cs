@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +8,29 @@ namespace TinaShopV2.Models
 {
     public class BaseViewModel
     {
+        protected ApplicationUserManager _userManagerService;
+        protected ApplicationDbContext _dbContextService;
+        protected IOwinContext _owinContext;
+
+        public BaseViewModel()
+        {
+
+        }
+
+        public void SetOwinContext(IOwinContext owinContext)
+        {
+            _owinContext = owinContext;
+            _userManagerService = owinContext.GetUserManager<ApplicationUserManager>();
+            _dbContextService = owinContext.Get<ApplicationDbContext>();
+        }
+
+        public BaseViewModel(IOwinContext owinContext)
+        {
+            _owinContext = owinContext;
+            _userManagerService = owinContext.GetUserManager<ApplicationUserManager>();
+            _dbContextService = owinContext.Get<ApplicationDbContext>();
+        }
+
         private string createdUserId;
         [Display(Name = "CreatedUser", ResourceType = typeof(App_GlobalResources.Commons))]
         [MaxLength(128, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Errors))]
@@ -15,8 +40,8 @@ namespace TinaShopV2.Models
             set
             {
                 createdUserId = value;
-                if (!string.IsNullOrEmpty(createdUserId))
-                    createdUser = ApplicationUserManager.Instance.FindById(CreatedUserId);
+                //if (!string.IsNullOrEmpty(createdUserId))
+                //    createdUser = _userManagerService.FindById(CreatedUserId);
             }
         }
 
@@ -26,8 +51,8 @@ namespace TinaShopV2.Models
         {
             get
             {
-                if (createdUser == null && !string.IsNullOrEmpty(CreatedUserId))
-                    createdUser = ApplicationUserManager.Instance.FindById(CreatedUserId);
+                //if (createdUser == null && !string.IsNullOrEmpty(CreatedUserId))
+                createdUser = _userManagerService.FindById(CreatedUserId);
 
                 return createdUser;
             }
@@ -42,8 +67,8 @@ namespace TinaShopV2.Models
             set
             {
                 updatedUserId = value;
-                if (!string.IsNullOrEmpty(updatedUserId))
-                    updatedUser = ApplicationUserManager.Instance.FindById(CreatedUserId);
+                //if (!string.IsNullOrEmpty(updatedUserId))
+                //    updatedUser = _userManagerService.FindById(CreatedUserId);
             }
         }
 
@@ -53,8 +78,8 @@ namespace TinaShopV2.Models
         {
             get
             {
-                if (updatedUser == null && !string.IsNullOrEmpty(CreatedUserId))
-                    updatedUser = ApplicationUserManager.Instance.FindById(CreatedUserId);
+                //if (updatedUser == null && !string.IsNullOrEmpty(CreatedUserId))
+                updatedUser = _userManagerService.FindById(CreatedUserId);
 
                 return updatedUser;
             }

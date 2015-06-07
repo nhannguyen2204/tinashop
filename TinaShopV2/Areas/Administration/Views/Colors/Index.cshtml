@@ -27,9 +27,9 @@
                 <td>@Html.DisplayFor(modelItem => item.UpdatedUser.UserName)</td>
                 <td>@Html.DisplayFor(modelItem => item.UpdatedDatetime)</td>
                 <td>
-                    @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { id = item.ColorKey })) |
-                    @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { id = item.ColorKey })) |
-                    @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { id = item.ColorKey }))
+                    @Html.ActionLink(Resources.Commons.Edit, "Edit", ViewContext.LocalizeRouteValues(new { ColorKey = item.ColorKey })) |
+                    @Html.ActionLink(Resources.Commons.Detail, "Details", ViewContext.LocalizeRouteValues(new { ColorKey = item.ColorKey })) |
+                    @Html.ActionLink(Resources.Commons.Delete, "Delete", ViewContext.LocalizeRouteValues(new { ColorKey = item.ColorKey }))
                 </td>
             </tr>
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System.Web;
 using TinaShopV2.Models;
 
@@ -11,8 +12,12 @@ namespace TinaShopV2.Common.Extensions
             if (httpContext.User.Identity.IsAuthenticated)
             {
                 string userId = httpContext.User.Identity.GetUserId();
+
+                var owinContext = httpContext.GetOwinContext();
+                var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+
                 if (!string.IsNullOrEmpty(userId))
-                    return ApplicationUserManager.Instance.FindById(userId);
+                    return userManager.FindById(userId);
             }
             return null;
         }

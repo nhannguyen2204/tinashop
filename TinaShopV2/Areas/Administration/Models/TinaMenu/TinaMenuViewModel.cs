@@ -6,11 +6,24 @@ using System.Web;
 using TinaShopV2.App_GlobalResources;
 using TinaShopV2.Common.Attributes.Validation;
 using TinaShopV2.Models;
+using Microsoft.Owin;
 
 namespace TinaShopV2.Areas.Administration.Models.TinaMenu
 {
     public class TinaMenuViewModel : BaseViewModel
     {
+        public TinaMenuViewModel()
+            : base()
+        {
+
+        }
+
+        public TinaMenuViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Errors))]
@@ -24,7 +37,7 @@ namespace TinaShopV2.Areas.Administration.Models.TinaMenu
             get
             {
                 if (menuTypeObj == null)
-                    menuTypeObj = ApplicationDbContext.Instance.MenuTypes.Find(MenuTypeId);
+                    menuTypeObj = _dbContextService.MenuTypes.Find(MenuTypeId);
 
                 return menuTypeObj;
             }
@@ -48,7 +61,7 @@ namespace TinaShopV2.Areas.Administration.Models.TinaMenu
             get
             {
                 if (ActionId != null)
-                    actionObj = ApplicationDbContext.Instance.TinaActions.Find(ActionId.Value);
+                    actionObj = _dbContextService.TinaActions.Find(ActionId.Value);
 
                 return actionObj;
             }
@@ -64,7 +77,7 @@ namespace TinaShopV2.Areas.Administration.Models.TinaMenu
             get
             {
                 if (ParentId != null)
-                    parentObj = ApplicationDbContext.Instance.TinaMenus.Find(ParentId.Value);
+                    parentObj = _dbContextService.TinaMenus.Find(ParentId.Value);
 
                 return parentObj;
             }
@@ -84,9 +97,9 @@ namespace TinaShopV2.Areas.Administration.Models.TinaMenu
         {
             IEnumerable<TinaShopV2.Models.Entity.TinaMenu> childrens;
             if (isHidden == null)
-                childrens = ApplicationDbContext.Instance.TinaMenus.Where(m => m.ParentId == Id && m.MenuTypeId == MenuTypeId);
+                childrens = _dbContextService.TinaMenus.Where(m => m.ParentId == Id && m.MenuTypeId == MenuTypeId);
             else
-                childrens = ApplicationDbContext.Instance.TinaMenus.Where(m => m.ParentId == Id && m.MenuTypeId == MenuTypeId && m.IsHidden == isHidden.Value);
+                childrens = _dbContextService.TinaMenus.Where(m => m.ParentId == Id && m.MenuTypeId == MenuTypeId && m.IsHidden == isHidden.Value);
 
             List<TinaMenuViewModel> model = new List<TinaMenuViewModel>();
             AutoMapper.Mapper.Map(childrens, model);

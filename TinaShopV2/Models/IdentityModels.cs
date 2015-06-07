@@ -22,20 +22,20 @@ namespace TinaShopV2.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private static ApplicationDbContext instance;
-        public static ApplicationDbContext Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ApplicationDbContext();
-                    Database.SetInitializer<ApplicationDbContext>(null);
-                }
+        //private static ApplicationDbContext instance;
+        //public static ApplicationDbContext Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new ApplicationDbContext();
+        //            Database.SetInitializer<ApplicationDbContext>(null);
+        //        }
 
-                return instance;
-            }
-        }
+        //        return instance;
+        //    }
+        //}
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -62,7 +62,9 @@ namespace TinaShopV2.Models
 
         public static ApplicationDbContext Create()
         {
-            return Instance;
+            var newContext = new ApplicationDbContext();
+            Database.SetInitializer<ApplicationDbContext>(null);
+            return newContext;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

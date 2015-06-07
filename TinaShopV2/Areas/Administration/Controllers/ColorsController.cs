@@ -15,17 +15,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class ColorsController : BaseController
     {
+        public ColorsController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/Colors
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllColorViewModels();
+            var model = _owinContext.GetAllColorViewModels();
             return View(model);
         }
 
         // GET: Administration/Colors/Details/5
         public ActionResult Details(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
+            var model = _owinContext.GetColorByKey(colorKey);
             return View(model);
         }
 
@@ -46,7 +52,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateColorByViewModel(model);
+                    _owinContext.CreateColorByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -64,7 +70,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Colors/Edit/5
         public ActionResult Edit(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
+            var model = _owinContext.GetColorByKey(colorKey);
             return View(model);
         }
 
@@ -79,7 +85,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditColorByViewModel(model);
+                    _owinContext.EditColorByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -97,7 +103,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Colors/Delete/5
         public ActionResult Delete(string colorKey)
         {
-            var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
+            var model = _owinContext.GetColorByKey(colorKey);
             return View(model);
         }
 
@@ -109,7 +115,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteColorByKey(colorKey);
+                _owinContext.DeleteColorByKey(colorKey);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -118,7 +124,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                var model = ApplicationDbContext.Instance.GetColorByKey(colorKey);
+                var model = _owinContext.GetColorByKey(colorKey);
                 return View(model);
             }
         }

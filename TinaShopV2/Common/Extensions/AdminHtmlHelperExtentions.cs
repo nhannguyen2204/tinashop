@@ -13,6 +13,9 @@ using TinaShopV2.Models;
 using TinaShopV2.Common;
 using TinaShopV2.Areas.Administration.Models.Product;
 using TinaShopV2.Areas.Administration.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace TinaShopV2.Common.Extensions
 {
@@ -22,6 +25,8 @@ namespace TinaShopV2.Common.Extensions
 
         public static MvcHtmlString TinaMenuDropdownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, Expression<Func<TModel, int>> expressionMenuType, object htmlAttributes = null, bool isEnableLabel = false, bool? isHidden = null)
         {
+            IOwinContext owinContext = htmlHelper.ViewContext.HttpContext.GetOwinContext();
+
             List<SelectListItem> selectList = new List<SelectListItem>();
             string menuTypeIdStr = GetValue(htmlHelper, expressionMenuType);
             string menuIdStr = GetValue(htmlHelper, expression);
@@ -33,7 +38,7 @@ namespace TinaShopV2.Common.Extensions
                     int menuId = 0;
                     int.TryParse(menuIdStr, out menuId);
                     List<TinaMenuViewModel> models = new List<TinaMenuViewModel>();
-                    AdminHelpers.GenerateTinaMenus(ref models, menuTypeId, null, 0, isHidden);
+                    AdminHelpers.GenerateTinaMenus(ref models, owinContext, menuTypeId, null, 0, isHidden);
                     selectList = models.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == menuId }).ToList();
                 }
             }

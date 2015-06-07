@@ -11,24 +11,30 @@ using TinaShopV2.Models;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
-   [TinaAdminAuthorization]
+    [TinaAdminAuthorization]
     public class TinaActionsController : BaseController
     {
+        public TinaActionsController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/TinaActions
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllTinaActionViewModel();
+            var model = _owinContext.GetAllTinaActionViewModel();
             return View(model);
         }
 
         // GET: Administration/TinaActions/Details/5
         public ActionResult Details(int id)
         {
-            var tinaAction = ApplicationDbContext.Instance.TinaActions.Find(id);
+            var tinaAction = _dbContextService.TinaActions.Find(id);
             if (tinaAction == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaActionViewModel model = new TinaActionViewModel();
+            TinaActionViewModel model = new TinaActionViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaAction, model);
             model.LoadRoles();
 
@@ -38,7 +44,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaActions/Create
         public ActionResult Create()
         {
-            ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", null);
+            ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", null);
             return View();
         }
 
@@ -53,18 +59,18 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateTinaActionByViewModel(model);
+                    _owinContext.CreateTinaActionByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
+                ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
                 return View(model);
             }
             catch (Exception ex)
             {
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
+                ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
@@ -73,15 +79,15 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaActions/Edit/5
         public ActionResult Edit(int id)
         {
-            var tinaAction = ApplicationDbContext.Instance.TinaActions.Find(id);
+            var tinaAction = _dbContextService.TinaActions.Find(id);
             if (tinaAction == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaActionViewModel model = new TinaActionViewModel();
+            TinaActionViewModel model = new TinaActionViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaAction, model);
             model.LoadRoles();
 
-            ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
+            ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
             return View(model);
         }
 
@@ -95,23 +101,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
-                    var existingItem = ApplicationDbContext.Instance.TinaActions.Find(model.Id);
+                    var existingItem = _dbContextService.TinaActions.Find(model.Id);
                     if (existingItem == null)
                         throw new HttpException(400, "BadRequest");
 
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditTinaActionByViewModel(model);
+                    _owinContext.EditTinaActionByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
+                ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
                 return View(model);
             }
             catch (Exception ex)
             {
-                ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
+                ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", model.RoleIds);
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
@@ -120,11 +126,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaActions/Delete/5
         public ActionResult Delete(int id)
         {
-            var tinaAction = ApplicationDbContext.Instance.TinaActions.Find(id);
+            var tinaAction = _dbContextService.TinaActions.Find(id);
             if (tinaAction == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaActionViewModel model = new TinaActionViewModel();
+            TinaActionViewModel model = new TinaActionViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaAction, model);
             return View(model);
         }
@@ -134,14 +140,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var model = ApplicationDbContext.Instance.TinaActions.Find(id);
+            var model = _dbContextService.TinaActions.Find(id);
             if (model == null)
                 throw new HttpException(400, "BadRequest");
 
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteTinaActionByViewModel(id);
+                _owinContext.DeleteTinaActionByViewModel(id);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");

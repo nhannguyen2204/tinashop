@@ -1,6 +1,9 @@
-﻿
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
 using System.Web.Configuration;
 using TinaShopV2.Models;
+
 namespace TinaShopV2.Common
 {
     public static class GlobalObjects
@@ -66,6 +69,54 @@ namespace TinaShopV2.Common
             }
         }
 
+        private static int mediaType_BrandImage_Id;
+        public static int MediaType_BrandImage_Id
+        {
+            get
+            {
+                if (mediaType_BrandImage_Id == 0)
+                {
+                    string id = WebConfigurationManager.AppSettings["mediatype_brandimage_id"] ?? "5";
+                    if (!int.TryParse(id, out mediaType_BrandImage_Id))
+                        mediaType_BrandImage_Id = 5;
+                }
+
+                return mediaType_BrandImage_Id;
+            }
+        }
+
+        private static int mediaType_CatalogImage_Id;
+        public static int MediaType_CatalogImage_Id
+        {
+            get
+            {
+                if (mediaType_CatalogImage_Id == 0)
+                {
+                    string id = WebConfigurationManager.AppSettings["mediatype_catalogimage_id"] ?? "6";
+                    if (!int.TryParse(id, out mediaType_CatalogImage_Id))
+                        mediaType_CatalogImage_Id = 6;
+                }
+
+                return mediaType_CatalogImage_Id;
+            }
+        }
+
+        private static int mediaType_CategoryImage_Id;
+        public static int MediaType_CategoryImage_Id
+        {
+            get
+            {
+                if (mediaType_CategoryImage_Id == 0)
+                {
+                    string id = WebConfigurationManager.AppSettings["mediatype_categoryimage_id"] ?? "7";
+                    if (!int.TryParse(id, out mediaType_CategoryImage_Id))
+                        mediaType_CategoryImage_Id = 7;
+                }
+
+                return mediaType_CategoryImage_Id;
+            }
+        }
+
         private static int mediaType_SliderImage_Id;
         public static int MediaType_SliderImage_Id
         {
@@ -123,7 +174,7 @@ namespace TinaShopV2.Common
                 {
                     string valueStr = WebConfigurationManager.AppSettings["IsComingSoonMode"] ?? "false";
                     bool boolValue = false;
-                    if (!bool.TryParse(valueStr,out boolValue))
+                    if (!bool.TryParse(valueStr, out boolValue))
                         isComingSoonMode = false;
 
                     isComingSoonMode = boolValue;
@@ -135,15 +186,14 @@ namespace TinaShopV2.Common
 
 
         private static TinaShopV2.Models.Entity.Media media_NoImage;
-        public static TinaShopV2.Models.Entity.Media Media_NoImage
+        public static TinaShopV2.Models.Entity.Media Get_Media_NoImage(IOwinContext owinContext)
         {
-            get
+            if (media_NoImage == null)
             {
-                if (media_NoImage == null)
-                    media_NoImage = ApplicationDbContext.Instance.Medias.Find(Media_NoImage_Id);
-
-                return media_NoImage;
+                var dbContext = owinContext.Get<ApplicationDbContext>();
+                media_NoImage = dbContext.Medias.Find(Media_NoImage_Id);
             }
+            return media_NoImage;
         }
 
         private static string media_NoImage_Path = string.Empty;
@@ -151,8 +201,8 @@ namespace TinaShopV2.Common
         {
             get
             {
-                if (string.IsNullOrEmpty(media_NoImage_Path) && Media_NoImage != null)
-                    media_NoImage_Path = Media_NoImage.FilePath;
+                //if (string.IsNullOrEmpty(media_NoImage_Path) && Media_NoImage != null)
+                //    media_NoImage_Path = Media_NoImage.FilePath;
 
                 return media_NoImage_Path;
             }
@@ -163,8 +213,8 @@ namespace TinaShopV2.Common
         {
             get
             {
-                if (string.IsNullOrEmpty(media_NoImageThumb_Path) && Media_NoImage != null)
-                    media_NoImageThumb_Path = Media_NoImage.ThumbPath;
+                //if (string.IsNullOrEmpty(media_NoImageThumb_Path) && Media_NoImage != null)
+                //    media_NoImageThumb_Path = Media_NoImage.ThumbPath;
 
                 return media_NoImageThumb_Path;
             }

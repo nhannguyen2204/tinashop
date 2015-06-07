@@ -18,33 +18,43 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class ProductsController : BaseController
     {
+
+        public ProductsController()
+            : base()
+        {
+
+        }
+
         public JsonResult Find(string productCode)
         {
             IEnumerable<ProductViewModel> result = null;
 
             if (!string.IsNullOrEmpty(productCode))
-                result = ApplicationDbContext.Instance.FindProductViewModelById(productCode);
+                result = _owinContext.FindProductViewModelById(productCode);
 
-            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            List<ResponseProductViewModel> model = new List<ResponseProductViewModel>();
+            AutoMapper.Mapper.Map(result, model);
+;
+            return new JsonResult() { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         // GET: Administration/Products
         public ActionResult Index(ProductIndexViewModel model)
         {
             // Init Products
-            ApplicationDbContext.Instance.GetProductsByIndexViewModel(ref model);
+            _owinContext.GetProductsByIndexViewModel(ref model);
 
             // Init Lists for View
             ViewBag.PublishStatusList = EnumHelper<PublishStatus>.EnumToList();
             ViewBag.DeleteStatusList = EnumHelper<DeleteStatus>.EnumToList();
             ViewBag.SaleStateList = EnumHelper<SaleState>.EnumToList();
-            ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
 
             // Response
             return View(model);
         }
 
-        [ActionName("Index"),HttpPost,ValidateAntiForgeryToken]
+        [ActionName("Index"), HttpPost, ValidateAntiForgeryToken]
         public ActionResult SearchProduct(ProductIndexViewModel model)
         {
             model.Page = 1;
@@ -54,14 +64,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Products/Details/5
         public ActionResult Details(string productCode)
         {
-            var model = ApplicationDbContext.Instance.GetProductViewModelById(productCode);
+            var model = _owinContext.GetProductViewModelById(productCode);
             return View(model);
         }
 
         // GET: Administration/Products/Create
         public ActionResult Create()
         {
-            ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
             return View();
         }
 
@@ -74,7 +84,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateProductByViewModel(model);
+                    _owinContext.CreateProductByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -85,16 +95,16 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
             return View(model);
         }
 
         // GET: Administration/Products/Edit/5
         public ActionResult Edit(string productCode)
         {
-            var model = ApplicationDbContext.Instance.GetProductViewModelById(productCode);
+            var model = _owinContext.GetProductViewModelById(productCode);
 
-            ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
             return View(model);
         }
 
@@ -107,7 +117,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditProductByViewModel(model);
+                    _owinContext.EditProductByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -118,26 +128,26 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            ViewBag.Brands = ApplicationDbContext.Instance.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
             return View(model);
         }
 
         // GET: Administration/Products/Delete/5
         public ActionResult Delete(string productCode)
         {
-            var model = ApplicationDbContext.Instance.GetProductViewModelById(productCode);
+            var model = _owinContext.GetProductViewModelById(productCode);
             return View(model);
         }
 
         // POST: Administration/Products/Delete/5
-        [HttpPost,ValidateAntiForgeryToken,ActionName("Delete")]
+        [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
         public ActionResult DeleteConfirmed(string productCode)
         {
-            var model = ApplicationDbContext.Instance.GetProductViewModelById(productCode);
-            
+            var model = _owinContext.GetProductViewModelById(productCode);
+
             try
             {
-                ApplicationDbContext.Instance.DeleteProductById(productCode);
+                _owinContext.DeleteProductById(productCode);
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
             }

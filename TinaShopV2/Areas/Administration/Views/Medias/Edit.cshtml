@@ -64,7 +64,7 @@
                 <div id="ProductSelected" class="col-md-12">
                     @if (!string.IsNullOrEmpty(Model.ProductCode))
                     {
-                        <div class="alert adjusted alert-success fade in"><button class="close" onclick="removeProduct('@Model.ProductCode');" data-dismiss="alert">×</button><strong>@Model.ProductObj.ProductName (@Model.ProductCode)</strong></div>
+                        <div class="alert adjusted alert-success fade in"><button class="close" onclick="removeProduct('@Model.ProductCode');" data-dismiss="alert">×</button><strong>@Model.GetProduct().ProductName (@Model.ProductCode)</strong></div>
                     }
                 </div>
                 @Html.TextBox("ProductCode_Find", "", new { @class = "form-control", @autofocus = "false" })
@@ -116,6 +116,7 @@
 
         function removeProduct(productCode) {
             $("#ProductCode").val('');
+            $("#ProductSelected").html('');
             $("#ProductCode_Find").fadeIn();
         };
 

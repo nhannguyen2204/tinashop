@@ -27,11 +27,11 @@
     </dl>
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.TypeId)</dt>
-        <dd>@Model.MediaTypeObj.Name</dd>
+        <dd>@(Model.GetMediaType() != null ? Model.GetMediaType().Name : string.Empty)</dd>
     </dl>
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.ProductCode)</dt>
-        <dd>@(string.IsNullOrEmpty(Model.ProductCode) ? string.Empty : string.Format("{0} - {1}", Model.ProductObj.ProductCode, Model.ProductObj.ProductName))</dd>
+        <dd>@(string.IsNullOrEmpty(Model.ProductCode) ? string.Empty : string.Format("{0} - {1}", Model.GetProduct() != null ? Model.GetProduct().ProductCode : string.Empty, Model.GetProduct() != null ? Model.GetProduct().ProductName : string.Empty))</dd>
     </dl>
 </div>
 <p>

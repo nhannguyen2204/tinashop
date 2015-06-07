@@ -15,13 +15,19 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class CategoryController : BaseController
     {
+        public CategoryController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/Category
         public ActionResult Index()
         {
             List<CategoryViewModel> model = new List<CategoryViewModel>();
 
             // Generate Categories
-            AdminHelpers.GenerateCategories(ref model);
+            AdminHelpers.GenerateCategories(ref model, _owinContext);
 
             return View(model);
         }
@@ -29,7 +35,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Category/Details/5
         public ActionResult Details(string catCode)
         {
-            CategoryViewModel model = ApplicationDbContext.Instance.GetCategoryViewModelByCatCode(catCode);
+            CategoryViewModel model = _owinContext.GetCategoryViewModelByCatCode(catCode);
             if (model == null)
                 throw new HttpException(404, "ContentNotFound");
 
@@ -42,10 +48,10 @@ namespace TinaShopV2.Areas.Administration.Controllers
             List<CategoryViewModel> categories = new List<CategoryViewModel>();
 
             // Generate Categories
-            AdminHelpers.GenerateCategories(ref categories);
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
             ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
-            return View(new CategoryViewModel());
+            return View(new CategoryViewModel(_owinContext));
         }
 
         // POST: Administration/Category/Create
@@ -58,7 +64,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateCategoryByViewModel(model);
+                    _owinContext.CreateCategoryByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -66,7 +72,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
 
                 List<CategoryViewModel> categories = new List<CategoryViewModel>();
                 // Generate Categories
-                AdminHelpers.GenerateCategories(ref categories);
+                AdminHelpers.GenerateCategories(ref categories, _owinContext);
                 ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
                 return View(model);
@@ -75,7 +81,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 List<CategoryViewModel> categories = new List<CategoryViewModel>();
                 // Generate Categories
-                AdminHelpers.GenerateCategories(ref categories);
+                AdminHelpers.GenerateCategories(ref categories, _owinContext);
                 ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
                 ModelState.AddModelError("", ex.Message);
@@ -86,14 +92,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Category/Edit/5
         public ActionResult Edit(string catCode)
         {
-            CategoryViewModel model = ApplicationDbContext.Instance.GetCategoryViewModelByCatCode(catCode);
+            CategoryViewModel model = _owinContext.GetCategoryViewModelByCatCode(catCode);
             if (model == null)
                 throw new HttpException(404, "ContentNotFound");
 
             List<CategoryViewModel> categories = new List<CategoryViewModel>();
 
             // Generate Categories
-            AdminHelpers.GenerateCategories(ref categories);
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
             ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
             return View(model);
@@ -109,7 +115,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditCategoryByViewModel(model);
+                    _owinContext.EditCategoryByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -117,7 +123,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
 
                 List<CategoryViewModel> categories = new List<CategoryViewModel>();
                 // Generate Categories
-                AdminHelpers.GenerateCategories(ref categories);
+                AdminHelpers.GenerateCategories(ref categories, _owinContext);
                 ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
                 return View(model);
@@ -126,7 +132,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 List<CategoryViewModel> categories = new List<CategoryViewModel>();
                 // Generate Categories
-                AdminHelpers.GenerateCategories(ref categories);
+                AdminHelpers.GenerateCategories(ref categories, _owinContext);
                 ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
                 ModelState.AddModelError("", ex.Message);
@@ -138,7 +144,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [HttpGet]
         public ActionResult Delete(string catCode)
         {
-            CategoryViewModel model = ApplicationDbContext.Instance.GetCategoryViewModelByCatCode(catCode);
+            CategoryViewModel model = _owinContext.GetCategoryViewModelByCatCode(catCode);
             if (model == null)
                 throw new HttpException(404, "ContentNotFound");
 
@@ -153,14 +159,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteCategoryByCatCode(catCode);
+                _owinContext.DeleteCategoryByCatCode(catCode);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
 
-                CategoryViewModel model = ApplicationDbContext.Instance.GetCategoryViewModelByCatCode(catCode);
+                CategoryViewModel model = _owinContext.GetCategoryViewModelByCatCode(catCode);
                 if (model == null)
                     throw new HttpException(404, "ContentNotFound");
 

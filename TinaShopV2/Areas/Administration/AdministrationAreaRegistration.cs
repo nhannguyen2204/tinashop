@@ -114,6 +114,32 @@ namespace TinaShopV2.Areas.Administration
             );
 
             context.MapRoute(
+                "Administration_Medias_Find_ByType",
+                "Administration/Medias/FindByType/{TypeId}/{MediaName}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Medias",
+                    action = "FindByType",
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
+                "Administration_Medias_Find",
+                "Administration/Medias/Find/{MediaName}",
+                new
+                {
+                    area = AreaName,
+                    controller = "Medias",
+                    action = "Find",
+                    language = "vi",
+                    culture = "VN"
+                }
+            );
+
+            context.MapRoute(
                 "Administration_Medias_Index",
                 "Administration/Medias/Index/{Page}/{TypeId}/{ProductCode}",
                 new
@@ -368,8 +394,14 @@ namespace TinaShopV2.Areas.Administration
             AutoMapper.Mapper.CreateMap<Media, MediaViewModel>();
             AutoMapper.Mapper.CreateMap<MediaViewModel, Media>();
 
+            AutoMapper.Mapper.CreateMap<ResponseMediaViewModel, MediaViewModel>();
+            AutoMapper.Mapper.CreateMap<MediaViewModel, ResponseMediaViewModel>();
+
             AutoMapper.Mapper.CreateMap<Product, ProductViewModel>();
             AutoMapper.Mapper.CreateMap<ProductViewModel, Product>();
+
+            AutoMapper.Mapper.CreateMap<ResponseProductViewModel, ProductViewModel>();
+            AutoMapper.Mapper.CreateMap<ProductViewModel, ResponseProductViewModel>();
 
             AutoMapper.Mapper.CreateMap<Category, CategoryViewModel>();
             AutoMapper.Mapper.CreateMap<CategoryViewModel, Category>();

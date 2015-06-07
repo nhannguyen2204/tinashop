@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,22 +31,28 @@ namespace TinaShopV2.Common.Extensions
     {
         #region Product
 
-        public static IEnumerable<ProductViewModel> GetAllProductViewModels(this ApplicationDbContext context)
+        public static IEnumerable<ProductViewModel> GetAllProductViewModels(this IOwinContext owinContext)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             IEnumerable<ProductViewModel> model = new List<ProductViewModel>();
-            var products = context.Products.AsEnumerable();
+            var products = dbContext.Products.AsEnumerable();
             AutoMapper.Mapper.Map(products, model);
             return model;
         }
 
-        public static void GetProductsByIndexViewModel(this ApplicationDbContext context, ref ProductIndexViewModel indexViewModel)
+        public static void GetProductsByIndexViewModel(this IOwinContext owinContext, ref ProductIndexViewModel indexViewModel)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             // Init List
             List<ProductViewModel> models = new List<ProductViewModel>();
-            var products = context.Products.AsEnumerable();
+            var products = dbContext.Products.AsEnumerable();
 
             // Filter By Brand Code
             string brandCode = indexViewModel.BrandCode;
@@ -90,14 +98,22 @@ namespace TinaShopV2.Common.Extensions
                 throw new HttpException(404, "ContentNotFound");
 
             indexViewModel.Products = AutoMapper.Mapper.Map(products, models);
+
+            foreach (var item in indexViewModel.Products)
+            {
+                item.SetOwinContext(owinContext);
+            }
         }
 
-        public static IEnumerable<ProductViewModel> FindProductViewModelById(this ApplicationDbContext context, string productCode)
+        public static IEnumerable<ProductViewModel> FindProductViewModelById(this IOwinContext owinContext, string productCode)
         {
-            if (context == null || string.IsNullOrEmpty(productCode))
+            if (owinContext == null || string.IsNullOrEmpty(productCode))
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var products = context.Products.Where(m => !string.IsNullOrEmpty(m.ProductCode) && m.ProductCode.Contains(productCode)).OrderBy(m => m.ProductCode);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var products = dbContext.Products.Where(m => !string.IsNullOrEmpty(m.ProductCode) && m.ProductCode.Contains(productCode)).OrderBy(m => m.ProductCode);
 
             IEnumerable<ProductViewModel> model = new List<ProductViewModel>();
             AutoMapper.Mapper.Map(products, model);
@@ -105,29 +121,35 @@ namespace TinaShopV2.Common.Extensions
             return model;
         }
 
-        public static ProductViewModel GetProductViewModelById(this ApplicationDbContext context, string productCode)
+        public static ProductViewModel GetProductViewModelById(this IOwinContext owinContext, string productCode)
         {
-            if (context == null || string.IsNullOrEmpty(productCode))
+            if (owinContext == null || string.IsNullOrEmpty(productCode))
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var product = context.Products.Find(productCode.ToUpper());
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var product = dbContext.Products.Find(productCode.ToUpper());
             if (product == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            ProductViewModel model = new ProductViewModel();
+            ProductViewModel model = new ProductViewModel(owinContext);
             AutoMapper.Mapper.Map(product, model);
 
             return model;
         }
 
-        public static void CreateProductByViewModel(this ApplicationDbContext context, ProductViewModel model)
+        public static void CreateProductByViewModel(this IOwinContext owinContext, ProductViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var existingProduct = context.Products.Find(model.ProductCode);
+                var existingProduct = dbContext.Products.Find(model.ProductCode);
                 if (existingProduct != null)
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.ProductCode));
 
@@ -136,9 +158,9 @@ namespace TinaShopV2.Common.Extensions
                 var product = new Product();
                 AutoMapper.Mapper.Map(model, product);
 
-                context.Products.Add(product);
-                context.Entry<Product>(product).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Products.Add(product);
+                dbContext.Entry<Product>(product).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -146,10 +168,13 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditProductByViewModel(this ApplicationDbContext context, ProductViewModel model)
+        public static void EditProductByViewModel(this IOwinContext owinContext, ProductViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
@@ -157,7 +182,7 @@ namespace TinaShopV2.Common.Extensions
                     throw new HttpException(404, "ContentNotFound");
                 else
                 {
-                    var product = context.Products.Find(model.ProductCode.ToUpper());
+                    var product = dbContext.Products.Find(model.ProductCode.ToUpper());
                     if (product == null)
                         throw new HttpException(404, "ContentNotFound");
 
@@ -166,8 +191,8 @@ namespace TinaShopV2.Common.Extensions
 
                     AutoMapper.Mapper.Map(model, product);
 
-                    context.Entry<Product>(product).State = EntityState.Modified;
-                    context.SaveChanges();
+                    dbContext.Entry<Product>(product).State = EntityState.Modified;
+                    dbContext.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -176,20 +201,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteProductById(this ApplicationDbContext context, string productCode)
+        public static void DeleteProductById(this IOwinContext owinContext, string productCode)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var product = context.Products.Find(productCode);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var product = dbContext.Products.Find(productCode);
             if (product == null)
                 throw new HttpException(404, "ContentNotFound");
 
             try
             {
-                context.Products.Remove(product);
-                context.Entry<Product>(product).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Products.Remove(product);
+                dbContext.Entry<Product>(product).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -201,24 +229,51 @@ namespace TinaShopV2.Common.Extensions
 
         #region Media
 
-        public static IEnumerable<MediaViewModel> GetAllMediaViewModels(this ApplicationDbContext context)
+        public static IEnumerable<MediaViewModel> GetAllMediaViewModels(this IOwinContext owinContext)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<MediaViewModel> models = new List<MediaViewModel>();
-            var medias = context.Medias.AsEnumerable();
+            var medias = dbContext.Medias.AsEnumerable();
             AutoMapper.Mapper.Map(medias, models);
             return models;
         }
 
-        public static void GetMediasByIndexViewModel(this ApplicationDbContext context, ref MediaIndexViewModel indexViewModel)
+        public static IEnumerable<MediaViewModel> FindMediaViewModelByName(this IOwinContext owinContext, string mediaName, int? typeId = null)
         {
-            if (context == null)
+            if (owinContext == null || string.IsNullOrEmpty(mediaName))
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var medias = dbContext.Medias.Where(m => !string.IsNullOrEmpty(m.Name) && m.Name.Contains(mediaName));
+
+            if (typeId != null)
+                medias = medias.Where(m => m.TypeId == typeId.Value);
+
+            medias = medias.OrderBy(m => m.Name);
+
+            IEnumerable<MediaViewModel> model = new List<MediaViewModel>();
+            AutoMapper.Mapper.Map(medias, model);
+
+            return model;
+        }
+
+        public static void GetMediasByIndexViewModel(this IOwinContext owinContext, ref MediaIndexViewModel indexViewModel)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<MediaViewModel> models = new List<MediaViewModel>();
-            var medias = context.Medias.AsEnumerable();
+            var medias = dbContext.Medias.AsEnumerable();
 
             int? typeId = indexViewModel.TypeId;
             if (indexViewModel.TypeId != null && indexViewModel.TypeId != 0)
@@ -239,27 +294,38 @@ namespace TinaShopV2.Common.Extensions
                 throw new HttpException(404, "ContentNotFound");
 
             indexViewModel.Medias = AutoMapper.Mapper.Map(medias, models);
+
+            foreach (var item in indexViewModel.Medias)
+            {
+                item.SetOwinContext(owinContext);
+            }
         }
 
-        public static MediaViewModel GetMediaViewModelById(this ApplicationDbContext context, int id)
+        public static MediaViewModel GetMediaViewModelById(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var media = context.Medias.Find(id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var media = dbContext.Medias.Find(id);
             if (media == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            MediaViewModel model = new MediaViewModel();
+            MediaViewModel model = new MediaViewModel(owinContext);
             AutoMapper.Mapper.Map(media, model);
 
             return model;
         }
 
-        public static void CreateMediaByViewModel(this ApplicationDbContext context, MediaViewModel model)
+        public static void CreateMediaByViewModel(this IOwinContext owinContext, MediaViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
@@ -272,9 +338,9 @@ namespace TinaShopV2.Common.Extensions
                 var media = new Media();
                 AutoMapper.Mapper.Map(model, media);
 
-                context.Medias.Add(media);
-                context.Entry<Media>(media).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Medias.Add(media);
+                dbContext.Entry<Media>(media).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -282,12 +348,15 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditMediaByViewModel(this ApplicationDbContext context, MediaViewModel model)
+        public static void EditMediaByViewModel(this IOwinContext owinContext, MediaViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var media = context.Medias.Find(model.Id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var media = dbContext.Medias.Find(model.Id);
             if (media == null)
                 throw new HttpException(404, "ContentNotFound");
 
@@ -318,8 +387,8 @@ namespace TinaShopV2.Common.Extensions
                     model.ProductCode = string.Empty;
 
                 AutoMapper.Mapper.Map(model, media);
-                context.Entry<Media>(media).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<Media>(media).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -327,12 +396,15 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteMediaById(this ApplicationDbContext context, int id)
+        public static void DeleteMediaById(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var media = context.Medias.Find(id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var media = dbContext.Medias.Find(id);
             if (media == null)
                 throw new HttpException(404, "ContentNotFound");
 
@@ -342,9 +414,9 @@ namespace TinaShopV2.Common.Extensions
                 Helpers.DeleteFile(GlobalObjects.MediaImageFolderPath, media.FilePath);
                 Helpers.DeleteFile(GlobalObjects.MediaImageFolderPath, media.ThumbPath);
 
-                context.Medias.Remove(media);
-                context.Entry<Media>(media).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Medias.Remove(media);
+                dbContext.Entry<Media>(media).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -356,38 +428,53 @@ namespace TinaShopV2.Common.Extensions
 
         #region MediaType
 
-        public static IEnumerable<MediaTypeViewModel> GetAllMediaTypeViewModels(this ApplicationDbContext context)
+        public static IEnumerable<MediaTypeViewModel> GetAllMediaTypeViewModels(this IOwinContext owinContext)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<MediaTypeViewModel> models = new List<MediaTypeViewModel>();
-            var mediaTypes = context.MediaTypes.AsEnumerable();
+            var mediaTypes = dbContext.MediaTypes.AsEnumerable();
             AutoMapper.Mapper.Map(mediaTypes, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return models;
         }
 
-        public static MediaTypeViewModel GetMediaTypeViewModelById(this ApplicationDbContext context, int id)
+        public static MediaTypeViewModel GetMediaTypeViewModelById(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var mediaType = context.MediaTypes.Find(id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var mediaType = dbContext.MediaTypes.Find(id);
             if (mediaType == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            MediaTypeViewModel model = new MediaTypeViewModel();
+            MediaTypeViewModel model = new MediaTypeViewModel(owinContext);
             AutoMapper.Mapper.Map(mediaType, model);
 
             return model;
         }
 
-        public static void CreateMediaTypeByViewModel(this ApplicationDbContext context, MediaTypeViewModel model)
+        public static void CreateMediaTypeByViewModel(this IOwinContext owinContext, MediaTypeViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            if (context.MediaTypes.Any(m => m.Name == model.Name))
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            if (dbContext.MediaTypes.Any(m => m.Name == model.Name))
                 throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
             try
@@ -395,9 +482,9 @@ namespace TinaShopV2.Common.Extensions
                 MediaType newMediaType = new MediaType();
                 AutoMapper.Mapper.Map(model, newMediaType);
 
-                context.MediaTypes.Add(newMediaType);
-                context.Entry<MediaType>(newMediaType).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.MediaTypes.Add(newMediaType);
+                dbContext.Entry<MediaType>(newMediaType).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -405,16 +492,19 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditMediaTypeByViewModel(this ApplicationDbContext context, MediaTypeViewModel model)
+        public static void EditMediaTypeByViewModel(this IOwinContext owinContext, MediaTypeViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var mediaType = context.MediaTypes.Find(model.Id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var mediaType = dbContext.MediaTypes.Find(model.Id);
             if (mediaType == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            if (context.MediaTypes.Any(m => m.Name == model.Name && m.Id != model.Id))
+            if (dbContext.MediaTypes.Any(m => m.Name == model.Name && m.Id != model.Id))
                 throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
             try
@@ -423,8 +513,8 @@ namespace TinaShopV2.Common.Extensions
                 model.CreatedUserId = mediaType.CreatedUserId;
 
                 AutoMapper.Mapper.Map(model, mediaType);
-                context.Entry<MediaType>(mediaType).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<MediaType>(mediaType).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -432,20 +522,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteMediaTypeByViewModel(this ApplicationDbContext context, int id)
+        public static void DeleteMediaTypeByViewModel(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            var mediaType = context.MediaTypes.Find(id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var mediaType = dbContext.MediaTypes.Find(id);
             if (mediaType == null)
                 throw new HttpException(404, "ContentNotFound");
 
             try
             {
-                context.MediaTypes.Remove(mediaType);
-                context.Entry<MediaType>(mediaType).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.MediaTypes.Remove(mediaType);
+                dbContext.Entry<MediaType>(mediaType).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -457,45 +550,60 @@ namespace TinaShopV2.Common.Extensions
 
         #region Brand
 
-        public static IEnumerable<BrandViewModel> GetAllBrandViewModels(this ApplicationDbContext context)
+        public static IEnumerable<BrandViewModel> GetAllBrandViewModels(this IOwinContext owinContext)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<BrandViewModel> models = new List<BrandViewModel>();
-            var brands = context.Brands.AsEnumerable();
+            var brands = dbContext.Brands.AsEnumerable();
             AutoMapper.Mapper.Map(brands, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return models;
         }
 
-        public static BrandViewModel GetBrandViewModelById(this ApplicationDbContext context, string brandCode)
+        public static BrandViewModel GetBrandViewModelById(this IOwinContext owinContext, string brandCode)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            BrandViewModel model = new BrandViewModel();
-            var brand = context.Brands.Find(brandCode);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            BrandViewModel model = new BrandViewModel(owinContext);
+            var brand = dbContext.Brands.Find(brandCode);
             if (brand == null)
                 throw new HttpException(404, "ContentNotFound");
             AutoMapper.Mapper.Map(brand, model);
             return model;
         }
 
-        public static void CreateBrandByViewModel(this ApplicationDbContext context, BrandViewModel model)
+        public static void CreateBrandByViewModel(this IOwinContext owinContext, BrandViewModel model)
         {
-            if (context == null && model == null)
+            if (owinContext == null && model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.Brands.Any(m => m.Name == model.Name))
+                if (dbContext.Brands.Any(m => m.Name == model.Name))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 Brand newBrand = new Brand();
                 AutoMapper.Mapper.Map(model, newBrand);
-                context.Brands.Add(newBrand);
-                context.Entry<Brand>(newBrand).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Brands.Add(newBrand);
+                dbContext.Entry<Brand>(newBrand).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -503,26 +611,29 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditBrandByViewModel(this ApplicationDbContext context, BrandViewModel model)
+        public static void EditBrandByViewModel(this IOwinContext owinContext, BrandViewModel model)
         {
-            if (context == null && model == null)
+            if (owinContext == null && model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var brand = context.Brands.Find(model.BrandCode);
+                var brand = dbContext.Brands.Find(model.BrandCode);
                 if (brand == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                if (context.Brands.Any(m => m.Name == model.Name && m.BrandCode != model.BrandCode))
+                if (dbContext.Brands.Any(m => m.Name == model.Name && m.BrandCode != model.BrandCode))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 model.CreatedDatetime = brand.CreatedDatetime;
                 model.CreatedUserId = brand.CreatedUserId;
 
                 AutoMapper.Mapper.Map(model, brand);
-                context.Entry<Brand>(brand).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<Brand>(brand).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -530,20 +641,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteBrandById(this ApplicationDbContext context, string brandCode)
+        public static void DeleteBrandById(this IOwinContext owinContext, string brandCode)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var brand = context.Brands.Find(brandCode);
+                var brand = dbContext.Brands.Find(brandCode);
                 if (brand == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                context.Brands.Remove(brand);
-                context.Entry<Brand>(brand).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Brands.Remove(brand);
+                dbContext.Entry<Brand>(brand).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -555,14 +669,17 @@ namespace TinaShopV2.Common.Extensions
 
         #region Category
 
-        public static IEnumerable<CategoryViewModel> GetCatViewModelByParent(this ApplicationDbContext context, string parentCode = null, bool? isPublished = null)
+        public static IEnumerable<CategoryViewModel> GetCatViewModelByParent(this IOwinContext owinContext, string parentCode = null, bool? isPublished = null)
         {
             IEnumerable<Category> result = null;
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             if (string.IsNullOrEmpty(parentCode))
-                result = context.Categories.Where(m => m.CatParentCode == null || m.CatParentCode == string.Empty).OrderBy(m => m.OrderNumber);
+                result = dbContext.Categories.Where(m => m.CatParentCode == null || m.CatParentCode == string.Empty).OrderBy(m => m.OrderNumber);
             else
-                result = context.Categories.Where(m => m.CatParentCode == parentCode).OrderBy(m => m.OrderNumber);
+                result = dbContext.Categories.Where(m => m.CatParentCode == parentCode).OrderBy(m => m.OrderNumber);
 
             if (isPublished != null)
                 result = result.Where(m => m.IsPublish == isPublished);
@@ -572,17 +689,20 @@ namespace TinaShopV2.Common.Extensions
             return model ?? new List<CategoryViewModel>();
         }
 
-        public static IEnumerable<string> GetParentCodesByCategoryViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        public static IEnumerable<string> GetParentCodesByCategoryViewModel(this IOwinContext owinContext, CategoryViewModel model)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<string> parentCodes = new List<string>();
 
-            Category parent = !string.IsNullOrEmpty(model.CatParentCode) ? context.Categories.Find(model.CatParentCode) : null;
+            Category parent = !string.IsNullOrEmpty(model.CatParentCode) ? dbContext.Categories.Find(model.CatParentCode) : null;
             while (parent != null)
             {
                 parentCodes.Add(parent.CatCode);
 
                 if (!string.IsNullOrEmpty(parent.CatParentCode))
-                    parent = context.Categories.Find(parent.CatParentCode);
+                    parent = dbContext.Categories.Find(parent.CatParentCode);
                 else
                     break;
             }
@@ -590,46 +710,52 @@ namespace TinaShopV2.Common.Extensions
             return parentCodes;
         }
 
-        public static CategoryViewModel GetCategoryViewModelByCatCode(this ApplicationDbContext context, string catCode)
+        public static CategoryViewModel GetCategoryViewModelByCatCode(this IOwinContext owinContext, string catCode)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             CategoryViewModel model = null;
 
-            Category cat = context.Categories.Find(catCode);
+            Category cat = dbContext.Categories.Find(catCode);
             if (cat != null)
             {
-                model = new CategoryViewModel();
+                model = new CategoryViewModel(owinContext);
                 AutoMapper.Mapper.Map(cat, model);
             }
 
             return model;
         }
 
-        public static void CreateCategoryByViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        public static void CreateCategoryByViewModel(this IOwinContext owinContext, CategoryViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim()))
+                if (dbContext.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim()))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.CatCode)));
 
-                if (context.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim()))
+                if (dbContext.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim()))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.Name)));
 
-                if (!string.IsNullOrEmpty(model.CatParentCode) && !context.Categories.Any(m => m.CatCode == model.CatParentCode))
+                if (!string.IsNullOrEmpty(model.CatParentCode) && !dbContext.Categories.Any(m => m.CatCode == model.CatParentCode))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.CatParentCode)));
 
-                var categories = context.GetParentCodesByCategoryViewModel(model);
+                var categories = owinContext.GetParentCodesByCategoryViewModel(model);
                 if (categories.Count() > 0 && categories.Contains(model.CatCode))
                     throw new Exception(string.Format(Errors.NotSelectThisValueFormat, model.GetDisplayName(m => m.CatParentCode)));
 
                 Category newCat = new Category();
                 AutoMapper.Mapper.Map(model, newCat);
 
-                context.Categories.Add(newCat);
-                context.Entry<Category>(newCat).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Categories.Add(newCat);
+                dbContext.Entry<Category>(newCat).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -637,27 +763,30 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditCategoryByViewModel(this ApplicationDbContext context, CategoryViewModel model)
+        public static void EditCategoryByViewModel(this IOwinContext owinContext, CategoryViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            Category category = context.Categories.Find(model.CatCode);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            Category category = dbContext.Categories.Find(model.CatCode);
             if (category == null)
                 throw new HttpException(404, "ContentNotFound");
-            
+
             try
             {
-                if (context.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim() && m.CatCode != model.CatCode))
+                if (dbContext.Categories.Any(m => m.CatCode.ToLower().Trim() == model.CatCode.ToLower().Trim() && m.CatCode != model.CatCode))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.CatCode)));
 
-                if (context.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim() && m.CatCode != model.CatCode))
+                if (dbContext.Categories.Any(m => m.Name.ToLower().Trim() == model.Name.ToLower().Trim() && m.CatCode != model.CatCode))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, model.GetDisplayName(m => m.Name)));
 
-                if (!string.IsNullOrEmpty(model.CatParentCode) && !context.Categories.Any(m => m.CatCode == model.CatParentCode))
+                if (!string.IsNullOrEmpty(model.CatParentCode) && !dbContext.Categories.Any(m => m.CatCode == model.CatParentCode))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.CatParentCode)));
 
-                var categories = context.GetParentCodesByCategoryViewModel(model);
+                var categories = owinContext.GetParentCodesByCategoryViewModel(model);
                 if (categories.Count() > 0 && categories.Contains(model.CatCode))
                     throw new Exception(string.Format(Errors.NotSelectThisValueFormat, model.GetDisplayName(m => m.CatParentCode)));
 
@@ -665,8 +794,8 @@ namespace TinaShopV2.Common.Extensions
                 model.CreatedUserId = category.CreatedUserId;
                 AutoMapper.Mapper.Map(model, category);
 
-                context.Entry<Category>(category).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<Category>(category).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -674,20 +803,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteCategoryByCatCode(this ApplicationDbContext context, string catCode)
+        public static void DeleteCategoryByCatCode(this IOwinContext owinContext, string catCode)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var cat = context.Categories.Find(catCode);
+                var cat = dbContext.Categories.Find(catCode);
                 if (cat == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                context.Categories.Remove(cat);
-                context.Entry<Category>(cat).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Categories.Remove(cat);
+                dbContext.Entry<Category>(cat).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -699,41 +831,56 @@ namespace TinaShopV2.Common.Extensions
 
         #region Address
 
-        public static IEnumerable<AddressViewModel> GetAllAddressViewModels(this ApplicationDbContext context)
+        public static IEnumerable<AddressViewModel> GetAllAddressViewModels(this IOwinContext owinContext)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<AddressViewModel> models = new List<AddressViewModel>();
-            var addresses = context.Addresses.AsEnumerable();
+            var addresses = dbContext.Addresses.AsEnumerable();
             AutoMapper.Mapper.Map(addresses, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return models;
         }
 
-        public static AddressViewModel GetAddressViewModelById(this ApplicationDbContext context, int id)
+        public static AddressViewModel GetAddressViewModelById(this IOwinContext owinContext, int id)
         {
-            var address = context.Addresses.Find(id);
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var address = dbContext.Addresses.Find(id);
             if (address == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            AddressViewModel model = new AddressViewModel();
+            AddressViewModel model = new AddressViewModel(owinContext);
             AutoMapper.Mapper.Map(address, model);
 
             return model;
         }
 
-        public static void CreateAddressByViewModel(this ApplicationDbContext context, AddressViewModel model)
+        public static void CreateAddressByViewModel(this IOwinContext owinContext, AddressViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.Addresses.Any(m => m.StoreAddress == model.StoreAddress))
+                if (dbContext.Addresses.Any(m => m.StoreAddress == model.StoreAddress))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 Address address = new Address();
                 AutoMapper.Mapper.Map(model, address);
-                context.Addresses.Add(address);
-                context.Entry<Address>(address).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Addresses.Add(address);
+                dbContext.Entry<Address>(address).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -741,26 +888,29 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditAddressByViewModel(this ApplicationDbContext context, AddressViewModel model)
+        public static void EditAddressByViewModel(this IOwinContext owinContext, AddressViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var address = context.Addresses.Find(model.Id);
+                var address = dbContext.Addresses.Find(model.Id);
                 if (address == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                if (context.Addresses.Any(m => m.StoreAddress == model.StoreAddress && m.Id != model.Id))
+                if (dbContext.Addresses.Any(m => m.StoreAddress == model.StoreAddress && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 model.CreatedDatetime = address.CreatedDatetime;
                 model.CreatedUserId = address.CreatedUserId;
 
                 AutoMapper.Mapper.Map(model, address);
-                context.Entry<Address>(address).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<Address>(address).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -768,20 +918,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteAddressById(this ApplicationDbContext context, int id)
+        public static void DeleteAddressById(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var address = context.Addresses.Find(id);
+                var address = dbContext.Addresses.Find(id);
                 if (address == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                context.Addresses.Remove(address);
-                context.Entry<Address>(address).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Addresses.Remove(address);
+                dbContext.Entry<Address>(address).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -793,26 +946,38 @@ namespace TinaShopV2.Common.Extensions
 
         #region Color
 
-        public static IEnumerable<ColorViewModel> GetAllColorViewModels(this ApplicationDbContext context)
+        public static IEnumerable<ColorViewModel> GetAllColorViewModels(this IOwinContext owinContext)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             List<ColorViewModel> models = new List<ColorViewModel>();
-            var colors = context.Colors.AsEnumerable();
+            var colors = dbContext.Colors.AsEnumerable();
             AutoMapper.Mapper.Map(colors, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return models;
         }
 
-        public static ColorViewModel GetColorByKey(this ApplicationDbContext context, string colorKey)
+        public static ColorViewModel GetColorByKey(this IOwinContext owinContext, string colorKey)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var color = context.Colors.Find(colorKey);
+                var color = dbContext.Colors.Find(colorKey);
                 if (color == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                ColorViewModel model = new ColorViewModel();
+                ColorViewModel model = new ColorViewModel(owinContext);
                 AutoMapper.Mapper.Map(color, model);
                 return model;
             }
@@ -822,21 +987,24 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void CreateColorByViewModel(this ApplicationDbContext context, ColorViewModel model)
+        public static void CreateColorByViewModel(this IOwinContext owinContext, ColorViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.Colors.Any(m => m.Name == model.Name))
+                if (dbContext.Colors.Any(m => m.Name == model.Name))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 Color newColor = new Color();
                 AutoMapper.Mapper.Map(model, newColor);
-                context.Colors.Add(newColor);
-                context.Entry<Color>(newColor).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Colors.Add(newColor);
+                dbContext.Entry<Color>(newColor).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -844,26 +1012,31 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditColorByViewModel(this ApplicationDbContext context, ColorViewModel model)
+        public static void EditColorByViewModel(this IOwinContext owinContext, ColorViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var color = context.Colors.Find(model.ColorKey);
+                var color = dbContext.Colors.Find(model.ColorKey);
                 if (color == null)
                     throw new HttpException(404, "ContentNotFound");
 
-                if (context.Colors.Any(m => m.Name == model.Name && m.ColorKey != model.ColorKey))
+                if (dbContext.Colors.Any(m => m.Name == model.Name && m.ColorKey != model.ColorKey))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 model.CreatedDatetime = color.CreatedDatetime;
                 model.CreatedUserId = color.CreatedUserId;
 
                 AutoMapper.Mapper.Map(model, color);
-                context.Entry<Color>(color).State = EntityState.Modified;
-                context.SaveChanges();
+
+
+                dbContext.Entry<Color>(color).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -871,20 +1044,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteColorByKey(this ApplicationDbContext context, string colorKey)
+        public static void DeleteColorByKey(this IOwinContext owinContext, string colorKey)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var color = context.Colors.Find(colorKey);
+                var color = dbContext.Colors.Find(colorKey);
                 if (color == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                context.Colors.Remove(color);
-                context.Entry<Color>(color).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Colors.Remove(color);
+                dbContext.Entry<Color>(color).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -896,28 +1072,34 @@ namespace TinaShopV2.Common.Extensions
 
         #region Roles
 
-        public static IEnumerable<RoleViewModel> GetAllRoleViewModel(this ApplicationDbContext context)
+        public static IEnumerable<RoleViewModel> GetAllRoleViewModel(this IOwinContext owinContext)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
-            return context.Roles.Select(m => new RoleViewModel() { Id = m.Id, Name = m.Name });
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            return dbContext.Roles.Select(m => new RoleViewModel() { Id = m.Id, Name = m.Name });
         }
 
-        public static void CreateRoleByViewModel(this ApplicationDbContext context, RoleViewModel model)
+        public static void CreateRoleByViewModel(this IOwinContext owinContext, RoleViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.Roles.Any(m => m.Name == model.Name))
+                if (dbContext.Roles.Any(m => m.Name == model.Name))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 IdentityRole newRole = new IdentityRole(model.Name);
-                context.Roles.Add(newRole);
-                context.Entry<IdentityRole>(newRole).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.Roles.Add(newRole);
+                dbContext.Entry<IdentityRole>(newRole).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -925,22 +1107,25 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditRoleByViewModel(this ApplicationDbContext context, RoleViewModel model)
+        public static void EditRoleByViewModel(this IOwinContext owinContext, RoleViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var role = context.Roles.Find(model.Id);
+                var role = dbContext.Roles.Find(model.Id);
                 if (role == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                if (context.Roles.Any(m => m.Name == model.Name && m.Id != model.Id))
+                if (dbContext.Roles.Any(m => m.Name == model.Name && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
-                context.Entry<IdentityRole>(role).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<IdentityRole>(role).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -948,23 +1133,26 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteRoleByViewModel(this ApplicationDbContext context, string id)
+        public static void DeleteRoleByViewModel(this IOwinContext owinContext, string id)
         {
-            if (context == null || string.IsNullOrEmpty(id))
+            if (owinContext == null || string.IsNullOrEmpty(id))
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var role = context.Roles.Find(id);
+                var role = dbContext.Roles.Find(id);
                 if (role == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                if (context.TinaAuthorizes.Any(m => m.RoleId == id))
+                if (dbContext.TinaAuthorizes.Any(m => m.RoleId == id))
                     throw new Exception(App_GlobalResources.Errors.NotDelete_HaveChild);
 
-                context.Roles.Remove(role);
-                context.Entry<IdentityRole>(role).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.Roles.Remove(role);
+                dbContext.Entry<IdentityRole>(role).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -976,44 +1164,56 @@ namespace TinaShopV2.Common.Extensions
 
         #region TinaActions
 
-        public static IEnumerable<TinaActionViewModel> GetAllTinaActionViewModel(this ApplicationDbContext context)
+        public static IEnumerable<TinaActionViewModel> GetAllTinaActionViewModel(this IOwinContext owinContext)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
 
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             IEnumerable<TinaActionViewModel> result = new List<TinaActionViewModel>();
-            AutoMapper.Mapper.Map(context.TinaActions.OrderByDescending(m => m.UpdatedDatetime), result);
+            AutoMapper.Mapper.Map(dbContext.TinaActions.OrderByDescending(m => m.UpdatedDatetime), result);
+
+            foreach (var item in result)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return result;
         }
 
-        public static void CreateTinaActionByViewModel(this ApplicationDbContext context, TinaActionViewModel model)
+        public static void CreateTinaActionByViewModel(this IOwinContext owinContext, TinaActionViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var existingItem = context.TinaActions.FirstOrDefault(m => m.Name == model.Name);
+                var existingItem = dbContext.TinaActions.FirstOrDefault(m => m.Name == model.Name);
                 if (existingItem != null)
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
-                if (context.TinaActions.Any(m => m.Controller.ToLower() == model.Controller.ToLower() && m.Action.ToLower() == model.Action.ToLower() && (m.Area ?? string.Empty).ToLower() == model.Area.ToLower()))
+                if (dbContext.TinaActions.Any(m => m.Controller.ToLower() == model.Controller.ToLower() && m.Action.ToLower() == model.Action.ToLower() && (m.Area ?? string.Empty).ToLower() == model.Area.ToLower()))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, "Action"));
 
                 TinaAction newAction = new TinaAction();
                 AutoMapper.Mapper.Map(model, newAction);
-                newAction = context.TinaActions.Add(newAction);
-                context.Entry<TinaAction>(newAction).State = EntityState.Added;
-                context.SaveChanges();
+                newAction = dbContext.TinaActions.Add(newAction);
+                dbContext.Entry<TinaAction>(newAction).State = EntityState.Added;
+                dbContext.SaveChanges();
 
                 if (model.RoleIds != null && model.RoleIds.Count() > 0)
                 {
                     foreach (var item in model.RoleIds)
                     {
                         TinaAuthorize newAuthorize = new TinaAuthorize() { ActionId = newAction.Id, RoleId = item };
-                        context.TinaAuthorizes.Add(newAuthorize);
-                        context.Entry<TinaAuthorize>(newAuthorize).State = EntityState.Added;
-                        context.SaveChanges();
+                        dbContext.TinaAuthorizes.Add(newAuthorize);
+                        dbContext.Entry<TinaAuthorize>(newAuthorize).State = EntityState.Added;
+                        dbContext.SaveChanges();
                     }
                 }
             }
@@ -1023,21 +1223,24 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditTinaActionByViewModel(this ApplicationDbContext context, TinaActionViewModel model)
+        public static void EditTinaActionByViewModel(this IOwinContext owinContext, TinaActionViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                TinaAction tinaAction = context.TinaActions.Find(model.Id);
+                TinaAction tinaAction = dbContext.TinaActions.Find(model.Id);
                 if (tinaAction == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                if (context.TinaActions.Any(m => m.Name == model.Name && m.Id != model.Id))
+                if (dbContext.TinaActions.Any(m => m.Name == model.Name && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
-                if (context.TinaActions.Any(m => m.Controller.ToLower() == model.Controller.ToLower() && m.Action.ToLower() == model.Action.ToLower() && (m.Area ?? string.Empty).ToLower() == model.Area.ToLower() && m.Id != model.Id))
+                if (dbContext.TinaActions.Any(m => m.Controller.ToLower() == model.Controller.ToLower() && m.Action.ToLower() == model.Action.ToLower() && (m.Area ?? string.Empty).ToLower() == model.Area.ToLower() && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, "Action"));
 
                 model.CreatedUserId = tinaAction.CreatedUserId;
@@ -1045,15 +1248,15 @@ namespace TinaShopV2.Common.Extensions
 
                 AutoMapper.Mapper.Map(model, tinaAction);
 
-                context.Entry<TinaAction>(tinaAction).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<TinaAction>(tinaAction).State = EntityState.Modified;
+                dbContext.SaveChanges();
 
-                var authorizes = context.TinaAuthorizes.Where(m => m.ActionId == model.Id).ToList();
+                var authorizes = dbContext.TinaAuthorizes.Where(m => m.ActionId == model.Id).ToList();
                 foreach (var item in authorizes)
                 {
-                    context.TinaAuthorizes.Remove(item);
-                    context.Entry<TinaAuthorize>(item).State = EntityState.Deleted;
-                    context.SaveChanges();
+                    dbContext.TinaAuthorizes.Remove(item);
+                    dbContext.Entry<TinaAuthorize>(item).State = EntityState.Deleted;
+                    dbContext.SaveChanges();
                 }
 
                 if (model.RoleIds != null && model.RoleIds.Count() > 0)
@@ -1061,9 +1264,9 @@ namespace TinaShopV2.Common.Extensions
                     foreach (var item in model.RoleIds)
                     {
                         TinaAuthorize newAuthorize = new TinaAuthorize() { ActionId = model.Id, RoleId = item };
-                        context.TinaAuthorizes.Add(newAuthorize);
-                        context.Entry<TinaAuthorize>(newAuthorize).State = EntityState.Added;
-                        context.SaveChanges();
+                        dbContext.TinaAuthorizes.Add(newAuthorize);
+                        dbContext.Entry<TinaAuthorize>(newAuthorize).State = EntityState.Added;
+                        dbContext.SaveChanges();
                     }
                 }
             }
@@ -1072,21 +1275,24 @@ namespace TinaShopV2.Common.Extensions
                 throw ex;
             }
         }
-        public static void DeleteTinaActionByViewModel(this ApplicationDbContext context, int id)
+        public static void DeleteTinaActionByViewModel(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                TinaAction tinaAction = context.TinaActions.Find(id);
+                TinaAction tinaAction = dbContext.TinaActions.Find(id);
 
                 if (tinaAction == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                context.TinaActions.Remove(tinaAction);
-                context.Entry<TinaAction>(tinaAction).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.TinaActions.Remove(tinaAction);
+                dbContext.Entry<TinaAction>(tinaAction).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1102,28 +1308,40 @@ namespace TinaShopV2.Common.Extensions
 
         #region MenuType
 
-        public static IEnumerable<MenuTypeViewModel> GetAllMenuTypeViewModel(this ApplicationDbContext context)
+        public static IEnumerable<MenuTypeViewModel> GetAllMenuTypeViewModel(this IOwinContext owinContext)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             IEnumerable<MenuTypeViewModel> result = new List<MenuTypeViewModel>();
-            AutoMapper.Mapper.Map(context.MenuTypes, result);
+            AutoMapper.Mapper.Map(dbContext.MenuTypes, result);
+
+            foreach (var item in result)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return result;
         }
 
-        public static void CreateMenuTypeByViewModel(this ApplicationDbContext context, MenuTypeViewModel model)
+        public static void CreateMenuTypeByViewModel(this IOwinContext owinContext, MenuTypeViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (context.MenuTypes.Any(m => m.Name == model.Name))
+                if (dbContext.MenuTypes.Any(m => m.Name == model.Name))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 MenuType newMenuType = new MenuType();
                 AutoMapper.Mapper.Map(model, newMenuType);
-                context.MenuTypes.Add(newMenuType);
-                context.Entry<MenuType>(newMenuType).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.MenuTypes.Add(newMenuType);
+                dbContext.Entry<MenuType>(newMenuType).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1131,27 +1349,30 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditMenuTypeByViewModel(this ApplicationDbContext context, MenuTypeViewModel model)
+        public static void EditMenuTypeByViewModel(this IOwinContext owinContext, MenuTypeViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                MenuType menuType = context.MenuTypes.Find(model.Id);
+                MenuType menuType = dbContext.MenuTypes.Find(model.Id);
                 if (menuType == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
                 // Check 'Name' existing
-                if (context.MenuTypes.Any(m => m.Name == model.Name && m.Id != model.Id))
+                if (dbContext.MenuTypes.Any(m => m.Name == model.Name && m.Id != model.Id))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
                 model.CreatedUserId = menuType.CreatedUserId;
                 model.CreatedDatetime = menuType.CreatedDatetime;
 
                 AutoMapper.Mapper.Map(model, menuType);
-                context.Entry<MenuType>(menuType).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<MenuType>(menuType).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1159,21 +1380,24 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteMenuTypeByViewModel(this ApplicationDbContext context, int id)
+        public static void DeleteMenuTypeByViewModel(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                MenuType menuType = context.MenuTypes.Find(id);
+                MenuType menuType = dbContext.MenuTypes.Find(id);
 
                 if (menuType == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                context.MenuTypes.Remove(menuType);
-                context.Entry<MenuType>(menuType).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.MenuTypes.Remove(menuType);
+                dbContext.Entry<MenuType>(menuType).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1185,45 +1409,51 @@ namespace TinaShopV2.Common.Extensions
 
         #region TinaMenu
 
-        public static IEnumerable<TinaMenuViewModel> GetTinaMenuViewModelByTypeAndParent(this ApplicationDbContext context, int menuTypeId, int? parentId, bool? isHidden = null)
+        public static IEnumerable<TinaMenuViewModel> GetTinaMenuViewModelByTypeAndParent(this IOwinContext owinContext, int menuTypeId, int? parentId, bool? isHidden = null)
         {
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
             IEnumerable<TinaMenu> result;
             if (isHidden == null)
-                result = context.TinaMenus.Where(m => m.MenuTypeId == menuTypeId && m.ParentId == parentId).OrderBy(m => m.OrderNumber);
+                result = dbContext.TinaMenus.Where(m => m.MenuTypeId == menuTypeId && m.ParentId == parentId).OrderBy(m => m.OrderNumber);
             else
-                result = context.TinaMenus.Where(m => m.MenuTypeId == menuTypeId && m.ParentId == parentId && m.IsHidden == isHidden.Value).OrderBy(m => m.OrderNumber);
+                result = dbContext.TinaMenus.Where(m => m.MenuTypeId == menuTypeId && m.ParentId == parentId && m.IsHidden == isHidden.Value).OrderBy(m => m.OrderNumber);
 
             IEnumerable<TinaMenuViewModel> model = new List<TinaMenuViewModel>();
             AutoMapper.Mapper.Map(result, model);
             return model ?? new List<TinaMenuViewModel>();
         }
 
-        public static void CreateTinaMenuByViewModel(this ApplicationDbContext context, TinaMenuViewModel model)
+        public static void CreateTinaMenuByViewModel(this IOwinContext owinContext, TinaMenuViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (!context.MenuTypes.Any(m => m.Id == model.MenuTypeId))
+                if (!dbContext.MenuTypes.Any(m => m.Id == model.MenuTypeId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.MenuTypeId)));
 
-                if (model.ActionId != null && !context.TinaActions.Any(m => m.Id == model.ActionId))
+                if (model.ActionId != null && !dbContext.TinaActions.Any(m => m.Id == model.ActionId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.ActionId)));
 
-                if (model.ParentId != null && !context.TinaActions.Any(m => m.Id == model.ParentId))
+                if (model.ParentId != null && !dbContext.TinaActions.Any(m => m.Id == model.ParentId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.ParentId)));
 
                 if (model.ParentId != null)
                 {
                     bool parentIsOk = true;
-                    var parent = context.TinaMenus.Find(model.ParentId.Value);
+                    var parent = dbContext.TinaMenus.Find(model.ParentId.Value);
                     while (parent != null && (parentIsOk = !parent.IsHidden))
                     {
                         if (parent.ParentId == null)
                             break;
                         else
-                            parent = context.TinaMenus.Find(parent.ParentId.Value);
+                            parent = dbContext.TinaMenus.Find(parent.ParentId.Value);
                     }
 
                     if (!parentIsOk)
@@ -1232,9 +1462,9 @@ namespace TinaShopV2.Common.Extensions
 
                 TinaMenu newMenu = new TinaMenu();
                 AutoMapper.Mapper.Map(model, newMenu);
-                context.TinaMenus.Add(newMenu);
-                context.Entry<TinaMenu>(newMenu).State = EntityState.Added;
-                context.SaveChanges();
+                dbContext.TinaMenus.Add(newMenu);
+                dbContext.Entry<TinaMenu>(newMenu).State = EntityState.Added;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1242,23 +1472,26 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void EditTinaMenuByViewModel(this ApplicationDbContext context, TinaMenuViewModel model)
+        public static void EditTinaMenuByViewModel(this IOwinContext owinContext, TinaMenuViewModel model)
         {
-            if (context == null || model == null)
+            if (owinContext == null || model == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                if (!context.MenuTypes.Any(m => m.Id == model.MenuTypeId))
+                if (!dbContext.MenuTypes.Any(m => m.Id == model.MenuTypeId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.MenuTypeId)));
 
-                if (model.ActionId != null && !context.TinaActions.Any(m => m.Id == model.ActionId))
+                if (model.ActionId != null && !dbContext.TinaActions.Any(m => m.Id == model.ActionId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.ActionId)));
 
-                if (model.ParentId != null && !context.TinaActions.Any(m => m.Id == model.ParentId))
+                if (model.ParentId != null && !dbContext.TinaActions.Any(m => m.Id == model.ParentId))
                     throw new Exception(string.Format(Errors.DataNotExisting_FormatName, model.GetDisplayName(m => m.ParentId)));
 
-                var tinaMenu = context.TinaMenus.Find(model.Id);
+                var tinaMenu = dbContext.TinaMenus.Find(model.Id);
                 if (tinaMenu == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
@@ -1268,13 +1501,13 @@ namespace TinaShopV2.Common.Extensions
                 if (model.ParentId != null)
                 {
                     bool parentIsOk = true;
-                    var parent = context.TinaMenus.Find(model.ParentId.Value);
+                    var parent = dbContext.TinaMenus.Find(model.ParentId.Value);
                     while (parent != null && (parentIsOk = !parent.IsHidden))
                     {
                         if (parent.ParentId == null)
                             break;
                         else
-                            parent = context.TinaMenus.Find(parent.ParentId.Value);
+                            parent = dbContext.TinaMenus.Find(parent.ParentId.Value);
                     }
 
                     if (!parentIsOk)
@@ -1285,8 +1518,8 @@ namespace TinaShopV2.Common.Extensions
                 model.CreatedUserId = tinaMenu.CreatedUserId;
 
                 AutoMapper.Mapper.Map(model, tinaMenu);
-                context.Entry<TinaMenu>(tinaMenu).State = EntityState.Modified;
-                context.SaveChanges();
+                dbContext.Entry<TinaMenu>(tinaMenu).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -1294,20 +1527,23 @@ namespace TinaShopV2.Common.Extensions
             }
         }
 
-        public static void DeleteTinaMenuById(this ApplicationDbContext context, int id)
+        public static void DeleteTinaMenuById(this IOwinContext owinContext, int id)
         {
-            if (context == null)
+            if (owinContext == null)
                 throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
 
             try
             {
-                var model = context.TinaMenus.Find(id);
+                var model = dbContext.TinaMenus.Find(id);
                 if (model == null)
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
-                context.TinaMenus.Remove(model);
-                context.Entry<TinaMenu>(model).State = EntityState.Deleted;
-                context.SaveChanges();
+                dbContext.TinaMenus.Remove(model);
+                dbContext.Entry<TinaMenu>(model).State = EntityState.Deleted;
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {

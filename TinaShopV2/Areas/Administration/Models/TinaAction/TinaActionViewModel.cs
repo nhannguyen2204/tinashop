@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,14 @@ namespace TinaShopV2.Areas.Administration.Models.TinaAction
 {
     public class TinaActionViewModel : BaseViewModel
     {
+        public TinaActionViewModel() : base() { }
+
+        public TinaActionViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+            
+        }
+
         public int Id { get; set; }
 
         [Display(Name = "Name", ResourceType = typeof(App_GlobalResources.Commons))]
@@ -40,7 +49,7 @@ namespace TinaShopV2.Areas.Administration.Models.TinaAction
             { 
                 roleIds = value;
                 if (roleIds != null)
-                    Roles = ApplicationDbContext.Instance.Roles.Where(m => roleIds.Contains(m.Id));
+                    Roles = _dbContextService.Roles.Where(m => roleIds.Contains(m.Id));
             }
         }
 
@@ -48,10 +57,10 @@ namespace TinaShopV2.Areas.Administration.Models.TinaAction
 
         public void LoadRoles()
         {
-            var tinaAction = ApplicationDbContext.Instance.TinaActions.Find(Id);
+            var tinaAction = _dbContextService.TinaActions.Find(Id);
             if (tinaAction != null)
             {
-                this.RoleIds = ApplicationDbContext.Instance.TinaAuthorizes.Where(m => m.ActionId == this.Id).Select(m => m.RoleId).ToArray();
+                this.RoleIds = _dbContextService.TinaAuthorizes.Where(m => m.ActionId == this.Id).Select(m => m.RoleId).ToArray();
             }
         }
 

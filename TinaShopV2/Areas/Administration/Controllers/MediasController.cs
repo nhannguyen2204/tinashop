@@ -17,18 +17,50 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class MediasController : BaseController
     {
+        public MediasController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/Medias
         public ActionResult Index(MediaIndexViewModel model)
         {
             // Init Medias
-            ApplicationDbContext.Instance.GetMediasByIndexViewModel(ref model);
-            
+            _owinContext.GetMediasByIndexViewModel(ref model);
+
             // Init Media Types
-            var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
+            var mediaTypes = _dbContextService.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
             // Response
             return View(model);
+        }
+
+        public JsonResult Find(string mediaName)
+        {
+            IEnumerable<MediaViewModel> medias = null;
+
+            if (!string.IsNullOrEmpty(mediaName))
+                medias = _owinContext.FindMediaViewModelByName(mediaName);
+
+            List<ResponseMediaViewModel> model = new List<ResponseMediaViewModel>();
+            AutoMapper.Mapper.Map(medias, model);
+
+            return new JsonResult() { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult FindByType(int typeId, string mediaName)
+        {
+            IEnumerable<MediaViewModel> medias = null;
+
+            if (!string.IsNullOrEmpty(mediaName))
+                medias = _owinContext.FindMediaViewModelByName(mediaName, typeId);
+
+            List<ResponseMediaViewModel> model = new List<ResponseMediaViewModel>();
+            AutoMapper.Mapper.Map(medias, model);
+
+            return new JsonResult() { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName("Index")]
@@ -48,14 +80,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Medias/Details/5
         public ActionResult Details(int id)
         {
-            MediaViewModel model = ApplicationDbContext.Instance.GetMediaViewModelById(id);
+            MediaViewModel model = _owinContext.GetMediaViewModelById(id);
             return View(model);
         }
 
         // GET: Administration/Medias/Create
         public ActionResult Create()
         {
-            var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
+            var mediaTypes = _dbContextService.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
             return View();
@@ -71,7 +103,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateMediaByViewModel(model);
+                    _owinContext.CreateMediaByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -82,7 +114,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
+            var mediaTypes = _dbContextService.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
             return View(model);
         }
@@ -90,10 +122,10 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Medias/Edit/5
         public ActionResult Edit(int id)
         {
-            var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
+            var mediaTypes = _dbContextService.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
-            MediaViewModel model = ApplicationDbContext.Instance.GetMediaViewModelById(id);
+            MediaViewModel model = _owinContext.GetMediaViewModelById(id);
             return View(model);
         }
 
@@ -107,7 +139,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditMediaByViewModel(model);
+                    _owinContext.EditMediaByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -118,7 +150,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            var mediaTypes = ApplicationDbContext.Instance.MediaTypes.AsEnumerable();
+            var mediaTypes = _dbContextService.MediaTypes.AsEnumerable();
             ViewBag.MediaTypes = mediaTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
             return View(model);
         }
@@ -126,7 +158,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Medias/Delete/5
         public ActionResult Delete(int id)
         {
-            MediaViewModel model = ApplicationDbContext.Instance.GetMediaViewModelById(id);
+            MediaViewModel model = _owinContext.GetMediaViewModelById(id);
             return View(model);
         }
 
@@ -137,7 +169,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteMediaById(id);
+                _owinContext.DeleteMediaById(id);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -146,7 +178,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                var model = ApplicationDbContext.Instance.GetMediaViewModelById(id);
+                var model = _owinContext.GetMediaViewModelById(id);
                 return View(model);
             }
         }

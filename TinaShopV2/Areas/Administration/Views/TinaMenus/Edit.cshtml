@@ -24,7 +24,6 @@
         <div class="form-group">
             @Html.LabelFor(model => model.MenuTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-8">
-
                 @Html.SmartDropDownListFor(model => model.MenuTypeId, ViewBag.MenuTypes as IEnumerable<SelectListItem>, new { @disabled = "disabled" }, false)
                 @Html.ValidationMessageFor(model => model.MenuTypeId, "", new { @class = "text-danger" })
             </div>

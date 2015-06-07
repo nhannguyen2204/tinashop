@@ -14,17 +14,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class AddressesController : BaseController
     {
+        public AddressesController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/Addresses
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllAddressViewModels();
+            var model = _owinContext.GetAllAddressViewModels();
             return View(model);
         }
 
         // GET: Administration/Addresses/Details/5
         public ActionResult Details(int id)
         {
-            var model = ApplicationDbContext.Instance.GetAddressViewModelById(id);
+            var model = _owinContext.GetAddressViewModelById(id);
             return View(model);
         }
 
@@ -45,7 +51,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateAddressByViewModel(model);
+                    _owinContext.CreateAddressByViewModel(model);
                     return RedirectToAction("Index");
                 }
 
@@ -61,7 +67,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Addresses/Edit/5
         public ActionResult Edit(int id)
         {
-            var model = ApplicationDbContext.Instance.GetAddressViewModelById(id);
+            var model = _owinContext.GetAddressViewModelById(id);
             return View(model);
         }
 
@@ -76,7 +82,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditAddressByViewModel(model);
+                    _owinContext.EditAddressByViewModel(model);
                     return RedirectToAction("Index");
                 }
 
@@ -92,7 +98,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Addresses/Delete/5
         public ActionResult Delete(int id)
         {
-            var model = ApplicationDbContext.Instance.GetAddressViewModelById(id);
+            var model = _owinContext.GetAddressViewModelById(id);
             return View(model);
         }
 
@@ -104,12 +110,12 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteAddressById(id);
+                _owinContext.DeleteAddressById(id);
                 return RedirectToAction("Index");
             }
             catch
             {
-                var model = ApplicationDbContext.Instance.GetAddressViewModelById(id);
+                var model = _owinContext.GetAddressViewModelById(id);
                 return View(model);
             }
         }

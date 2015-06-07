@@ -12,11 +12,21 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class TinaSystemsController : BaseController
     {
+        public TinaSystemsController()
+            : base()
+        {
+            
+        }
+
         public PartialViewResult MainMenu(int? parentId = null)
         {
-            var tinaMenus = ApplicationDbContext.Instance.TinaMenus.Where(m => m.ParentId == parentId && m.MenuTypeId == AdminGlobalObjects.MainMenuTypeId).OrderBy(m => m.OrderNumber);
+            var tinaMenus = _dbContextService.TinaMenus.Where(m => m.ParentId == parentId && m.MenuTypeId == AdminGlobalObjects.MainMenuTypeId).OrderBy(m => m.OrderNumber);
             List<TinaMenuViewModel> model = new List<TinaMenuViewModel>();
             AutoMapper.Mapper.Map(tinaMenus, model);
+            foreach (var item in model)
+            {
+                item.SetOwinContext(_owinContext);
+            }
             return PartialView("_MainMenuPartial", model);
         }
     }

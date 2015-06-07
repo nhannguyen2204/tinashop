@@ -1,10 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Owin;
+using System.ComponentModel.DataAnnotations;
 using TinaShopV2.App_GlobalResources;
+using TinaShopV2.Models;
 
 namespace TinaShopV2.Areas.Administration.Models
 {
-    public class IndexBasicViewModel
+    public class IndexBasicViewModel : BaseViewModel
     {
+        public IndexBasicViewModel() : base() { }
+
+        public IndexBasicViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+
+        }
 
        /// <summary>
        /// Current Page

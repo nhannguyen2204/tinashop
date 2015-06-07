@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
-using TinaShopV2.Models;
 using TinaShopV2.Common.Extensions;
-using System.Threading.Tasks;
+using TinaShopV2.Models;
 
 namespace TinaShopV2.Common.Attributes
 {
     public class TinaAdminAuthorizationAttribute : AuthorizeAttribute
     {
+
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
+            var owinContext = httpContext.GetOwinContext();
+            ApplicationUserManager userManager = owinContext.GetUserManager<ApplicationUserManager>();           
+            ApplicationDbContext dbContext = owinContext.Get<ApplicationDbContext>();
+
             if (httpContext == null)
                 throw new ArgumentNullException("httpContext");
 
@@ -24,19 +29,20 @@ namespace TinaShopV2.Common.Attributes
             string actionName = routeData.Values["action"] != null ? routeData.Values["action"].ToString() : string.Empty;
             string areaName = routeData.Values["area"] != null ? routeData.Values["area"].ToString() : string.Empty;
 
-            var tinaAction = ApplicationDbContext.Instance.TinaActions.FirstOrDefault(m => m.Controller == controllerName && m.Action == actionName && m.Area == areaName);
+            var tinaAction = dbContext.TinaActions.FirstOrDefault(m => m.Controller == controllerName && m.Action == actionName && m.Area == areaName);
+
             if (tinaAction != null)
             {
                 if (tinaAction.IsAnonymous)
                     return true;
 
-                var roleIds = ApplicationDbContext.Instance.TinaAuthorizes.Where(m => m.ActionId == tinaAction.Id).Select(m => m.RoleId).ToArray();
-                var roleNames = ApplicationDbContext.Instance.Roles.Where(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToArray();
+                var roleIds = dbContext.TinaAuthorizes.Where(m => m.ActionId == tinaAction.Id).Select(m => m.RoleId).ToArray();
+                var roleNames = dbContext.Roles.Where(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToArray();
                 if (currentUser != null && roleNames.Count() > 0)
                 {
                     foreach (var roleName in roleNames)
                     {
-                        var task = ApplicationUserManager.Instance.IsInRoleAsync(currentUser.Id,roleName);
+                        var task = userManager.IsInRoleAsync(currentUser.Id,roleName);
                         if (task.Result)
                         {
                             return true;

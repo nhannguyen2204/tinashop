@@ -17,22 +17,28 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class UsersController : BaseController
     {
+        public UsersController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/UserViewModel
         public ActionResult Index()
         {
-            var users = ApplicationDbContext.Instance.Users.Select(m => new UserViewModel() { Id = m.Id, Email = m.Email, PhoneNumber = m.PhoneNumber, UserName = m.UserName, LockoutEnabled = m.LockoutEnabled });
+            var users = _dbContextService.Users.AsEnumerable().Select(m => new UserViewModel(_owinContext) { Id = m.Id, Email = m.Email, PhoneNumber = m.PhoneNumber, UserName = m.UserName, LockoutEnabled = m.LockoutEnabled });
             return View(users);
         }
 
         // GET: Administration/UserViewModel/Details/5
         public ActionResult Details(string id)
         {
-            var user = ApplicationDbContext.Instance.Users.Find(id);
+            var user = _dbContextService.Users.Find(id);
 
             if (user == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            UserViewModel userViewModel = new UserViewModel();
+            UserViewModel userViewModel = new UserViewModel(_owinContext);
             AutoMapper.Mapper.Map(user, userViewModel);
 
             return View(userViewModel);
@@ -41,7 +47,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/UserViewModel/Create
         public ActionResult Create()
         {
-            ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", null);
+            ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", null);
             return View();
         }
 
@@ -56,14 +62,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var emailExisting = UserManager.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim());
+                    var emailExisting = _userManagerService.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim());
                     if (emailExisting != null)
                     {
                         ModelState.AddModelError("", "Email's existing");
                         goto responseToClient;
                     }
 
-                    var phoneNumberExisting = UserManager.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim());
+                    var phoneNumberExisting = _userManagerService.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim());
                     if (phoneNumberExisting != null)
                     {
                         ModelState.AddModelError("", "Phone Number's existing");
@@ -71,13 +77,13 @@ namespace TinaShopV2.Areas.Administration.Controllers
                     }
 
                     var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, PhoneNumber = model.PhoneNumber };
-                    var result = await UserManager.CreateAsync(user, model.Password);
+                    var result = await _userManagerService.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
                         foreach (var item in model.RoleId)
                         {
-                            var role = ApplicationDbContext.Instance.Roles.Find(item);
-                            await UserManager.AddToRoleAsync(user.Id, role.Name);
+                            var role = _dbContextService.Roles.Find(item);
+                            await _userManagerService.AddToRoleAsync(user.Id, role.Name);
                         }
 
                         TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
@@ -91,12 +97,12 @@ namespace TinaShopV2.Areas.Administration.Controllers
 
                 if (model.RoleId != null)
                 {
-                    var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                    var selectedRoles = _dbContextService.Roles.Where(m => model.RoleId.Contains(m.Id));
+                    ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
                 }
                 else
                 {
-                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
+                    ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
                 }
 
                 return View(model);
@@ -111,17 +117,17 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/UserViewModel/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            var user = await UserManager.FindByIdAsync(id);
+            var user = await _userManagerService.FindByIdAsync(id);
 
             if (user == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            var model = new EditUserViewModel();
+            var model = new EditUserViewModel(_owinContext);
             AutoMapper.Mapper.Map(user, model);
 
             model.RoleId = user.Roles.Select(m => m.RoleId).ToArray();
-            var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-            ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+            var selectedRoles = _dbContextService.Roles.Where(m => model.RoleId.Contains(m.Id));
+            ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
 
             return View(model);
         }
@@ -137,12 +143,12 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await UserManager.FindByIdAsync(model.Id);
+                    var user = await _userManagerService.FindByIdAsync(model.Id);
 
                     if (user == null)
                         throw new HttpException(404, "ContentNotFound");
 
-                    var emailExisting = UserManager.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim() && m.Id != model.Id);
+                    var emailExisting = _userManagerService.Users.FirstOrDefault(m => m.Email.ToLower().Trim() == model.Email.ToLower().Trim() && m.Id != model.Id);
                     if (emailExisting != null)
                     {
 #warning localize message
@@ -150,7 +156,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                         goto responseToClient;
                     }
 
-                    var phoneNumberExisting = UserManager.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim() && m.Id != model.Id);
+                    var phoneNumberExisting = _userManagerService.Users.FirstOrDefault(m => m.PhoneNumber.ToLower().Trim() == model.PhoneNumber.ToLower().Trim() && m.Id != model.Id);
                     if (phoneNumberExisting != null)
                     {
 #warning localize message
@@ -163,18 +169,18 @@ namespace TinaShopV2.Areas.Administration.Controllers
                     user.PhoneNumber = model.PhoneNumber;
 
                     // Update user
-                    var result = await UserManager.UpdateAsync(user);
+                    var result = await _userManagerService.UpdateAsync(user);
 
                     // Remove all roles
-                    var roles = await UserManager.GetRolesAsync(user.Id);
-                    var removeRoleResult = await UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray());
+                    var roles = await _userManagerService.GetRolesAsync(user.Id);
+                    var removeRoleResult = await _userManagerService.RemoveFromRolesAsync(user.Id, roles.ToArray());
 
                     IdentityResult addRoleResult = null;
                     // Add new roles
                     if (model.RoleId != null && model.RoleId.Count() > 0)
                     {
-                        string[] newRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id)).Select(m => m.Name).ToArray();
-                        addRoleResult = await UserManager.AddToRolesAsync(user.Id, newRoles);
+                        string[] newRoles = _dbContextService.Roles.Where(m => model.RoleId.Contains(m.Id)).Select(m => m.Name).ToArray();
+                        addRoleResult = await _userManagerService.AddToRolesAsync(user.Id, newRoles);
                     }
 
 
@@ -189,17 +195,17 @@ namespace TinaShopV2.Areas.Administration.Controllers
 
                 responseToClient:
 
-                //var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-                //ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                //var selectedRoles = _owinContext.Roles.Where(m => model.RoleId.Contains(m.Id));
+                //ViewBag.Roles = new MultiSelectList(_owinContext.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
 
                 if (model.RoleId != null)
                 {
-                    var selectedRoles = ApplicationDbContext.Instance.Roles.Where(m => model.RoleId.Contains(m.Id));
-                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
+                    var selectedRoles = _dbContextService.Roles.Where(m => model.RoleId.Contains(m.Id));
+                    ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", selectedRoles);
                 }
                 else
                 {
-                    ViewBag.Roles = new MultiSelectList(ApplicationDbContext.Instance.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
+                    ViewBag.Roles = new MultiSelectList(_dbContextService.Roles.AsEnumerable(), "Id", "Name", new List<IdentityRole>());
                 }
 
                 return View(model);
@@ -214,12 +220,12 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/UserViewModel/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
-            var user = await UserManager.FindByIdAsync(id);
+            var user = await _userManagerService.FindByIdAsync(id);
 
             if (user == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            var userViewModel = new UserViewModel();
+            var userViewModel = new UserViewModel(_owinContext);
             AutoMapper.Mapper.Map(user, userViewModel);
 
             return View(userViewModel);
@@ -230,13 +236,13 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            var user = await UserManager.FindByIdAsync(id);
+            var user = await _userManagerService.FindByIdAsync(id);
 
             if (user == null)
                 throw new HttpException(400, "BadRequest");
 
             user.LockoutEnabled = true;
-            var result = await UserManager.UpdateAsync(user);
+            var result = await _userManagerService.UpdateAsync(user);
             if (result.Succeeded)
             {
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
@@ -245,7 +251,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             else
                 AddErrors(result);
 
-            var model = new UserViewModel();
+            var model = new UserViewModel(_owinContext);
             AutoMapper.Mapper.Map(user, model);
 
             return View(model);

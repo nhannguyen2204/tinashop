@@ -15,17 +15,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class MediaTypesController : BaseController
     {
+        public MediaTypesController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/MediaTypes
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllMediaTypeViewModels();
+            var model = _owinContext.GetAllMediaTypeViewModels();
             return View(model);
         }
 
         // GET: Administration/MediaTypes/Details/5
         public ActionResult Details(int id)
         {
-            var model = ApplicationDbContext.Instance.GetMediaTypeViewModelById(id);
+            var model = _owinContext.GetMediaTypeViewModelById(id);
             return View(model);
         }
 
@@ -45,7 +51,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateMediaTypeByViewModel(model);
+                    _owinContext.CreateMediaTypeByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -63,7 +69,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/MediaTypes/Edit/5
         public ActionResult Edit(int id)
         {
-            var model = ApplicationDbContext.Instance.GetMediaTypeViewModelById(id);
+            var model = _owinContext.GetMediaTypeViewModelById(id);
             return View(model);
         }
 
@@ -77,7 +83,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditMediaTypeByViewModel(model);
+                    _owinContext.EditMediaTypeByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -95,7 +101,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/MediaTypes/Delete/5
         public ActionResult Delete(int id)
         {
-            var model = ApplicationDbContext.Instance.GetMediaTypeViewModelById(id);
+            var model = _owinContext.GetMediaTypeViewModelById(id);
             return View(model);
         }
 
@@ -106,7 +112,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteMediaTypeByViewModel(id);
+                _owinContext.DeleteMediaTypeByViewModel(id);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -114,7 +120,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                var model = ApplicationDbContext.Instance.GetMediaTypeViewModelById(id);
+                var model = _owinContext.GetMediaTypeViewModelById(id);
                 return View(model);
             }
         }

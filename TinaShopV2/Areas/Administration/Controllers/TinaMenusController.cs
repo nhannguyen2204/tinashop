@@ -16,17 +16,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
     [TinaAdminAuthorization]
     public class TinaMenusController : BaseController
     {
+        public TinaMenusController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/TinaMenus
         public ActionResult Index(int? menuTypeId)
         {
-            var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
-            
+            var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
+
             if (menuTypeId == null && menuTypes.Count() > 0)
             {
                 menuTypeId = menuTypes.First().Id;
                 return RedirectToAction("Index", "TinaMenus", new { @menuTypeId = menuTypeId });
             }
-            else if (menuTypeId != null && !ApplicationDbContext.Instance.MenuTypes.Any(m => m.Id == menuTypeId))
+            else if (menuTypeId != null && !_dbContextService.MenuTypes.Any(m => m.Id == menuTypeId))
                 throw new HttpException(404, "ContentNotFound");
 
             ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
@@ -34,8 +40,13 @@ namespace TinaShopV2.Areas.Administration.Controllers
             IndexTinaMenuViewModel model = new IndexTinaMenuViewModel();
             model.MenuTypeId = menuTypeId;
             List<TinaMenuViewModel> tinaMenus = new List<TinaMenuViewModel>();
-            AdminHelpers.GenerateTinaMenus(ref tinaMenus, menuTypeId ?? 0, null);
+            AdminHelpers.GenerateTinaMenus(ref tinaMenus, _owinContext, menuTypeId ?? 0, null);
             model.TinaMenus = tinaMenus;
+
+            foreach (var item in model.TinaMenus)
+            {
+                item.SetOwinContext(_owinContext);
+            }
 
             if (Request.IsAjaxRequest())
             {
@@ -48,11 +59,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaMenus/Details/5
         public ActionResult Details(int id)
         {
-            var tinaMenu = ApplicationDbContext.Instance.TinaMenus.Find(id);
+            var tinaMenu = _dbContextService.TinaMenus.Find(id);
             if (tinaMenu == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaMenuViewModel model = new TinaMenuViewModel();
+            TinaMenuViewModel model = new TinaMenuViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaMenu, model);
 
             return View(model);
@@ -61,22 +72,22 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaMenus/Create
         public ActionResult Create(int? menuTypeId)
         {
-            var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
-            
+            var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
+
             if (menuTypeId == null && menuTypes.Count() > 0)
             {
                 menuTypeId = menuTypes.First().Id;
                 return RedirectToAction("Create", "TinaMenus", new { @menuTypeId = menuTypeId });
             }
-            else if (menuTypeId != null && !ApplicationDbContext.Instance.MenuTypes.Any(m => m.Id == menuTypeId))
+            else if (menuTypeId != null && !_dbContextService.MenuTypes.Any(m => m.Id == menuTypeId))
             {
                 throw new HttpException(404, "ContentNotFound");
             }
 
             ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-            ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+            ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
-            return View(new TinaMenuViewModel() { MenuTypeId = menuTypeId ?? 0 });
+            return View(new TinaMenuViewModel(_owinContext) { MenuTypeId = menuTypeId ?? 0 });
         }
 
         // POST: Administration/TinaMenus/Create
@@ -89,23 +100,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateTinaMenuByViewModel(model);
+                    _owinContext.CreateTinaMenuByViewModel(model);
 
-                    TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;   
+                    TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
                 }
 
-                var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
+                var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
                 ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-                ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+                ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
                 return View(model);
             }
             catch (Exception ex)
             {
-                var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
+                var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
                 ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-                ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+                ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
@@ -115,16 +126,16 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaMenus/Edit/5
         public ActionResult Edit(int id)
         {
-            var tinaMenu = ApplicationDbContext.Instance.TinaMenus.Find(id);
+            var tinaMenu = _dbContextService.TinaMenus.Find(id);
             if (tinaMenu == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaMenuViewModel model = new TinaMenuViewModel();
+            TinaMenuViewModel model = new TinaMenuViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaMenu, model);
 
-            var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
+            var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
             ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-            ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+            ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
             return View(model);
         }
@@ -139,23 +150,23 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditTinaMenuByViewModel(model);
+                    _owinContext.EditTinaMenuByViewModel(model);
 
-                    TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;   
+                    TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index", new { @menuTypeId = model.MenuTypeId });
                 }
 
-                var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
+                var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
                 ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-                ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+                ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
                 return View(model);
             }
             catch (Exception ex)
             {
-                var menuTypes = ApplicationDbContext.Instance.MenuTypes.AsEnumerable();
+                var menuTypes = _dbContextService.MenuTypes.AsEnumerable();
                 ViewBag.MenuTypes = menuTypes.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
-                ViewBag.Actions = ApplicationDbContext.Instance.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
+                ViewBag.Actions = _dbContextService.TinaActions.Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Name });
 
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
@@ -165,11 +176,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/TinaMenus/Delete/5
         public ActionResult Delete(int id)
         {
-            var tinaMenu = ApplicationDbContext.Instance.TinaMenus.Find(id);
+            var tinaMenu = _dbContextService.TinaMenus.Find(id);
             if (tinaMenu == null)
                 throw new HttpException(404, "ContentNotFound");
 
-            TinaMenuViewModel model = new TinaMenuViewModel();
+            TinaMenuViewModel model = new TinaMenuViewModel(_owinContext);
             AutoMapper.Mapper.Map(tinaMenu, model);
 
             return View(model);
@@ -180,7 +191,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var tinaMenu = ApplicationDbContext.Instance.TinaMenus.Find(id);
+            var tinaMenu = _dbContextService.TinaMenus.Find(id);
             if (tinaMenu == null)
                 throw new HttpException(404, "ContentNotFound");
 
@@ -188,13 +199,13 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 int menuTypeId = tinaMenu.MenuTypeId;
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteTinaMenuById(id);
+                _owinContext.DeleteTinaMenuById(id);
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index", new { @menuTypeId = menuTypeId });
             }
             catch (Exception ex)
             {
-                TinaMenuViewModel model = new TinaMenuViewModel();
+                TinaMenuViewModel model = new TinaMenuViewModel(_owinContext);
                 AutoMapper.Mapper.Map(tinaMenu, model);
 
                 ModelState.AddModelError("", ex.Message);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,14 @@ namespace TinaShopV2.Areas.Administration.Models.Address
 {
     public class AddressViewModel : BaseViewModel
     {
+        public AddressViewModel() : base() { }
+
+        public AddressViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]

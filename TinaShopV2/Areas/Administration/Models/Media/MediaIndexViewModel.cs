@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Owin;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TinaShopV2.App_GlobalResources;
 using TinaShopV2.Models;
@@ -7,6 +8,14 @@ namespace TinaShopV2.Areas.Administration.Models.Media
 {
     public class MediaIndexViewModel : IndexBasicViewModel
     {
+        public MediaIndexViewModel() : base() { }
+
+        public MediaIndexViewModel(IOwinContext owinContext)
+            : base(owinContext)
+        {
+
+        }
+
         [Display(Name = "MediaType", ResourceType = typeof(Commons))]
         public int? TypeId { get; set; }
 
@@ -19,7 +28,7 @@ namespace TinaShopV2.Areas.Administration.Models.Media
             get
             {
                 if (!string.IsNullOrEmpty(ProductCode))
-                    return ApplicationDbContext.Instance.Products.Find(this.ProductCode);
+                    return _dbContextService.Products.Find(this.ProductCode);
 
                 return null;
             }

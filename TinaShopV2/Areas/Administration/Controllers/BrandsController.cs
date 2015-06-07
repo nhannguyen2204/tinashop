@@ -9,23 +9,30 @@ using TinaShopV2.Common.Extensions;
 using TinaShopV2.Areas.Administration.Models.Brand;
 using TinaShopV2.Controllers;
 using TinaShopV2.Common;
+using TinaShopV2.Areas.Administration.Models.Media;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
     [TinaAdminAuthorization]
     public class BrandsController : BaseController
     {
+        public BrandsController()
+            : base()
+        {
+
+        }
+
         // GET: Administration/Brands
         public ActionResult Index()
         {
-            var model = ApplicationDbContext.Instance.GetAllBrandViewModels();
+            var model = _owinContext.GetAllBrandViewModels();
             return View(model);
         }
 
         // GET: Administration/Brands/Details/5
         public ActionResult Details(string brandCode)
         {
-            var model = ApplicationDbContext.Instance.GetBrandViewModelById(brandCode);
+            var model = _owinContext.GetBrandViewModelById(brandCode);
             return View(model);
         }
 
@@ -45,7 +52,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    ApplicationDbContext.Instance.CreateBrandByViewModel(model);
+                    _owinContext.CreateBrandByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -63,7 +70,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Brands/Edit/5
         public ActionResult Edit(string brandCode)
         {
-            var model = ApplicationDbContext.Instance.GetBrandViewModelById(brandCode);
+            var model = _owinContext.GetBrandViewModelById(brandCode);
             return View(model);
         }
 
@@ -77,7 +84,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    ApplicationDbContext.Instance.EditBrandByViewModel(model);
+                    _owinContext.EditBrandByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -95,7 +102,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Brands/Delete/5
         public ActionResult Delete(string brandCode)
         {
-            var model = ApplicationDbContext.Instance.GetBrandViewModelById(brandCode);
+            var model = _owinContext.GetBrandViewModelById(brandCode);
             return View(model);
         }
 
@@ -106,7 +113,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                ApplicationDbContext.Instance.DeleteBrandById(brandCode);
+                _owinContext.DeleteBrandById(brandCode);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -115,7 +122,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                var model = ApplicationDbContext.Instance.GetBrandViewModelById(brandCode);
+                var model = _owinContext.GetBrandViewModelById(brandCode);
                 return View(model);
             }
         }

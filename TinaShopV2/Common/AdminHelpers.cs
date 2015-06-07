@@ -10,17 +10,20 @@ using TinaShopV2.Areas.Administration.Models.TinaMenu;
 using TinaShopV2.Models;
 using TinaShopV2.Common.Extensions;
 using TinaShopV2.Areas.Administration.Models.Category;
+using Microsoft.Owin;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace TinaShopV2.Common
 {
     public class AdminHelpers
     {
-        public static void GenerateTinaMenus(ref List<TinaMenuViewModel> models, int menuTypeId, int? parentId, int level = 0, bool? isHidden = null)
+        public static void GenerateTinaMenus(ref List<TinaMenuViewModel> models, IOwinContext owinContext, int menuTypeId, int? parentId, int level = 0, bool? isHidden = null)
         {
             if (models == null)
                 models = new List<TinaMenuViewModel>();
 
-            var tinaMenus = ApplicationDbContext.Instance.GetTinaMenuViewModelByTypeAndParent(menuTypeId, parentId, isHidden);
+            var tinaMenus = owinContext.GetTinaMenuViewModelByTypeAndParent(menuTypeId, parentId, isHidden);
             foreach (var item in tinaMenus)
             {
                 string levelStr = string.Empty;
@@ -31,18 +34,18 @@ namespace TinaShopV2.Common
 
                 item.Name = string.Format("{0} {1}", levelStr, item.Name);
                 models.Add(item);
-                var menus = ApplicationDbContext.Instance.GetTinaMenuViewModelByTypeAndParent(menuTypeId, item.Id, isHidden);
+                var menus = owinContext.GetTinaMenuViewModelByTypeAndParent(menuTypeId, item.Id, isHidden);
                 if (menus.Count() > 0)
-                    GenerateTinaMenus(ref models, menuTypeId, item.Id, level + 1, isHidden);
+                    GenerateTinaMenus(ref models, owinContext, menuTypeId, item.Id, level + 1, isHidden);
             }
         }
 
-        public static void GenerateCategories(ref List<CategoryViewModel> models, string parentCode = null, int level = 0, bool? isPublished = null)
+        public static void GenerateCategories(ref List<CategoryViewModel> models, IOwinContext owinContext, string parentCode = null, int level = 0, bool? isPublished = null)
         {
             if (models == null)
                 models = new List<CategoryViewModel>();
 
-            var categories = ApplicationDbContext.Instance.GetCatViewModelByParent(parentCode, isPublished);
+            var categories = owinContext.GetCatViewModelByParent(parentCode, isPublished);
             foreach (var item in categories)
             {
                 string levelStr = string.Empty;
@@ -52,11 +55,12 @@ namespace TinaShopV2.Common
                 }
 
                 item.Name = string.Format("{0} {1}", levelStr, item.Name);
+                item.SetOwinContext(owinContext);
                 models.Add(item);
 
-                var cats = ApplicationDbContext.Instance.GetCatViewModelByParent(item.CatCode, isPublished);
+                var cats = owinContext.GetCatViewModelByParent(item.CatCode, isPublished);
                 if (cats.Count() > 0)
-                    GenerateCategories(ref models, item.CatCode, level + 1, isPublished);
+                    GenerateCategories(ref models, owinContext, item.CatCode, level + 1, isPublished);
             }
         }
 

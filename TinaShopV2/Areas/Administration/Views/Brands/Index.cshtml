@@ -13,6 +13,7 @@
 <div class="table-responsive">
     <table class="table table-hover table-bordered table-striped responsive-utilities">
         <tr>
+            <th>@Html.DisplayNameFor(model => model.BrandCode)</th>
             <th>@Html.DisplayNameFor(model => model.Name)</th>
             <th>@Html.DisplayNameFor(model => model.UpdatedUser)</th>
             <th>@Html.DisplayNameFor(model => model.UpdatedDatetime)</th>
@@ -21,6 +22,7 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.BrandCode)</td>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.UpdatedUser.UserName)</td>
                 <td>@Html.DisplayFor(modelItem => item.UpdatedDatetime)</td>

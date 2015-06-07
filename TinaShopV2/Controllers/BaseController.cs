@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
+using Microsoft.AspNet.Identity.Owin;
 using System.Web;
 using System.Web.Mvc;
-using TinaShopV2.Models;
-using TinaShopV2.Common.Extensions;
 using TinaShopV2.Common;
+using TinaShopV2.Common.Extensions;
+using TinaShopV2.Models;
 
 namespace TinaShopV2.Controllers
 {
     public class BaseController : Controller
     {
-        public ApplicationUserManager UserManager
+        protected ApplicationUserManager _userManagerService;
+        protected ApplicationDbContext _dbContextService;
+        protected IOwinContext _owinContext;
+
+        public BaseController()
         {
-            get
-            {
-                return ApplicationUserManager.Instance;
-            }
+            
         }
 
         private ApplicationUser currentUser;
@@ -22,9 +25,6 @@ namespace TinaShopV2.Controllers
         {
             get
             {
-                if (currentUser == null)
-                    currentUser = HttpContext.GetCurrentUser();
-
                 return currentUser;
             }
             private set { currentUser = value; }
@@ -33,6 +33,13 @@ namespace TinaShopV2.Controllers
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
+
+            _owinContext = requestContext.HttpContext.GetOwinContext();
+            _userManagerService = _owinContext.GetUserManager<ApplicationUserManager>();
+            _dbContextService = _owinContext.Get<ApplicationDbContext>();
+
+            if (currentUser == null)
+                currentUser = HttpContext.GetCurrentUser();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -45,6 +52,16 @@ namespace TinaShopV2.Controllers
                 Response.Redirect(Url.Action("ComingSoon", "Home", new { area = "" }));
 
             base.OnActionExecuting(filterContext);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                //_dbContextService.Dispose();
+                //_userManagerService.Dispose();
+            }
         }
     }
 }
