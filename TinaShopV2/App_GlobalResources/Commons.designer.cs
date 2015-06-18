@@ -664,6 +664,15 @@ namespace TinaShopV2.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slider.
+        /// </summary>
+        public static string Slider {
+            get {
+                return ResourceManager.GetString("Slider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trạng thái.
         /// </summary>
         public static string Status {

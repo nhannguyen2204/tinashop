@@ -45,7 +45,7 @@ namespace TinaShopV2.Areas.Administration.Models.Media
         [Display(Name = "MediaType", ResourceType = typeof(Commons))]
         public int TypeId { get; set; }
 
-        public TinaShopV2.Models.Entity.MediaType GetMediaType()
+        public TinaShopV2.Models.Entity.MediaType Get_MediaType()
         {
             return _dbContextService.MediaTypes.Find(TypeId);
         }
@@ -54,7 +54,7 @@ namespace TinaShopV2.Areas.Administration.Models.Media
         [Display(Name = "Product", ResourceType = typeof(Commons))]
         public string ProductCode { get; set; }
 
-        public TinaShopV2.Models.Entity.Product GetProduct()
+        public TinaShopV2.Models.Entity.Product Get_Product()
         {
             if (!string.IsNullOrEmpty(ProductCode))
                 return _dbContextService.Products.Find(this.ProductCode);

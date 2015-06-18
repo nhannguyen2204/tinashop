@@ -238,6 +238,7 @@
     <Compile Include="Areas\Administration\Controllers\MenuTypesController.cs" />
     <Compile Include="Areas\Administration\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Administration\Controllers\RolesController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SlidersController.cs" />
     <Compile Include="Areas\Administration\Controllers\TinaActionsController.cs" />
     <Compile Include="Areas\Administration\Controllers\TinaMenusController.cs" />
     <Compile Include="Areas\Administration\Controllers\TinaSystemsController.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Areas\Administration\Models\Product\ProductIndexViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Product\ProductViewModel.cs" />
     <Compile Include="Areas\Administration\Models\RoleViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Slider\SliderViewModel.cs" />
     <Compile Include="Areas\Administration\Models\TinaAction\TinaActionViewModel.cs" />
     <Compile Include="Areas\Administration\Models\TinaMenu\TinaMenuViewModel.cs" />
     <Compile Include="Areas\Administration\Models\User\CreateUserViewModel.cs" />
@@ -1492,6 +1494,11 @@
     <Content Include="Areas\Administration\Views\Category\Create.cshtml" />
     <Content Include="Areas\Administration\Views\Category\Edit.cshtml" />
     <Content Include="Areas\Administration\Views\Category\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Sliders\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Sliders\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Sliders\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Sliders\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Sliders\Delete.cshtml" />
     <None Include="connectionStrings.config">
       <SubType>Designer</SubType>
     </None>

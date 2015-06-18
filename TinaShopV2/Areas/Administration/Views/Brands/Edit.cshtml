@@ -71,7 +71,7 @@
                 delay: 500,
                 minLength: 3,
                 source: function (request, response) {
-                    $.getJSON("@Url.Action("FindByType", "Medias", new { area = "Administration", @TypeId = GlobalObjects.MediaType_BrandImage_Id })" + "/" + $("#Media_Find").val(), function (data) {
+                    $.getJSON("@Url.Action("FindByType", "Medias", new { area = "Administration" })/@GlobalObjects.MediaType_BrandImage_Id" + "/" + $("#Media_Find").val(), function (data) {
                         // data is an array of objects and must be transformed for autocomplete to use
                         var array = data.error ? [] : $.map(data, function (m) {
                             return {

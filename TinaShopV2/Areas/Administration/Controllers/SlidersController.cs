@@ -3,48 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using TinaShopV2.Models;
-using TinaShopV2.Common.Extensions;
-using TinaShopV2.Areas.Administration.Models.Address;
 using TinaShopV2.Controllers;
-using TinaShopV2.Common.Attributes;
+using TinaShopV2.Common.Extensions;
+using TinaShopV2.Areas.Administration.Models.Slider;
 using TinaShopV2.Common;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
-    [TinaAdminAuthorization]
-    public class AddressesController : BaseController
+    public class SlidersController : BaseController
     {
-        public AddressesController()
-            : base()
-        {
-
-        }
-
-        // GET: Administration/Addresses
+        // GET: Administration/Sliders
         public ActionResult Index()
         {
-            var model = _owinContext.GetAllAddressViewModels();
+            var model = _owinContext.GetAllSliderViewModels();
             return View(model);
         }
 
-        // GET: Administration/Addresses/Details/5
+        // GET: Administration/Sliders/Details/5
         public ActionResult Details(int id)
         {
-            var model = _owinContext.GetAddressViewModelById(id);
+            var model = _owinContext.GetSliderById(id);
             return View(model);
         }
 
-        // GET: Administration/Addresses/Create
+        // GET: Administration/Sliders/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new SliderViewModel());
         }
 
-        // POST: Administration/Addresses/Create
+        // POST: Administration/Sliders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AddressViewModel model)
+        public ActionResult Create(SliderViewModel model)
         {
             try
             {
@@ -52,7 +43,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id, true);
-                    _owinContext.CreateAddressByViewModel(model);
+                    _owinContext.CreateSliderByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.CreateSuccessMessage;
                     return RedirectToAction("Index");
@@ -67,17 +58,17 @@ namespace TinaShopV2.Areas.Administration.Controllers
             }
         }
 
-        // GET: Administration/Addresses/Edit/5
+        // GET: Administration/Sliders/Edit/5
         public ActionResult Edit(int id)
         {
-            var model = _owinContext.GetAddressViewModelById(id);
+            var model = _owinContext.GetSliderById(id);
             return View(model);
         }
 
-        // POST: Administration/Addresses/Edit/5
+        // POST: Administration/Sliders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AddressViewModel model)
+        public ActionResult Edit(SliderViewModel model)
         {
             try
             {
@@ -85,7 +76,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 if (ModelState.IsValid)
                 {
                     model.SetInteractionUser(CurrentUser.Id);
-                    _owinContext.EditAddressByViewModel(model);
+                    _owinContext.EditSliderByViewModel(model);
 
                     TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.UpdateSuccessMessage;
                     return RedirectToAction("Index");
@@ -100,14 +91,14 @@ namespace TinaShopV2.Areas.Administration.Controllers
             }
         }
 
-        // GET: Administration/Addresses/Delete/5
+        // GET: Administration/Sliders/Delete/5
         public ActionResult Delete(int id)
         {
-            var model = _owinContext.GetAddressViewModelById(id);
+            var model = _owinContext.GetSliderById(id);
             return View(model);
         }
 
-        // POST: Administration/Addresses/Delete/5
+        // POST: Administration/Sliders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -115,7 +106,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             try
             {
                 // TODO: Add delete logic here
-                _owinContext.DeleteAddressById(id);
+                _owinContext.DeleteSliderById(id);
 
                 TempData[GlobalObjects.SuccesMessageKey] = App_GlobalResources.Commons.DeleteSuccessMessage;
                 return RedirectToAction("Index");
@@ -124,7 +115,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                var model = _owinContext.GetAddressViewModelById(id);
+                var model = _owinContext.GetSliderById(id);
                 return View(model);
             }
         }

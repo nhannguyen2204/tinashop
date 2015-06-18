@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TinaShopV2.Models.Entity
 {
-    public partial class Slider
+    public class Slider
     {
         public int Id { get; set; }
         public string Name { get; set; }

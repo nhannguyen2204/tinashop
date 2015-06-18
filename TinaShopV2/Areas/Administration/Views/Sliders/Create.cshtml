@@ -1,10 +1,10 @@
 ﻿@using TinaShopV2.Common;
 @using TinaShopV2.Common.Extensions;
 
-@model TinaShopV2.Areas.Administration.Models.Category.CategoryViewModel
+@model TinaShopV2.Areas.Administration.Models.Slider.SliderViewModel
 
 @{
-    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Create, Resources.Commons.Category);
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Create, Resources.Commons.Slider);
     Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
 }
 @Html.SmartValidationSummary()
@@ -13,22 +13,22 @@
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
-        <h4>@Resources.Commons.Category</h4>
+        <h4>@Resources.Commons.Slider</h4>
         <hr />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CatCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.CatCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CatCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-8">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Link, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Link, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -44,29 +44,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CatParentCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.SmartDropDownListFor(model => model.CatParentCode, ViewBag.Categories as IEnumerable<SelectListItem>, null, true)
-                @Html.ValidationMessageFor(model => model.CatParentCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.OrderNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-2">
-                @Html.SmartSpinner(model => model.OrderNumber)
-            </div>
-            <div class="col-md-2" style="clear:both;"></div>
             <div class="col-md-8">
+                @Html.SmartSpinner(model => model.OrderNumber)
                 @Html.ValidationMessageFor(model => model.OrderNumber, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsPublished, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-8">
-                @Html.SmartCheckboxFor(m => m.IsPublish, null)
-                @Html.ValidationMessageFor(model => model.IsPublish, "", new { @class = "text-danger" })
+                @Html.SmartCheckboxFor(model => model.IsPublished)
+                @Html.ValidationMessageFor(model => model.IsPublished, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -90,7 +79,7 @@
                 delay: 500,
                 minLength: 3,
                 source: function (request, response) {
-                    $.getJSON("@Url.Action("FindByType", "Medias", new { area = "Administration" })/@GlobalObjects.MediaType_CategoryImage_Id" + "/" + $("#Media_Find").val(), function (data) {
+                    $.getJSON("@Url.Action("FindByType", "Medias", new { area = "Administration" })/@GlobalObjects.MediaType_SliderImage_Id" + "/" + $("#Media_Find").val(), function (data) {
                         // data is an array of objects and must be transformed for autocomplete to use
                         var array = data.error ? [] : $.map(data, function (m) {
                             return {

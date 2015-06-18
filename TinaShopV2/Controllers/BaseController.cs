@@ -51,7 +51,7 @@ namespace TinaShopV2.Controllers
             var routeData = filterContext.RequestContext.RouteData;
             string areaName = routeData.Values["area"] != null ? routeData.Values["area"].ToString() : string.Empty;
 
-            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal && !areaName.ToLower().Equals("administration") &&
+            if (GlobalObjects.IsComingSoonMode && !Request.IsLocal && !areaName.ToLower().Equals("administration") && !filterContext.Controller.ControllerContext.IsChildAction &&
                 !Request.Url.PathAndQuery.ToLower().Equals(Url.Action("ComingSoon", "Home", new { area = "" }).ToLower()))
                 Response.Redirect(Url.Action("ComingSoon", "Home", new { area = "" }));
 

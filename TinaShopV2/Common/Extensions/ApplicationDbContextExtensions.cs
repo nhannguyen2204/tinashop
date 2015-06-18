@@ -24,6 +24,7 @@ using TinaShopV2.Areas.Administration.Models.TinaAction;
 using TinaShopV2.Areas.Administration.Models.TinaMenu;
 using TinaShopV2.Models;
 using TinaShopV2.Models.Entity;
+using TinaShopV2.Areas.Administration.Models.Slider;
 
 namespace TinaShopV2.Common.Extensions
 {
@@ -333,9 +334,11 @@ namespace TinaShopV2.Common.Extensions
                 model.ThumbPath = Helpers.SaveFile(model.ThumbUploader, GlobalObjects.MediaImageFolderPath);
 
                 if (model.TypeId != GlobalObjects.MediaType_ProductImage_Id)
-                    model.ProductCode = string.Empty;
+                    model.ProductCode = null;
 
-                var media = new Media();
+                model.SetOwinContext(owinContext);
+
+                var media = new TinaShopV2.Models.Entity.Media();
                 AutoMapper.Mapper.Map(model, media);
 
                 dbContext.Medias.Add(media);
@@ -384,7 +387,7 @@ namespace TinaShopV2.Common.Extensions
                 }
 
                 if (model.TypeId != GlobalObjects.MediaType_ProductImage_Id)
-                    model.ProductCode = string.Empty;
+                    model.ProductCode = null;
 
                 AutoMapper.Mapper.Map(model, media);
                 dbContext.Entry<Media>(media).State = EntityState.Modified;
@@ -1060,6 +1063,136 @@ namespace TinaShopV2.Common.Extensions
 
                 dbContext.Colors.Remove(color);
                 dbContext.Entry<Color>(color).State = EntityState.Deleted;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Slider
+
+        public static IEnumerable<SliderViewModel> GetAllSliderViewModels(this IOwinContext owinContext)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            List<SliderViewModel> models = new List<SliderViewModel>();
+            var sliders = dbContext.Sliders.AsEnumerable();
+            AutoMapper.Mapper.Map(sliders, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
+            return models;
+        }
+
+        public static SliderViewModel GetSliderById(this IOwinContext owinContext, int id)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var slider = dbContext.Sliders.Find(id);
+                if (slider == null)
+                    throw new HttpException(404, "ContentNotFound");
+
+                SliderViewModel model = new SliderViewModel(owinContext);
+                AutoMapper.Mapper.Map(slider, model);
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void CreateSliderByViewModel(this IOwinContext owinContext, SliderViewModel model)
+        {
+            if (owinContext == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                if (dbContext.Sliders.Any(m => m.Name == model.Name))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
+
+                Slider newSlider = new Slider();
+                AutoMapper.Mapper.Map(model, newSlider);
+
+                dbContext.Sliders.Add(newSlider);
+                dbContext.Entry<Slider>(newSlider).State = EntityState.Added;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void EditSliderByViewModel(this IOwinContext owinContext, SliderViewModel model)
+        {
+            if (owinContext == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var slider = dbContext.Sliders.Find(model.Id);
+                if (slider == null)
+                    throw new HttpException(404, "ContentNotFound");
+
+                if (dbContext.Sliders.Any(m => m.Name == model.Name && m.Id != model.Id))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
+
+                model.CreatedDatetime = slider.CreatedDatetime;
+                model.CreatedUserId = slider.CreatedUserId;
+
+                AutoMapper.Mapper.Map(model, slider);
+
+                dbContext.Entry<Slider>(slider).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeleteSliderById(this IOwinContext owinContext, int id)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var slider = dbContext.Sliders.Find(id);
+                if (slider == null)
+                    throw new Exception(App_GlobalResources.Errors.DataNotExisting);
+
+                dbContext.Sliders.Remove(slider);
+                dbContext.Entry<Slider>(slider).State = EntityState.Deleted;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)

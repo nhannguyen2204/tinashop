@@ -1,0 +1,55 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@model TinaShopV2.Areas.Administration.Models.Slider.SliderViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Delete, Resources.Commons.Slider);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+@Html.SmartValidationSummary()
+<h2>@Resources.Commons.Delete</h2>
+<h3>@Resources.Commons.DeleteConfirm</h3>
+<div>
+    <h4>@Resources.Commons.Slider</h4>
+    <hr />
+    
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Link)</dt>
+        <dd>@Html.DisplayFor(model => model.Link)</dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.MediaId)</dt>
+        <dd>
+            @if (Model.MediaId != null)
+            {
+                var media = Model.GetImage();
+                if (media != null)
+                {
+                    <img alt="@media.Name" src="@Path.Combine(GlobalObjects.MediaImageFolderPath, media.ThumbPath)" style="max-width:150px;" class="thumbnail" />
+                }
+            }
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.IsPublished)</dt>
+        <dd>@Html.DisplayFor(model => model.IsPublished)</dd>
+    </dl>
+
+    @using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.Commons.Delete" class="btn btn-default" /> |
+            @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+        </div>
+    }
+</div>

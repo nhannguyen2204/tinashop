@@ -3,6 +3,7 @@ TinaShopV2/bin/*
 TinaShopV2/obj/*
 TinaTest/bin/*
 TinaTest/obj/*
+TinaShopV2/MediaFiles/*
 packages/*
 *.user
 TinaShopV2/Properties/PublishProfiles/TinaShopV2.pubxml

@@ -9,6 +9,7 @@ using TinaShopV2.Areas.Administration.Models.Media;
 using TinaShopV2.Areas.Administration.Models.MediaType;
 using TinaShopV2.Areas.Administration.Models.MenuType;
 using TinaShopV2.Areas.Administration.Models.Product;
+using TinaShopV2.Areas.Administration.Models.Slider;
 using TinaShopV2.Areas.Administration.Models.TinaAction;
 using TinaShopV2.Areas.Administration.Models.TinaMenu;
 using TinaShopV2.Areas.Administration.Models.User;
@@ -29,6 +30,7 @@ namespace TinaShopV2.Areas.Administration
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+
             context.MapRoute(
                 "Administration_Categories_Edit",
                 "Administration/Category/Edit/{CatCode}",
@@ -405,6 +407,9 @@ namespace TinaShopV2.Areas.Administration
 
             AutoMapper.Mapper.CreateMap<Category, CategoryViewModel>();
             AutoMapper.Mapper.CreateMap<CategoryViewModel, Category>();
+
+            AutoMapper.Mapper.CreateMap<Slider, SliderViewModel>();
+            AutoMapper.Mapper.CreateMap<SliderViewModel, Slider>();
         }
     }
 }
