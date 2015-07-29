@@ -25,11 +25,109 @@ using TinaShopV2.Areas.Administration.Models.TinaMenu;
 using TinaShopV2.Models;
 using TinaShopV2.Models.Entity;
 using TinaShopV2.Areas.Administration.Models.Slider;
+using TinaShopV2.Areas.Administration.Models.Catalog;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Web.Hosting;
 
 namespace TinaShopV2.Common.Extensions
 {
     public static class ApplicationDbContextExtensions
     {
+        #region Product FO
+
+        public static ProductFOViewModel GetProductFOViewModelById(this IOwinContext owinContext, string productCode)
+        {
+            if (owinContext == null || string.IsNullOrEmpty(productCode))
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            var product = dbContext.Products.Find(productCode.ToUpper());
+            if (product == null || product.IsPublish != true)
+                throw new HttpException(404, "ContentNotFound");
+
+            ProductFOViewModel model = new ProductFOViewModel(owinContext);
+            AutoMapper.Mapper.Map(product, model);
+
+            return model;
+        }
+
+        public static ProductFilterIndexViewModel GetProductFOViewModels(this IOwinContext owinContext, ref ProductFilterIndexViewModel model)
+        {
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            List<ProductFOViewModel> productsFO = new List<ProductFOViewModel>();
+            var products = dbContext.Products.Where(m => m.IsPublish == true && m.IsDeleted == false).AsEnumerable();
+
+            var fromPrice = model.FromPrice;
+            var toPrice = model.ToPrice;
+            products = products.Where(m => m.Price >= (fromPrice * 1000) && m.Price <= (toPrice * 1000));
+
+            if (!string.IsNullOrEmpty(model.BrandCode) && model.BrandCode.ToLower() != GlobalObjects.DefaultAllBrandCode)
+            {
+                string brandCode = model.BrandCode;
+                products = products.Where(m => m.BrandCode == brandCode);
+            }
+
+            if (!string.IsNullOrEmpty(model.CatCode) && model.CatCode.ToLower() != GlobalObjects.DefaultAllCatCode)
+            {
+                List<CategoryViewModel> catChilds = new List<CategoryViewModel>();
+                AdminHelpers.GenerateCategories(ref catChilds, owinContext, model.CatCode);
+                var childsCode = catChilds.Select(m => m.CatCode).ToList();
+                childsCode.Add(model.CatCode);
+                products = products.Where(m => childsCode.Contains(m.CatCode));
+            }
+
+            if (!string.IsNullOrEmpty(model.ColorKeys) && model.ColorKeys.ToLower() != GlobalObjects.DefaultAllColors)
+            {
+                var colorKeys = model.ColorKeys.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                var selectedProducts = dbContext.ProductDetails.Where(m => colorKeys.Contains(m.ColorKey)).Select(n => n.ProductCode).ToList();
+                products = products.Where(m => selectedProducts.Contains(m.ProductCode));
+            }
+
+            if (model.IsOrderDatetimeDesc == 0)
+            {
+                if (model.IsOrderPriceDesc == 0)
+                    products = products.OrderByDescending(m => m.UpdatedDatetime.Date).ThenByDescending(m => m.Price);
+                else
+                    products = products.OrderByDescending(m => m.UpdatedDatetime.Date).ThenBy(m => m.Price);
+            }
+            else
+            {
+                if (model.IsOrderPriceDesc == 0)
+                    products = products.OrderBy(m => m.UpdatedDatetime.Date).ThenByDescending(m => m.Price);
+                else
+                    products = products.OrderBy(m => m.UpdatedDatetime.Date).ThenBy(m => m.Price);
+            }
+
+            model.SetOwinContext(owinContext);
+
+            model.PageTotal = products.Count() / AdminGlobalObjects.PageSize + (products.Count() % AdminGlobalObjects.PageSize > 0 ? 1 : 0);
+            model.Total = products.Count();
+
+            if (model.Page != 0)
+                products = products.Skip((model.Page - 1) * AdminGlobalObjects.PageSize).Take(AdminGlobalObjects.PageSize);
+
+            if (model.Page > 1 && products.Count() == 0)
+                throw new HttpException(404, "ContentNotFound");
+
+            AutoMapper.Mapper.Map(products, productsFO);
+            model.Products = productsFO;
+
+            foreach (var item in model.Products)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
+            return model;
+        }
+
+        #endregion
+
         #region Product
 
         public static IEnumerable<ProductViewModel> GetAllProductViewModels(this IOwinContext owinContext)
@@ -59,6 +157,17 @@ namespace TinaShopV2.Common.Extensions
             string brandCode = indexViewModel.BrandCode;
             if (!string.IsNullOrEmpty(brandCode) && brandCode.ToLower() != "all")
                 products = products.Where(m => m.BrandCode == brandCode);
+
+            // Filter By Category Code
+            string catCode = indexViewModel.CatCode;
+            if (!string.IsNullOrEmpty(catCode) && catCode.ToLower() != "all")
+            {
+                List<CategoryViewModel> catChilds = new List<CategoryViewModel>();
+                AdminHelpers.GenerateCategories(ref catChilds, owinContext, catCode);
+                var childsCode = catChilds.Select(m => m.CatCode).ToList();
+                childsCode.Add(catCode);
+                products = products.Where(m => childsCode.Contains(m.CatCode));
+            }
 
             // Filter By Product Code
             string productCode = indexViewModel.ProductCode;
@@ -330,8 +439,27 @@ namespace TinaShopV2.Common.Extensions
 
             try
             {
+                if (dbContext.Medias.Any(m => m.Name.ToLower() == model.Name))
+                {
+#warning Add message error
+                    throw new Exception("Trùng tên");
+                }
+
                 model.FilePath = Helpers.SaveFile(model.FileUploader, GlobalObjects.MediaImageFolderPath);
-                model.ThumbPath = Helpers.SaveFile(model.ThumbUploader, GlobalObjects.MediaImageFolderPath);
+                if (model.ThumbUploader != null && model.ThumbUploader.ContentLength > 0)
+                    model.ThumbPath = Helpers.SaveFile(model.ThumbUploader, GlobalObjects.MediaImageFolderPath);
+                else if (!string.IsNullOrEmpty(model.FilePath))
+                {
+                    var imagePath = HostingEnvironment.MapPath(Path.Combine(GlobalObjects.MediaImageFolderPath, model.FilePath));
+                    var image = Image.FromFile(imagePath);
+
+                    var newImage = Helpers.ScaleImage(image, 356, 390);
+
+                    var folderPath = HostingEnvironment.MapPath(GlobalObjects.MediaImageFolderPath);
+                    var newName = string.Format("{0}.png", Guid.NewGuid().ToString());
+                    newImage.Save(Path.Combine(folderPath, newName), ImageFormat.Png);
+                    model.ThumbPath = newName;
+                }
 
                 if (model.TypeId != GlobalObjects.MediaType_ProductImage_Id)
                     model.ProductCode = null;
@@ -365,6 +493,12 @@ namespace TinaShopV2.Common.Extensions
 
             try
             {
+                if (dbContext.Medias.Any(m => m.Name.ToLower() == model.Name && m.Id != model.Id))
+                {
+#warning Add message error
+                    throw new Exception("Trùng tên");
+                }
+
                 model.CreatedDatetime = media.CreatedDatetime;
                 model.CreatedUserId = media.CreatedUserId;
 
@@ -1003,10 +1137,10 @@ namespace TinaShopV2.Common.Extensions
                 if (dbContext.Colors.Any(m => m.Name == model.Name))
                     throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
 
-                Color newColor = new Color();
+                TinaShopV2.Models.Entity.Color newColor = new TinaShopV2.Models.Entity.Color();
                 AutoMapper.Mapper.Map(model, newColor);
                 dbContext.Colors.Add(newColor);
-                dbContext.Entry<Color>(newColor).State = EntityState.Added;
+                dbContext.Entry<TinaShopV2.Models.Entity.Color>(newColor).State = EntityState.Added;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -1038,7 +1172,7 @@ namespace TinaShopV2.Common.Extensions
                 AutoMapper.Mapper.Map(model, color);
 
 
-                dbContext.Entry<Color>(color).State = EntityState.Modified;
+                dbContext.Entry<TinaShopV2.Models.Entity.Color>(color).State = EntityState.Modified;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -1062,7 +1196,7 @@ namespace TinaShopV2.Common.Extensions
                     throw new Exception(App_GlobalResources.Errors.DataNotExisting);
 
                 dbContext.Colors.Remove(color);
-                dbContext.Entry<Color>(color).State = EntityState.Deleted;
+                dbContext.Entry<TinaShopV2.Models.Entity.Color>(color).State = EntityState.Deleted;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -1193,6 +1327,152 @@ namespace TinaShopV2.Common.Extensions
 
                 dbContext.Sliders.Remove(slider);
                 dbContext.Entry<Slider>(slider).State = EntityState.Deleted;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Catalog
+
+        public static IEnumerable<CatalogViewModel> GetAllCatalogViewModels(this IOwinContext owinContext)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            List<CatalogViewModel> models = new List<CatalogViewModel>();
+            var catalogs = dbContext.Catalogs.AsEnumerable();
+            AutoMapper.Mapper.Map(catalogs, models);
+
+            foreach (var item in models)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
+            return models;
+        }
+
+        public static CatalogViewModel GetCatalogById(this IOwinContext owinContext, int id)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            //var userManager = owinContext.GetUserManager<ApplicationUserManager>();
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var catalog = dbContext.Catalogs.Find(id);
+                if (catalog == null)
+                    throw new HttpException(404, "ContentNotFound");
+
+                CatalogViewModel model = new CatalogViewModel(owinContext);
+                AutoMapper.Mapper.Map(catalog, model);
+
+                foreach (var item in model.Products)
+                {
+                    model.ProductIds += "," + item.ProductCode + ",";
+                }
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void CreateCatalogByViewModel(this IOwinContext owinContext, CatalogViewModel model)
+        {
+            if (owinContext == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                if (dbContext.Catalogs.Any(m => m.Name == model.Name))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
+
+                string[] productIds = model.ProductIds.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                if (productIds.Count() > 0)
+                    model.Products = dbContext.Products.Where(m => productIds.Contains(m.ProductCode)).ToList();
+
+                Catalog newCatalog = new Catalog();
+                AutoMapper.Mapper.Map(model, newCatalog);
+
+                dbContext.Catalogs.Add(newCatalog);
+                dbContext.Entry<Catalog>(newCatalog).State = EntityState.Added;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void EditCatalogByViewModel(this IOwinContext owinContext, CatalogViewModel model)
+        {
+            if (owinContext == null || model == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var catalog = dbContext.Catalogs.Find(model.Id);
+                if (catalog == null)
+                    throw new HttpException(404, "ContentNotFound");
+
+                if (dbContext.Catalogs.Any(m => m.Name == model.Name && m.Id != model.Id))
+                    throw new Exception(string.Format(App_GlobalResources.Errors.FieldExisting, App_GlobalResources.Commons.Name));
+
+                model.CreatedDatetime = catalog.CreatedDatetime;
+                model.CreatedUserId = catalog.CreatedUserId;
+                //model.SetOwinContext(owinContext);
+
+                if (!string.IsNullOrEmpty(model.ProductIds))
+                {
+                    string[] productIds = model.ProductIds.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    if (productIds.Count() > 0)
+                        model.Products = dbContext.Products.Where(m => productIds.Contains(m.ProductCode)).ToList();
+                }
+                else
+                    model.Products = new List<Product>();
+
+                AutoMapper.Mapper.Map(model, catalog);
+
+                dbContext.Entry<Catalog>(catalog).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeleteCatalogById(this IOwinContext owinContext, int id)
+        {
+            if (owinContext == null)
+                throw new Exception(App_GlobalResources.Errors.DataNotNull);
+
+            var dbContext = owinContext.Get<ApplicationDbContext>();
+
+            try
+            {
+                var catalog = dbContext.Catalogs.Find(id);
+                if (catalog == null)
+                    throw new Exception(App_GlobalResources.Errors.DataNotExisting);
+
+                dbContext.Catalogs.Remove(catalog);
+                dbContext.Entry<Catalog>(catalog).State = EntityState.Deleted;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -1557,6 +1837,12 @@ namespace TinaShopV2.Common.Extensions
 
             IEnumerable<TinaMenuViewModel> model = new List<TinaMenuViewModel>();
             AutoMapper.Mapper.Map(result, model);
+
+            foreach (var item in model)
+            {
+                item.SetOwinContext(owinContext);
+            }
+
             return model ?? new List<TinaMenuViewModel>();
         }
 

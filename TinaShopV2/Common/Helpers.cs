@@ -7,6 +7,9 @@ using System.Web.Hosting;
 using System.Web.Routing;
 using System.Collections;
 using TinaShopV2.App_GlobalResources;
+using System.Drawing;
+using TinaShopV2.Models;
+using System.Security.Policy;
 
 namespace TinaShopV2.Common
 {
@@ -89,5 +92,22 @@ namespace TinaShopV2.Common
 
         #endregion
 
+        #region Image
+
+        public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        {
+            var ratioX = (double)maxWidth / image.Width;
+            var ratioY = (double)maxHeight / image.Height;
+            var ratio = Math.Min(ratioX, ratioY);
+
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
+
+            var newImage = new Bitmap(newWidth, newHeight);
+            Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
+            return newImage;
+        }
+
+        #endregion
     }
 }

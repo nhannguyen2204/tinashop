@@ -1,0 +1,35 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    var owinContext = Context.GetOwinContext();
+    var brands = owinContext.GetAllBrandViewModels();
+
+    string brandCode = Model != null ? Model.BrandCode : string.Empty;
+    Model.BrandCode = GlobalObjects.DefaultAllBrandCode;
+    Model.Page = 1;
+}
+
+<section class="filter-section">
+    <h3>@Resources.Commons.Brand</h3>
+    <ul class="categories">
+        <li class="@(string.IsNullOrEmpty(brandCode) || brandCode.ToLower() == GlobalObjects.DefaultAllBrandCode ? "selected" : string.Empty)">
+            <a href="@Url.GetUrlByModel(Model)" data-url="@Url.GetUrlByModel(Model)" class="product-price-filter-action">Tất cả</a>
+        </li>
+
+        @foreach (var item in brands)
+        {
+            bool selected = item.BrandCode.ToLower().Equals(brandCode);
+            TinaShopV2.Models.ProductFilterIndexViewModel urlModel = new TinaShopV2.Models.ProductFilterIndexViewModel(Model);
+            urlModel.BrandCode = item.BrandCode;
+
+            string url = Url.GetUrlByModel(urlModel);
+
+            <li class="@(selected ? "selected" : string.Empty)">
+                <a href="@url" data-url="@url" class="product-price-filter-action">@item.Name</a>
+            </li>
+        }
+    </ul>
+</section>

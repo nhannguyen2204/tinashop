@@ -1,0 +1,59 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    var owinContext = Context.GetOwinContext();
+    var colors = owinContext.GetAllColorViewModels();
+
+    string[] colorKeys = !string.IsNullOrEmpty(Model.ColorKeys) ? Model.ColorKeys.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries) : new string[0];
+
+    Model.ColorKeys = string.Empty;
+    Model.Page = 1;
+}
+
+<section class="filter-section">
+    <h3>Chọn lọc theo màu</h3>
+    <a href="@Url.GetUrlByModel(Model)" class="product-price-filter-action clear clearChecks" 
+       data-url="@Url.GetUrlByModel(Model)">Xóa màu</a>
+
+    @foreach (var item in colors)
+    {
+        bool selected = colorKeys != null && colorKeys.Contains(item.ColorKey);
+
+        string[] keys = colorKeys;
+        if (colorKeys.Contains(GlobalObjects.DefaultAllColors))
+        {
+            var ls = colorKeys.ToList();
+            ls.Remove(GlobalObjects.DefaultAllColors);
+            keys = ls.ToArray();
+        }
+
+        if (selected)
+        {
+            var ls = keys.ToList();
+            ls.Remove(item.ColorKey);
+            Model.ColorKeys = string.Join<string>(",", ls);
+        }
+        else
+        {
+            if (colorKeys.Count() > 0)
+            {
+                var ls = keys.ToList();
+                ls.Add(item.ColorKey);
+                Model.ColorKeys = string.Join<string>(",", ls);
+            }
+            else
+            {
+                Model.ColorKeys = item.ColorKey;
+            }
+        }
+
+        <label class="product-price-filter-action" data-url="@Url.GetUrlByModel(Model)">
+            <input type="checkbox" name="colors" value="@item.ColorKey" @(selected ? "checked" : string.Empty) />
+            @item.Name
+        </label>
+        <br />
+    }
+</section>

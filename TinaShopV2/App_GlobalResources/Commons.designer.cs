@@ -124,6 +124,15 @@ namespace TinaShopV2.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Catalog.
+        /// </summary>
+        public static string Catalog {
+            get {
+                return ResourceManager.GetString("Catalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã thể loại.
         /// </summary>
         public static string CatCode {

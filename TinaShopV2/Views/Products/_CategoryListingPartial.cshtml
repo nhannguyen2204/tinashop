@@ -1,0 +1,60 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    string catCode = Model.CatCode;
+    Model.CatCode = GlobalObjects.DefaultAllCatCode;
+    Model.Page = 1;
+
+    var owinContext = Context.GetOwinContext();
+    var selectedModel = owinContext.GetCategoryViewModelByCatCode(catCode);
+    var parents = selectedModel != null ? Context.GetOwinContext().GetParentCodesByCategoryViewModel(selectedModel) : new List<string>();
+}
+
+<section class="filter-section">
+    <h3>@Resources.Commons.Category</h3>
+    <ul class="categories">
+
+        <li class="@((string.IsNullOrEmpty(catCode) || catCode.ToLower().Equals(GlobalObjects.DefaultAllCatCode)) ? "selected" : string.Empty)">
+            <a class="product-price-filter-action" href="@Url.GetUrlByModel(Model)" data-url="@Url.GetUrlByModel(Model)">Tất cả</a>
+        </li>
+
+        @{
+            var cats = owinContext.GetCatViewModelByParent(null, true);
+        }
+
+        @foreach (var item in cats)
+        {
+            bool selected = item.CatCode.ToLower().Equals(catCode);
+            var childs = owinContext.GetCatViewModelByParent(item.CatCode, true);
+            bool hasChild = childs.Count() > 0;
+
+            TinaShopV2.Models.ProductFilterIndexViewModel urlModel = new TinaShopV2.Models.ProductFilterIndexViewModel(Model);
+            urlModel.CatCode = item.CatCode;
+
+            <li class="button @(hasChild ? "has-subcategory" : string.Empty) @(selected || parents.Contains(item.CatCode) ? "opened" : string.Empty)">
+                <a class="product-price-filter-action @(selected ? "selected" : string.Empty)" data-url="@Url.GetUrlByModel(urlModel)"
+                   href="@Url.GetUrlByModel(urlModel)">@item.Name</a>
+                @if (hasChild)
+                {
+                    <ul class="subcategory @(selected || parents.Contains(item.CatCode) ? "open" : string.Empty)">
+                        @foreach (var subItem in childs)
+                        {
+                            bool subSelected = subItem.CatCode.ToLower().Equals(catCode);
+
+                            TinaShopV2.Models.ProductFilterIndexViewModel subUrlModel = new TinaShopV2.Models.ProductFilterIndexViewModel(Model);
+                            subUrlModel.CatCode = subItem.CatCode;
+
+                            <li>
+                                <a class="product-price-filter-action @(subSelected ? "selected" : string.Empty)" data-url="@Url.GetUrlByModel(subUrlModel)"
+                                   href="@Url.GetUrlByModel(subUrlModel)">@subItem.Name</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+</section>

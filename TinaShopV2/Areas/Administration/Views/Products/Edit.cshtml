@@ -23,7 +23,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-8">
-                @foreach (var image in Model.GetImages())
+                @foreach (var image in Model.Get_Images())
                 {
                     string imgUrl = image.Id != GlobalObjects.Media_NoImage_Id ? Url.Action("Edit", "Medias", new { @area = "Administration", @Id = image.Id }) : GlobalObjects.HrefBlankPath;
                     
@@ -57,6 +57,14 @@
             <div class="col-md-8">
                 @Html.SmartDropDownListFor(m => m.BrandCode, ViewBag.Brands as IEnumerable<SelectListItem>, null, true)
                 @Html.ValidationMessageFor(model => model.BrandCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartDropDownListFor(m => m.CatCode, ViewBag.Categories as IEnumerable<SelectListItem>, null, true)
+                @Html.ValidationMessageFor(model => model.CatCode, "", new { @class = "text-danger" })
             </div>
         </div>
 

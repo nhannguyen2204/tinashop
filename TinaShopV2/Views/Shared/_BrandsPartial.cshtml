@@ -1,0 +1,24 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@{
+    var owinContext = Context.GetOwinContext();
+    var brands = owinContext.GetAllBrandViewModels();
+}
+
+<!--Brands Carousel Widget-->
+<section class="brand-carousel">
+    <div class="container">
+        <h2>Các nhãn hàng tại shop:</h2>
+        <div class="inner">
+            @foreach (var item in brands)
+            {
+                var image = item.GetImage();
+                if (image != null)
+                {
+                    <a class="item" href="@Url.Action("Index", "Products", new { @BrandCode = item.BrandCode })" title="@item.Name"><img src="@(Path.Combine(GlobalObjects.MediaImageFolderPath, image.FilePath))" alt="@item.Name" /></a>
+                }
+            }
+        </div>
+    </div>
+</section><!--Brands Carousel Close-->

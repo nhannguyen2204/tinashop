@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿@using TinaShopV2.Common;
+
+<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -10,26 +12,59 @@
     <!--Mobile Specific Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!--Favicon-->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <!--Master Slider Styles-->
-    <link href="Content/LIMO/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
+    <link href="/Content/LIMO/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
     <!--Styles-->
-    <link href="Content/LIMO/css/styles.css" rel="stylesheet" media="screen">
+    <link href="/Content/LIMO/css/styles.css" rel="stylesheet" media="screen">
 
     <!--Color Scheme-->
-    <link class="color-scheme" href="Content/LIMO/css/colors/color-scheme7.css" rel="stylesheet" media="screen">
+    <link class="color-scheme" href="/Content/LIMO/css/colors/color-scheme7.css" rel="stylesheet" media="screen">
 
+    <!-- My Styles -->
+    <link href="/Content/LIMO/css/MyStyles.css" rel="stylesheet" media="screen">
     <!--Modernizr-->
-    <script src="Content/LIMO/js/libs/modernizr.custom.js"></script>
+    <script src="/Content/LIMO/js/libs/modernizr.custom.js"></script>
     <!--Adding Media Queries Support for IE8-->
     <!--[if lt IE 9]>
-      <script src="Content/LIMO/js/plugins/respond.js"></script>
+      <script src="/Content/LIMO/js/plugins/respond.js"></script>
     <![endif]-->
+
+    <script src="/Content/LIMO/js/HeadScripts.js"></script>
+
+    @RenderSection("Head", false)
 </head>
 
 <!--Body-->
 <body>
+    <!-- Facebook Plugin -->
+    <div id="fb-root"></div>
+    <script type="text/javascript">
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=287908497922499";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <!-- End / Facebook Plugin -->
+
+    @RenderSection("Header", false)
+
+    <!-- Modal -->
+    <div class="modal fade" id="LoadingModal" role="dialog">
+        <div class="modal-backdrop" style="height:100%;"></div>
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content" style="background:none;">
+                <center>
+                    <img style="margin-top:100px;width:100px;" src="http://intuitglobal.intuit.com/delivery/cms/prod/sites/default/intuit.ca/images/quickbooks-sui-images/loader.gif" />
+                </center>
+            </div>
+        </div>
+    </div>
 
     <!--Login Modal-->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -82,179 +117,27 @@
         </form>
 
         <!--Mobile Menu Toggle-->
-        <div class="menu-toggle"><i class="fa fa-list"></i></div>
+        <div class="menu-toggle"><i class="fa fa-list" style="top:-50px;"></i></div>
 
         <div class="container">
-            <a class="logo" href="/"><img src="Content/LIMO/img/logo-scheme7.png" alt="Limo" /></a>
+            <a class="logo" href="/" title="@GlobalObjects.SiteTitle"><img src="/Content/LIMO/img/logo-scheme7.png" alt="@GlobalObjects.SiteTitle" /></a>
         </div>
 
-        <!--Main Menu-->
-        <nav class="menu">
-            <div class="container">
+        @Html.Action("MainMenu", "Home", null)
 
-                <ul class="main">
-                    <li class="has-submenu">
-                        <a href="/"><span>H</span>ome<i class="fa fa-chevron-down"></i></a><!--Class "has-submenu" for proper highlighting and dropdown-->
-                        <ul class="submenu">
-                            <li><a href="/">Home - Slideshow</a></li>
-                            <li><a href="home-fullscreen.html">Home - Fullscreen Slider</a></li>
-                            <li><a href="home-showcase.html">Home - Product Showcase</a></li>
-                            <li><a href="home-categories.html">Home - Categories Slider</a></li>
-                            <li><a href="home-offers.html">Home - Special Offers</a></li>
-                        </ul>
-                    </li>
-                    <li class="has-submenu">
-                        <a href="shop-filters-left-3cols.html"><span>S</span>hop<i class="fa fa-chevron-down"></i></a>
-                        <ul class="submenu">
-                            <li><a href="shop-filters-left-3cols.html">Shop - Filters Left 3 Cols</a></li>
-                            <li><a href="shop-filters-left-2cols.html">Shop - Filters Left 2 Cols</a></li>
-                            <li><a href="shop-filters-right-3cols.html">Shop - Filters Right 3 Cols</a></li>
-                            <li><a href="shop-filters-right-2cols.html">Shop - Filters Right 2 Cols</a></li>
-                            <li><a href="shop-no-filters-4cols.html">Shop - No Filters 4 Cols</a></li>
-                            <li><a href="shop-no-filters-3cols.html">Shop - No Filters 3 Cols</a></li>
-                            <li><a href="shop-single-item-v1.html">Shop - Single Item Vers 1</a></li>
-                            <li><a href="shop-single-item-v2.html">Shop - Single Item Vers 2</a></li>
-                            <li><a href="shopping-cart.html">Shopping Cart</a></li>
-                            <li><a href="checkout.html">Checkout Page</a></li>
-                            <li><a href="wishlist.html">Wishlist</a></li>
-                        </ul>
-                    </li>
-                    <li class="has-submenu">
-                        <a href="blog-sidebar-right.html"><span>B</span>log<i class="fa fa-chevron-down"></i></a>
-                        <ul class="submenu">
-                            <li><a href="blog-sidebar-left.html">Blog - Sidebar Left</a></li>
-                            <li><a href="blog-sidebar-right.html">Blog - Sidebar Right</a></li>
-                            <li><a href="blog-single.html">Blog - Single Post</a></li>
-                        </ul>
-                    </li>
-                    <li class="has-submenu">
-                        <a href="#"><span>P</span>ages<i class="fa fa-chevron-down"></i></a>
-                        <ul class="submenu">
-                            <li><a href="register.html">Login / Registration</a></li>
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="coming-soon.html">Coming Soon</a></li>
-                            <li><a href="404.html">404 Page</a></li>
-                            <li><a href="support.html">Support Page</a></li>
-                            <li><a href="delivery.html">Delivery</a></li>
-                            <li><a href="history.html">History Page</a></li>
-                            <li><a href="tracking.html">Tracking Page</a></li>
-                            <li><a href="cs-page.html">Components &amp; Styles</a></li>
-                        </ul>
-                    </li>
-                    <li class="hide-sm"><a href="support.html"><span>S</span>upport</a></li>
-                </ul>
+        @*@Html.Action("MainToolbar", "Home", null)*@
+    </header>
+    <!--Header Close-->
 
-            </div>
-
-            <div class="catalog-block">
-                <div class="container">
-                    <ul class="catalog">
-                        <li class="has-submenu">
-                            <a href="shop-filters-left-3cols.html">Handbag<i class="fa fa-chevron-down"></i></a>
-                            <ul class="submenu">
-                                <li><a href="#">Wristlet</a></li>
-                                <li class="has-submenu">
-                                    <a href="#">Backpack</a><!--Class "has-submenu" for adding carret and dropdown-->
-                                    <ul class="sub-submenu">
-                                        <li><a href="#">KATA</a></li>
-                                        <li><a href="#">Think Tank</a></li>
-                                        <li><a href="#">Manfrotto</a></li>
-                                        <li><a href="#">Lowepro</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Hat box</a></li>
-                                <li class="has-submenu">
-                                    <a href="#">Clutch</a>
-                                    <ul class="sub-submenu">
-                                        <li><a href="#">Louis Vuitton</a></li>
-                                        <li><a href="#">Chanel</a></li>
-                                        <li><a href="#">Christian Dior</a></li>
-                                        <li><a href="#">Gucci</a></li>
-                                        <li><a href="#">Neri Karra</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Envelope</a></li>
-                                <li class="offer">
-                                    <div class="col-1">
-                                        <p class="p-style2">Use product images on the menu. It's easier to percept a visual content than a textual one. </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <img src="Content/LIMO/img/offers/menu-drodown-offer.jpg" alt="Special Offer" />
-                                        <a class="btn btn-black" href="#"><span>584$</span>Special offer</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="shop-filters-left-3cols.html">Wallet</a></li>
-                        <li><a href="shop-filters-left-3cols.html">Satchel</a></li>
-                        <li><a href="shop-filters-left-3cols.html">Clutch</a></li>
-                        <li><a href="shop-filters-left-3cols.html">Hobo bags</a></li>
-                        <li><a href="shop-filters-left-3cols.html">Shoulder Bag</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="toolbar-container">
-            <div class="container">
-                <!--Toolbar-->
-                <div class="toolbar group">
-                    <a class="login-btn btn-outlined-invert" href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-profile"></i> <span><b>L</b>ogin</span></a>
-
-                    <a class="btn-outlined-invert" href="wishlist.html"><i class="icon-heart"></i> <span><b>W</b>ishlist</span></a>
-
-                    <div class="cart-btn">
-                        <a class="btn btn-outlined-invert" href="shopping-cart.html"><i class="icon-shopping-cart-content"></i><span>3</span><b>36 5654</b></a>
-
-                        <!--Cart Dropdown-->
-                        <div class="cart-dropdown">
-                            <span></span><!--Small rectangle to overlap Cart button-->
-                            <div class="body">
-                                <table>
-                                    <tr>
-                                        <th>Items</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                    </tr>
-                                    <tr class="item">
-                                        <td><div class="delete"></div><a href="#">Good Joo-Joo Surfb</a></td>
-                                        <td><input type="text" value="1"></td>
-                                        <td class="price">89 005 $</td>
-                                    </tr>
-                                    <tr class="item">
-                                        <td><div class="delete"></div><a href="#">Good Joo-Joo Item</a></td>
-                                        <td><input type="text" value="2"></td>
-                                        <td class="price">4 300 $</td>
-                                    </tr>
-                                    <tr class="item">
-                                        <td><div class="delete"></div><a href="#">Good Joo-Joo</a></td>
-                                        <td><input type="text" value="5"></td>
-                                        <td class="price">84 $</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="footer group">
-                                <div class="buttons">
-                                    <a class="btn btn-outlined-invert" href="checkout.html"><i class="icon-download"></i>Checkout</a>
-                                    <a class="btn btn-outlined-invert" href="shopping-cart.html"><i class="icon-shopping-cart-content"></i>To cart</a>
-                                </div>
-                                <div class="total">93 389 $</div>
-                            </div>
-                        </div><!--Cart Dropdown Close-->
-                    </div>
-
-                    <button class="search-btn btn-outlined-invert"><i class="icon-magnifier"></i></button>
-                </div><!--Toolbar Close-->
-            </div>
-        </div>
-    </header><!--Header Close-->
     <!--Page Content-->
-    <div class="page-content">
+    <div class="@ViewBag.ContentCssClass page-content">
 
         @RenderBody()
 
-    </div><!--Page Content Close-->
+        @Html.Action("Brands", "Home", null)
+
+    </div>
+    <!--Page Content Close-->
     <!--Sticky Buttons-->
     <div class="sticky-btns">
         <form class="quick-contact ajax-form" method="post" name="quick-contact">
@@ -279,108 +162,83 @@
         </form>
         <span id="qcf-btn"><i class="fa fa-envelope"></i></span>
         <span id="scrollTop-btn"><i class="fa fa-chevron-up"></i></span>
-    </div><!--Sticky Buttons Close-->
-    <!--Subscription Widget-->
-    <section class="subscr-widget gray-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7 col-md-8 col-sm-8">
-                    <h2>Subscribe to our news</h2>
-                    <form class="subscr-form" role="form" autocomplete="off">
-                        <div class="form-group">
-                            <label class="sr-only" for="subscr-name">Enter name</label>
-                            <input type="text" class="form-control" name="subscr-name" id="subscr-name" placeholder="Enter name" required>
-                            <button class="subscr-next"><i class="icon-arrow-right"></i></button>
-                        </div>
-                        <div class="form-group fff" style="display: none">
-                            <label class="sr-only" for="subscr-email">Enter email</label>
-                            <input type="email" class="form-control" name="subscr-email" id="subscr-email" placeholder="Enter email" required>
-                            <button type="submit" id="subscr-submit"><i class="icon-check"></i></button>
-                        </div>
-                    </form>
-                    <p class="p-style2">Please fill the field before continuing</p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-lg-offset-1">
-                    <p class="p-style3">Get more followers. In case of high quality newsletters the customers return rate can increase up to 20%! Have you already estimated your possible income? We took that into account and created a decent subscription form. </p>
-                </div>
-            </div>
-        </div>
-    </section><!--Subscription Widget Close-->
+    </div>
+    <!--Sticky Buttons Close-->
+
+
     <!--Footer-->
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-5 col-md-5 col-sm-5">
-                    <div class="info">
-                        <a class="logo" href="/"><img src="Content/LIMO/img/logo-footer.png" alt="Limo" /></a>
-                        <p>Describe the mission of your online store and the advantages a customer can get once he makes a purchase. If you have something to tell let customers know about it.</p>
-                        <div class="social">
-                            <a href="#" target="_blank"><i class="fa fa-instagram"></i></a>
-                            <a href="#" target="_blank"><i class="fa fa-youtube-square"></i></a>
-                            <a href="#" target="_blank"><i class="fa fa-tumblr-square"></i></a>
-                            <a href="#" target="_blank"><i class="fa fa-vimeo-square"></i></a>
-                            <a href="#" target="_blank"><i class="fa fa-pinterest-square"></i></a>
-                            <a href="#" target="_blank"><i class="fa fa-facebook-square"></i></a>
+                <center>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        <div class="info">
+                            <a class="logo" href="/"><img src="/Content/LIMO/img/official-logo-white.png" alt="@GlobalObjects.SiteTitle" /></a>
                         </div>
+                        <div class="social text-center">
+                            <a href="https://instagram.com/tina.2012/" target="_blank"><i class="fa fa-instagram"></i></a>
+                            <a href="https://google.com/+TinahouseNet" target="_blank"><i class="fa fa-google-plus"></i></a>
+                            <a href="https://www.facebook.com/tinahousebag" target="_blank"><i class="fa fa-facebook-square"></i></a>
+                        </div>
+
+                        <p class="p-style3">
+                            <i class="fa fa-home"></i> 262/6 Lê Văn Sỹ, P.14, Q.3, TP.HCM<br />
+                            <i class="fa fa-phone"></i> <a href="tel:0938020091">0938020091</a><br />
+                        </p>
+                        <p class="p-style3">
+                            <i class="fa fa-home"></i> 190A Trần Bình Trọng, P.3, Q.5, TP.HCM<br />
+                            <i class="fa fa-phone"></i> <a href="tel:0938030091">0938030091</a><br />
+                        </p>
                     </div>
-                </div>
+                </center>
+
                 <div class="col-lg-4 col-md-4 col-sm-4">
-                    <h2>Latest news</h2>
-                    <ul class="list-unstyled">
-                        <li>25 of May <a href="#">new arrivals in Spring</a></li>
-                        <li>24 of April <a href="#">5 facts about clutches</a></li>
-                        <li>25 of May <a href="#">new arrivals in Spring</a></li>
-                        <li>24 of April <a href="#">5 facts about clutches</a></li>
-                    </ul>
+                    <div class="fb-page" data-href="https://www.facebook.com/tinahousebag" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true" data-show-posts="true"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/tinahousebag"><a href="https://www.facebook.com/tinahousebag">Tina Shop</a></blockquote></div></div>
+                    <div class="clear"></div><br />
                 </div>
-                <div class="contacts col-lg-3 col-md-3 col-sm-3">
-                    <h2>Contacts</h2>
-                    <p class="p-style3">
-                        4120 Lenox Avenue, New York, NY,<br />
-                        10035 76 Saint Nicholas Avenue<br />
-                        <a href="mailto:mail@Limo.com">mail@Limo.com</a><br />
-                        +48 543765234<br />
-                        +48 555 234 54 34<br />
-                    </p>
-                </div>
+
             </div>
             <div class="copyright">
                 <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-7">
-                        <p>&copy; 2014 Limo. All Rights Reserved. Designed by <a href="http://8guild.com/" target="_blank">8Guild</a></p>
+                        <p><a title="@GlobalObjects.SiteTitle" href="/">@GlobalObjects.SiteTitle</a> &copy; @DateTime.Now.Year</p>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-5">
                         <div class="payment">
-                            <img src="Content/LIMO/img/payment/visa.png" alt="Visa" />
-                            <img src="Content/LIMO/img/payment/paypal.png" alt="PayPal" />
-                            <img src="Content/LIMO/img/payment/master.png" alt="Master Card" />
-                            <img src="Content/LIMO/img/payment/discover.png" alt="Discover" />
-                            <img src="Content/LIMO/img/payment/amazon.png" alt="Amazon" />
+                            <img src="/Content/LIMO/img/payment/visa.png" alt="Visa" />
+                            <img src="/Content/LIMO/img/payment/paypal.png" alt="PayPal" />
+                            <img src="/Content/LIMO/img/payment/master.png" alt="Master Card" />
+                            <img src="/Content/LIMO/img/payment/discover.png" alt="Discover" />
+                            <img src="/Content/LIMO/img/payment/amazon.png" alt="Amazon" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </footer><!--Footer Close-->
+    </footer>
+    <!--Footer Close-->
     <!--Javascript (jQuery) Libraries and Plugins-->
-    <script src="Content/LIMO/js/libs/jquery-1.11.1.min.js"></script>
-    <script src="Content/LIMO/js/libs/jquery-ui-1.10.4.custom.min.js"></script>
-    <script src="Content/LIMO/js/libs/jquery.easing.min.js"></script>
-    <script src="Content/LIMO/js/plugins/bootstrap.min.js"></script>
-    <script src="Content/LIMO/js/plugins/smoothscroll.js"></script>
-    <script src="Content/LIMO/js/plugins/jquery.validate.min.js"></script>
-    <script src="Content/LIMO/js/plugins/icheck.min.js"></script>
-    <script src="Content/LIMO/js/plugins/jquery.placeholder.js"></script>
-    <script src="Content/LIMO/js/plugins/jquery.stellar.min.js"></script>
-    <script src="Content/LIMO/js/plugins/jquery.touchSwipe.min.js"></script>
-    <script src="Content/LIMO/js/plugins/jquery.shuffle.min.js"></script>
-    <script src="Content/LIMO/js/plugins/lightGallery.min.js"></script>
-    <script src="Content/LIMO/js/plugins/owl.carousel.min.js"></script>
-    <script src="Content/LIMO/js/plugins/masterslider.min.js"></script>
-    <script src="Content/LIMO/mailer/mailer.js"></script>
-    <script src="Content/LIMO/js/scripts.js"></script>
+    <script src="/Content/LIMO/js/libs/jquery-1.11.1.min.js"></script>
+    @*<script src="~/Scripts/jquery-2.1.4.min.js"></script>*@
+    <script src="/Content/LIMO/js/libs/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="/Content/LIMO/js/libs/jquery.easing.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/bootstrap.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/smoothscroll.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.validate.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/icheck.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.placeholder.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.stellar.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.touchSwipe.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.shuffle.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/lightGallery.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/owl.carousel.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/masterslider.min.js"></script>
+    <script src="/Content/LIMO/js/plugins/jquery.nouislider.min.js"></script>
+    <script src="/Content/LIMO/mailer/mailer.js"></script>
+    <script src="/Content/LIMO/js/scripts.js"></script>
+    <script src="/Content/LIMO/js/MyScripts.js"></script>
 
-
+    @RenderSection("Scripts", false)
 
 </body><!--Body Close-->
 </html>

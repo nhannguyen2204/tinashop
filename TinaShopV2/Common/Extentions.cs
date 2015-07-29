@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
+using TinaShopV2.Models;
 
 namespace TinaShopV2.Common
 {
@@ -42,6 +44,30 @@ namespace TinaShopV2.Common
             attributes[attName] = classAtt;
 
             return attributes;
+        }
+
+        #endregion
+
+        #region FO / Product Listing
+
+        public static string GetUrlByModel(this UrlHelper urlHelper, ProductFilterIndexViewModel model)
+        {
+            if (model == null)
+                return string.Empty;
+
+            string url = urlHelper.Action("Index", "Products", new
+            {
+                @Page = model.Page,
+                @FromPrice = model.FromPrice,
+                @ToPrice = model.ToPrice,
+                @ColorKeys = model.ColorKeys,
+                @CatCode = model.CatCode,
+                @BrandCode = model.BrandCode,
+                @IsOrderPriceDesc = model.IsOrderPriceDesc,
+                @IsOrderDatetimeDesc = model.IsOrderDatetimeDesc
+            });
+
+            return HttpUtility.UrlDecode(url);
         }
 
         #endregion

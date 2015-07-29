@@ -6,15 +6,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TinaShopV2.Models
 {
-    public class BaseViewModel
+    public class BaseOwinContext
     {
         protected ApplicationUserManager _userManagerService;
         protected ApplicationDbContext _dbContextService;
         protected IOwinContext _owinContext;
 
-        public BaseViewModel()
+
+        public BaseOwinContext()
         {
 
+        }
+
+        public BaseOwinContext(IOwinContext owinContext)
+        {
+            _owinContext = owinContext;
+            _userManagerService = owinContext.GetUserManager<ApplicationUserManager>();
+            _dbContextService = owinContext.Get<ApplicationDbContext>();
         }
 
         public void SetOwinContext(IOwinContext owinContext)
@@ -23,12 +31,18 @@ namespace TinaShopV2.Models
             _userManagerService = owinContext.GetUserManager<ApplicationUserManager>();
             _dbContextService = owinContext.Get<ApplicationDbContext>();
         }
+    }
 
-        public BaseViewModel(IOwinContext owinContext)
+    public class BaseViewModel : BaseOwinContext
+    {
+        public BaseViewModel() : base()
         {
-            _owinContext = owinContext;
-            _userManagerService = owinContext.GetUserManager<ApplicationUserManager>();
-            _dbContextService = owinContext.Get<ApplicationDbContext>();
+
+        }
+
+        public BaseViewModel(IOwinContext owinContext) : base(owinContext)
+        {
+            
         }
 
         private string createdUserId;

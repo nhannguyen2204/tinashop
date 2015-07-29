@@ -37,7 +37,7 @@ namespace TinaShopV2.Areas.Administration.Models.Media
         public string ThumbPath { get; set; }
 
         [Display(Name = "Thumbnail")]
-        [RequiredIfEmpty("ThumbPath", ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
+        //[RequiredIfEmpty("ThumbPath", ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Common.Attributes.Validation.FileExtensions("jpg|gif|jpeg|png|bmp", ErrorMessageResourceName = "ImageExtension", ErrorMessageResourceType = typeof(Errors))]
         public HttpPostedFileBase ThumbUploader { get; set; }
 

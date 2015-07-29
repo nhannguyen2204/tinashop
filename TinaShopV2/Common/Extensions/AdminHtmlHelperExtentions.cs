@@ -223,6 +223,15 @@ namespace TinaShopV2.Common.Extensions
 
         #region Pager
 
+        public static MvcHtmlString ProductListingFOPager(this HtmlHelper htmlHelper, ProductFilterIndexViewModel model)
+        {
+            if (model != null && model.PageTotal > 1 && model.Page > 0)
+            {
+                return htmlHelper.Partial("_ProductListingFOPagerPartial", model);
+            }
+            return null;
+        }
+
         public static MvcHtmlString Pager(this HtmlHelper htmlHelper, IndexBasicViewModel model)
         {
             if (model != null && model.PageTotal > 1 && model.Page > 0)

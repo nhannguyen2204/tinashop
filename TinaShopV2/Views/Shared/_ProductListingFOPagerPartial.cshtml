@@ -1,0 +1,73 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    int left = 2;
+    int right = 2;
+
+    int currentPage = Model.Page;
+    
+    while (currentPage - left <= 0)
+    {
+        left--;
+        right++;
+    }
+
+    while (currentPage + right > Model.PageTotal)
+    {
+        right--;
+        if (currentPage - (left + 1) > 0)
+        {
+            left++;
+        }
+    }
+}
+
+<div class="text-center">
+    <ul class="pagination pagination-lg">
+        @{
+            Model.Page = currentPage - left - 1;
+        }
+        <li class="@((currentPage - left - 1) > 0 ? string.Empty : "disabled")">
+            <a class="product-price-filter-action" data-url="@((currentPage - left - 1) > 0 ? Url.GetUrlByModel(Model) : "javascript:void(0);")" 
+               href="@((currentPage - left - 1) > 0 ? Url.GetUrlByModel(Model) : "javascript:void(0);")"><i class="fa fa-chevron-left"></i></a>
+        </li>
+
+        @if (left > 0)
+        {
+            for (int i = left; i > 0; i--)
+            {
+                Model.Page = currentPage - i;
+                <li>
+                    <a class="product-price-filter-action" data-url="@Url.GetUrlByModel(Model)"
+                       href="@Url.GetUrlByModel(Model)">@(currentPage - i)</a>
+                </li>
+            }
+        }
+
+        <li class="active">
+            <a href="javascript:void(0);">@currentPage</a>
+        </li>
+
+        @if (right > 0)
+        {
+            for (int i = 1; i <= right; i++)
+            {
+                Model.Page = currentPage + i;
+                <li>
+                    <a class="product-price-filter-action" data-url="@Url.GetUrlByModel(Model)"
+                       href="@Url.GetUrlByModel(Model)">@(currentPage + i)</a>
+                </li>
+            }
+        }
+        
+
+        @{ Model.Page = currentPage + right + 1;}
+        <li class="@((currentPage + right + 1) <= Model.PageTotal ? string.Empty : "disabled")">
+            <a class="product-price-filter-action" data-url="@((currentPage + right + 1) <= Model.PageTotal ? Url.GetUrlByModel(Model) : "javascript:void(0);")"
+               href="@((currentPage + right + 1) <= Model.PageTotal ? Url.GetUrlByModel(Model) : "javascript:void(0);")"><i class="fa fa-chevron-right"></i></a>
+        </li>
+    </ul>
+</div>

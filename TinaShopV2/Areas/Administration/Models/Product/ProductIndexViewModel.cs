@@ -26,6 +26,9 @@ namespace TinaShopV2.Areas.Administration.Models.Product
         [Display(Name = "Brand", ResourceType = typeof(Commons))]
         public string BrandCode { get; set; }
 
+        [Display(Name = "Category", ResourceType = typeof(Commons))]
+        public string CatCode { get; set; }
+
         [Display(Name = "Publish", ResourceType = typeof(Commons))]
         public int IsPublish { get; set; }
 

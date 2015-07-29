@@ -1,0 +1,28 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+<!--Main Menu-->
+<nav class="menu">
+    <div class="container">
+        <ul class="main">
+            @{
+                var owinContext = Context.GetOwinContext();
+                var mainMenus = owinContext.GetTinaMenuViewModelByTypeAndParent(TinaShopV2.Common.GlobalObjects.MainMenuTypeId, null, false);
+
+                foreach (var item in mainMenus)
+                {
+                    if (item.ActionObj.Controller.ToLower() == "products" && item.ActionObj.Action.ToLower() == "index" && string.IsNullOrEmpty(item.ActionObj.Area))
+                    {
+                        <li class="hide-sm"><a title="@item.Name" href="@Url.GetUrlByModel(new TinaShopV2.Models.ProductFilterIndexViewModel())"> <span><i class="@(item.CssClass ?? null)"></i></span> @item.Name</a></li>
+                    }
+                    else
+                    {
+                        <li class="hide-sm"><a title="@item.Name" href="@Url.Action(item.ActionObj.Action, item.ActionObj.Controller, new { @Area = item.ActionObj.Area })"> <span><i class="@(item.CssClass ?? null)"></i></span> @item.Name</a></li>
+                    }
+                }
+            }
+        </ul>
+    </div>
+
+    @Html.Action("CategoryMenu", "Home", null)
+</nav>

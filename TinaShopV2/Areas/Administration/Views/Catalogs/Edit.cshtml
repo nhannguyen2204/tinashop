@@ -1,0 +1,176 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+@model TinaShopV2.Areas.Administration.Models.Catalog.CatalogViewModel
+
+@{
+    ViewBag.Title = string.Format(GlobalObjects.TitleFormat, Resources.Commons.Edit, Resources.Commons.Catalog);
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+@Html.SmartValidationSummary()
+
+<h2>@Resources.Commons.Edit</h2>
+
+@using (Html.BeginForm(ViewContext.LocalizeRouteValues()))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Resources.Commons.Catalog</h4>
+        <hr />
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MediaId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.HiddenFor(m => m.MediaId)
+                <div id="MediaSelected" class="col-md-12">
+                    @if (Model.MediaId != null)
+                    {
+                        var media = Model.GetImage();
+                        if (media != null)
+                        {
+                            <img alt="@media.Name" src="@Path.Combine(GlobalObjects.MediaImageFolderPath, media.ThumbPath)" style="max-width:150px;" class="thumbnail" />
+                            <div class="alert adjusted alert-success fade in"><button class="close" onclick="removeMedia();" data-dismiss="alert">×</button><strong>@media.Name</strong></div>
+                        }
+                    }
+                </div>
+                @Html.TextBox("Media_Find", "", new { @class = "form-control", @autofocus = "false" })
+                @Html.ValidationMessageFor(model => model.MediaId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsPublished, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.SmartCheckboxFor(model => model.IsPublished)
+                @Html.ValidationMessageFor(model => model.IsPublished, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductIds, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.HiddenFor(m => m.ProductIds)
+                <div id="ProductSelected" class="col-md-12">
+                    @foreach (var item in Model.Products)
+                    {
+                        <div id="@item.ProductCode" class="alert adjusted alert-success fade in"><button class="close" onclick="removeProduct('@item.ProductCode');" data-dismiss="alert">×</button><strong>@item.ProductName (@item.ProductCode)</strong></div>
+                    }
+                </div>
+                @Html.TextBox("Product_Find", "", new { @class = "form-control", @autofocus = "false" })
+                @Html.ValidationMessageFor(model => model.ProductIds, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+    <div class="form-actions no-color">
+        <input type="submit" value="@Resources.Commons.Save" class="btn btn-default" /> |
+        @Html.ActionLink(Resources.Commons.BackToList, "Index", ViewContext.LocalizeRouteValues())
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/CustomValidation")
+    <script type="text/javascript">
+
+        $(function () {
+            $("#Media_Find").autocomplete({
+                delay: 500,
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("@Url.Action("FindByType", "Medias", new { area = "Administration" })/@GlobalObjects.MediaType_CatalogImage_Id" + "/" + $("#Media_Find").val(), function (data) {
+                        // data is an array of objects and must be transformed for autocomplete to use
+                        var array = data.error ? [] : $.map(data, function (m) {
+                            return {
+                                label: m.Name,
+                                value: m.Id,
+                                thumbpath: m.ThumbPath
+                            };
+                        });
+                        response(array);
+                    });
+                },
+                focus: function (event, ui) {
+                    // prevent autocomplete from updating the textbox
+                    event.preventDefault();
+                },
+                select: function (event, ui) {
+                    // prevent autocomplete from updating the textbox
+                    event.preventDefault();
+                    // navigate to the selected item's url
+                    $("#MediaId").val(ui.item.value);
+                    $("#Media_Find").val('');
+                    $("#Media_Find").fadeOut();
+                    $("#MediaSelected").html("<img alt=\"" + ui.item.label + "\" src=\"@(string.Format("{0}/", GlobalObjects.MediaImageFolderPath))" + ui.item.thumbpath + "\" style=\"max-width:150px;\" class=\"thumbnail\" /><div class=\"alert adjusted alert-success fade in\"><button class=\"close\" onclick=\"removeMedia('" + ui.item.value + "');\" data-dismiss=\"alert\">×</button><strong>" + ui.item.label + "</strong></div>");
+                }
+            });
+        });
+
+        function removeMedia() {
+            $("#MediaId").val('');
+            $("#MediaSelected").html('');
+            $("#Media_Find").fadeIn();
+        }
+
+        @if (Model.MediaId != null)
+        {
+            <text>$("#Media_Find").fadeOut();</text>
+        }
+
+        $(function () {
+            $("#Product_Find").autocomplete({
+                delay: 500,
+                minLength: 3,
+                source: function (request, response) {
+                    $.getJSON("@Url.Action("Find", "Products", new { area = "Administration" })" + "/" + $("#Product_Find").val(), function (data) {
+                        // data is an array of objects and must be transformed for autocomplete to use
+                        var array = data.error ? [] : $.map(data, function (m) {
+                            return {
+                                label: m.ProductName + " (" + m.ProductCode + ")",
+                                value: m.ProductCode,
+                            };
+                        });
+                        response(array);
+                    });
+                },
+                focus: function (event, ui) {
+                    // prevent autocomplete from updating the textbox
+                    event.preventDefault();
+                },
+                select: function (event, ui) {
+                    // prevent autocomplete from updating the textbox
+                    event.preventDefault();
+
+                    if ($("#ProductIds").val() == "" || (("," + ui.item.value + ",").indexOf($("#ProductIds").val()) == -1 && $("#ProductIds").val() != "")) {
+                        // navigate to the selected item's url
+                        $("#ProductIds").val($("#ProductIds").val() + "," + ui.item.value + ",");
+                        $("#Product_Find").val('');
+                        $("#ProductSelected").append("<div id=\"" + ui.item.value + "\" class=\"alert adjusted alert-success fade in\"><button class=\"close\" onclick=\"removeProduct('" + ui.item.value + "');\" data-dismiss=\"alert\">×</button><strong>" + ui.item.label + "</strong></div>");
+                    }
+                    else {
+                        alert("Bạn đã chọn sản phẩm (" + ui.item.value + ")");
+                        $("#Product_Find").val('');
+                    }
+                }
+            });
+        });
+
+        function removeProduct(productCode) {
+            var productIds = $("#ProductIds").val();
+            productIds = productIds.replace("," + productCode + ",", "");
+            $("#ProductIds").val(productIds);
+            $("#ProductSelected").remove('#' + productCode);
+        };
+    </script>
+}

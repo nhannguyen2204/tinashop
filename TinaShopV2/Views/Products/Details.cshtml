@@ -1,0 +1,56 @@
+﻿@model TinaShopV2.Models.ProductFOViewModel
+
+@{
+    ViewBag.Title = string.Format("{0} - {1}", Model.ProductCode, Model.ProductName);
+    Layout = "~/Views/Shared/_LimoLayout.cshtml";
+}
+
+<!--Breadcrumbs-->
+<ol class="breadcrumb">
+    <li><a href="/">Trang chủ</a></li>
+    <li><a href="/san-pham">Sản phẩm</a></li>
+    <li>@ViewBag.Title</li>
+</ol><!--Breadcrumbs Close-->
+
+<!--Catalog Single Item-->
+<section class="catalog-single">
+    <div class="container">
+        <div class="row">
+            <!--Product Gallery-->
+            <div class="col-lg-8 col-md-8">
+                <div class="prod-gal master-slider" id="prod-gal">
+                    @{
+                        var owinContext = Context.GetOwinContext();
+                        var images = Model.Get_Images();
+
+                        if (images.Count() > 0)
+                        {
+                            foreach (var item in images)
+                            {
+                                <div class="ms-slide">
+                                    <img src="/Content/LIMO/masterslider/blank.gif" data-src="@(Path.Combine(TinaShopV2.Common.GlobalObjects.MediaImageFolderPath, item.FilePath))" alt="@ViewBag.Title" />
+                                    <img class="ms-thumb" src="@(Path.Combine(TinaShopV2.Common.GlobalObjects.MediaImageFolderPath, item.ThumbPath))" alt="thumb" />
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="ms-slide">
+                                <img src="/Content/LIMO/masterslider/blank.gif" data-src="@(Path.Combine(TinaShopV2.Common.GlobalObjects.MediaImageFolderPath, TinaShopV2.Common.GlobalObjects.Get_Media_NoImage(owinContext).FilePath))" alt="@ViewBag.Title" />
+                                <img class="ms-thumb" src="@(Path.Combine(TinaShopV2.Common.GlobalObjects.MediaImageFolderPath, TinaShopV2.Common.GlobalObjects.Get_Media_NoImage(owinContext).ThumbPath))" alt="thumb" />
+                            </div>
+                        }
+}
+                </div>
+            </div>
+
+            <!--Product Description-->
+            <div class="col-lg-4 col-md-4">
+                <div>Mã hàng: <span class="bold">@Model.ProductCode - @Model.ProductName</span></div>
+                <div>Thể loại: <span class="bold">@Model.Category.Name</span></div>
+                <div>Nhãn hiệu: <span class="bold">@Model.Brand.Name</span></div>
+                <div>Giá: <span class="price">@Model.Price.ToString("0,000 VND")</span></div>
+            </div>
+        </div>
+    </div>
+</section><!--Catalog Single Item Close-->

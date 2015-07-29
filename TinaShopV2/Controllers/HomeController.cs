@@ -37,5 +37,30 @@ namespace TinaShopV2.Controllers
         {
             return View();
         }
+
+        public PartialViewResult CategoryMenu()
+        {
+            return PartialView("_CategoryMenuPartial");
+        }
+
+        public PartialViewResult Sliders()
+        {
+            return PartialView("_SlidersPartial");
+        }
+
+        public PartialViewResult MainMenu()
+        {
+            return PartialView("_MainMenuPartial");
+        }
+
+        public PartialViewResult MainToolbar()
+        {
+            return PartialView("_MainToolbarPartial");
+        }
+
+        public PartialViewResult Brands()
+        {
+            return PartialView("_BrandsPartial");
+        }
     }
 }

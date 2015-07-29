@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using TinaShopV2.Areas.Administration.Models;
 using TinaShopV2.Areas.Administration.Models.Address;
 using TinaShopV2.Areas.Administration.Models.Brand;
+using TinaShopV2.Areas.Administration.Models.Catalog;
 using TinaShopV2.Areas.Administration.Models.Category;
 using TinaShopV2.Areas.Administration.Models.Color;
 using TinaShopV2.Areas.Administration.Models.Media;
@@ -229,7 +230,7 @@ namespace TinaShopV2.Areas.Administration
 
             context.MapRoute(
                 name: "Administration_Products_Index",
-                url: "Administration/Products/Index/{Page}/{IsPublish}/{IsDeleted}/{CanSale}/{BrandCode}/{ProductCode}",
+                url: "Administration/Products/{Page}/{IsPublish}/{IsDeleted}/{CanSale}/{BrandCode}/{CatCode}/{ProductCode}",
                 defaults: new
                 {
                     area = AreaName,
@@ -242,6 +243,7 @@ namespace TinaShopV2.Areas.Administration
                     PageTotal = 0,
                     Total = 0,
                     BrandCode = "all",
+                    CatCode = "all",
                     ProductCode = UrlParameter.Optional,
                     language = "vi",
                     culture = "VN"
@@ -410,6 +412,10 @@ namespace TinaShopV2.Areas.Administration
 
             AutoMapper.Mapper.CreateMap<Slider, SliderViewModel>();
             AutoMapper.Mapper.CreateMap<SliderViewModel, Slider>();
+
+            AutoMapper.Mapper.CreateMap<Catalog, CatalogViewModel>();
+            AutoMapper.Mapper.CreateMap<CatalogViewModel, Catalog>();
+
         }
     }
 }

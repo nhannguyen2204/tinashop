@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using System.Web.Configuration;
+using TinaShopV2.Areas.Administration.Models.Media;
 using TinaShopV2.Models;
 
 namespace TinaShopV2.Common
@@ -15,7 +16,10 @@ namespace TinaShopV2.Common
         public const string ErrorMessFormat = "[ERROR] message : {0}";
         public const string TitleFormat = "{0} - {1}";
         public const string SiteTitle = "Tina Shop";
-        public const string HrefBlankPath = "jsvascript:void(0);";
+        public const string HrefBlankPath = "javascript:void(0);";
+        public const string DefaultAllBrandCode = "all-br";
+        public const string DefaultAllCatCode = "all-cat";
+        public const string DefaultAllColors = "all-cl";
 
         private static string mediaImageFolderPath;
         public static string MediaImageFolderPath
@@ -184,40 +188,37 @@ namespace TinaShopV2.Common
             }
         }
 
+        private static int mainMenuTypeId;
+        public static int MainMenuTypeId
+        {
+            get
+            {
+                if (mainMenuTypeId == 0)
+                {
+                    string menuTypeId = WebConfigurationManager.AppSettings["main_menu_type_id"] ?? string.Empty;
+                    if (!string.IsNullOrEmpty(menuTypeId))
+                        int.TryParse(menuTypeId, out mainMenuTypeId);
+                }
 
-        private static TinaShopV2.Models.Entity.Media media_NoImage;
-        public static TinaShopV2.Models.Entity.Media Get_Media_NoImage(IOwinContext owinContext)
+                return mainMenuTypeId;
+            }
+        }
+
+
+        private static MediaViewModel media_NoImage;
+        public static MediaViewModel Get_Media_NoImage(IOwinContext owinContext)
         {
             if (media_NoImage == null)
             {
                 var dbContext = owinContext.Get<ApplicationDbContext>();
-                media_NoImage = dbContext.Medias.Find(Media_NoImage_Id);
+                var media = dbContext.Medias.Find(Media_NoImage_Id);
+                if (media != null)
+                {
+                    media_NoImage = new MediaViewModel();
+                    AutoMapper.Mapper.Map(media, media_NoImage);
+                }
             }
             return media_NoImage;
-        }
-
-        private static string media_NoImage_Path = string.Empty;
-        public static string Media_NoImage_Path
-        {
-            get
-            {
-                //if (string.IsNullOrEmpty(media_NoImage_Path) && Media_NoImage != null)
-                //    media_NoImage_Path = Media_NoImage.FilePath;
-
-                return media_NoImage_Path;
-            }
-        }
-
-        private static string media_NoImageThumb_Path = string.Empty;
-        public static string Media_NoImageThumb_Path
-        {
-            get
-            {
-                //if (string.IsNullOrEmpty(media_NoImageThumb_Path) && Media_NoImage != null)
-                //    media_NoImageThumb_Path = Media_NoImage.ThumbPath;
-
-                return media_NoImageThumb_Path;
-            }
         }
     }
 }

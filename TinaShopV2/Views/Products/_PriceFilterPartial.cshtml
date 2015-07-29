@@ -1,0 +1,46 @@
+﻿@using TinaShopV2.Common;
+@using TinaShopV2.Common.Extensions;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    int selectedFromPrice = Model.FromPrice;
+    int selectedToPrice = Model.ToPrice;
+    var fromPrices = new int[] { 0, 400, 800, 1200 };
+    var toPrices = new int[] { 400, 800, 1200, 1600 };
+
+    Model.Page = 1;
+    Model.FromPrice = 0;
+    Model.ToPrice = 3000;
+}
+
+<section class="filter-section">
+    <h3>Theo giá</h3>
+    <form method="get" name="price-filters">
+        <a class="product-price-filter-action clear" id="clearPrice" data-url="@Url.GetUrlByModel(Model)" 
+           href="@Url.GetUrlByModel(Model)">Xóa giá</a>
+        <div class="price-btns">
+            @for (int i = 0; i < fromPrices.Count(); i++)
+            {
+                bool selected = fromPrices[i] == selectedFromPrice && toPrices[i] == selectedToPrice;
+
+                Model.FromPrice = fromPrices[i];
+                Model.ToPrice = toPrices[i];
+
+                <a data-url="@Url.GetUrlByModel(Model)" href="@Url.GetUrlByModel(Model)" class="product-price-filter-action btn btn-black btn-sm @(selected ? "disabled" : string.Empty)">Từ @(fromPrices[i])k Đến @(toPrices[i])k</a>
+            }
+        </div>
+        <div class="price-slider">
+            <div id="price-range"></div>
+            <div class="values group">
+                <!--data-min-val represent minimal price and data-max-val maximum price respectively in pricing slider range; value="" - default values-->
+                <input class="form-control" name="minVal" id="minVal" type="text" data-min-val="0" value="@selectedFromPrice">
+                <span class="labels">k - </span>
+                <input class="form-control" name="maxVal" id="maxVal" type="text" data-max-val="3000" value="@selectedToPrice">
+                <span class="labels">k</span>
+            </div>
+        </div>
+        <button type="submit" class="product-price-filter-action btn btn-black btn-sm" 
+                data-color="@Model.ColorKeys" data-brand="@Model.BrandCode" data-cat="@Model.CatCode" data-sortdate="@Model.IsOrderDatetimeDesc" data-sortprice="@Model.IsOrderPriceDesc">Chọn lọc</button>
+    </form>
+</section>

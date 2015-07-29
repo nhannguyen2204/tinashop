@@ -26,6 +26,8 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Medias
         public ActionResult Index(MediaIndexViewModel model)
         {
+            model.SetOwinContext(_owinContext);
+
             // Init Medias
             _owinContext.GetMediasByIndexViewModel(ref model);
 

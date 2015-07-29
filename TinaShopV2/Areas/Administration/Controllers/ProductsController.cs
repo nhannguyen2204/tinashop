@@ -12,6 +12,7 @@ using TinaShopV2.Common.Attributes;
 using TinaShopV2.Common;
 using TinaShopV2.App_GlobalResources;
 using TinaShopV2.Areas.Administration.Models.CustomControls;
+using TinaShopV2.Areas.Administration.Models.Category;
 
 namespace TinaShopV2.Areas.Administration.Controllers
 {
@@ -34,7 +35,7 @@ namespace TinaShopV2.Areas.Administration.Controllers
 
             List<ResponseProductViewModel> model = new List<ResponseProductViewModel>();
             AutoMapper.Mapper.Map(result, model);
-;
+            ;
             return new JsonResult() { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -49,6 +50,10 @@ namespace TinaShopV2.Areas.Administration.Controllers
             ViewBag.DeleteStatusList = EnumHelper<DeleteStatus>.EnumToList();
             ViewBag.SaleStateList = EnumHelper<SaleState>.EnumToList();
             ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
+            ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
 
             // Response
             return View(model);
@@ -71,7 +76,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         // GET: Administration/Products/Create
         public ActionResult Create()
         {
-            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode, Text = m.Name });
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
+            ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
+
             return View();
         }
 
@@ -95,7 +104,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode, Text = m.Name });
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
+            ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
+
             return View(model);
         }
 
@@ -104,7 +117,11 @@ namespace TinaShopV2.Areas.Administration.Controllers
         {
             var model = _owinContext.GetProductViewModelById(productCode);
 
-            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode, Text = m.Name });
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
+            ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
+
             return View(model);
         }
 
@@ -116,6 +133,8 @@ namespace TinaShopV2.Areas.Administration.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.SetOwinContext(_owinContext);
+                    
                     model.SetInteractionUser(CurrentUser.Id);
                     _owinContext.EditProductByViewModel(model);
 
@@ -128,7 +147,10 @@ namespace TinaShopV2.Areas.Administration.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode.ToString(), Text = m.Name });
+            ViewBag.Brands = _owinContext.GetAllBrandViewModels().Select(m => new SelectListItem() { Value = m.BrandCode, Text = m.Name });
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            AdminHelpers.GenerateCategories(ref categories, _owinContext);
+            ViewBag.Categories = categories.Select(m => new SelectListItem() { Value = m.CatCode, Text = m.Name });
             return View(model);
         }
 

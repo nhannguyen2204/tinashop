@@ -5,7 +5,7 @@ using TinaShopV2.Models;
 
 namespace TinaShopV2.Areas.Administration.Models
 {
-    public class IndexBasicViewModel : BaseViewModel
+    public class IndexBasicViewModel : BaseOwinContext
     {
         public IndexBasicViewModel() : base() { }
 

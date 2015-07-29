@@ -357,4 +357,7 @@
   <data name="Slider" xml:space="preserve">
     <value>Slider</value>
   </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
 </root>

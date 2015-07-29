@@ -1,0 +1,33 @@
+﻿@using TinaShopV2.Common.Extensions;
+@using TinaShopV2.Common;
+
+<div class="catalog-block">
+    <div class="container">
+        <ul class="catalog">
+            @{
+                var owinContext = Context.GetOwinContext();
+                var mainCategories = owinContext.GetCatViewModelByParent(null, true);
+
+                foreach (var item in mainCategories)
+                {
+                    var subCategories = owinContext.GetCatViewModelByParent(item.CatCode, true);
+                    bool hasSub = subCategories.Count() > 0;
+
+                    <li class="@(hasSub ? "has-submenu" : string.Empty)">
+                        <a href="javascript:void(0);" title="@item.Name">@item.Name @(hasSub ? MvcHtmlString.Create("<i class=\"fa fa-chevron-down\"></i>") : MvcHtmlString.Empty)</a>
+                        @if (hasSub)
+                        {
+                            <ul class="submenu">
+                                @foreach (var subCat in subCategories)
+                                {
+                                    <li><a title="@subCat.Name" href="@GlobalObjects.HrefBlankPath">@subCat.Name</a></li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            }
+
+        </ul>
+    </div>
+</div>

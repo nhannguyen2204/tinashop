@@ -27,7 +27,7 @@ namespace TinaShopV2.Areas.Administration.Models.Product
         {
             get
             {
-                imagePath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Media_NoImage_Path);
+                imagePath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Get_Media_NoImage(_owinContext).FilePath);
 
                 TinaShopV2.Models.Entity.Media image = null;
                 if (image == null && !string.IsNullOrEmpty(this.ProductCode))
@@ -46,7 +46,7 @@ namespace TinaShopV2.Areas.Administration.Models.Product
         {
             get
             {
-                imageThumbPath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Media_NoImageThumb_Path);
+                imageThumbPath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Get_Media_NoImage(_owinContext).ThumbPath);
 
                 TinaShopV2.Models.Entity.Media image = null;
                 if (image == null && !string.IsNullOrEmpty(this.ProductCode))
@@ -59,7 +59,7 @@ namespace TinaShopV2.Areas.Administration.Models.Product
             }
         }
 
-        public IEnumerable<TinaShopV2.Models.Entity.Media> GetImages()
+        public IEnumerable<TinaShopV2.Models.Entity.Media> Get_Images()
         {
             if (!string.IsNullOrEmpty(ProductCode))
             {
@@ -67,7 +67,7 @@ namespace TinaShopV2.Areas.Administration.Models.Product
                 if (images.Count() > 0)
                     return images;
             }
-            return new List<TinaShopV2.Models.Entity.Media>() { GlobalObjects.Get_Media_NoImage(_owinContext) };
+            return new List<TinaShopV2.Models.Entity.Media>() {  };
         }
 
         [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(Errors))]
@@ -88,9 +88,18 @@ namespace TinaShopV2.Areas.Administration.Models.Product
         [Display(Name = "Brand", ResourceType = typeof(Commons))]
         public string BrandCode { get; set; }
 
-        public TinaShopV2.Models.Entity.Brand GetBrand()
+        [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
+        [Display(Name = "Category", ResourceType = typeof(Commons))]
+        public string CatCode { get; set; }
+
+        public TinaShopV2.Models.Entity.Brand Get_Brand()
         {
             return _dbContextService.Brands.Find(BrandCode);
+        }
+
+        public TinaShopV2.Models.Entity.Category Get_Category()
+        {
+            return _dbContextService.Categories.Find(CatCode);
         }
 
         [Display(Name = "CanSale", ResourceType = typeof(Commons))]
@@ -112,55 +121,6 @@ namespace TinaShopV2.Areas.Administration.Models.Product
 
     public class ResponseProductViewModel
     {
-        //private string imagePath;
-        //[Display(Name = "Image", ResourceType = typeof(Commons))]
-        //public string ImagePath
-        //{
-        //    get
-        //    {
-        //        imagePath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Media_NoImage_Path);
-
-        //        TinaShopV2.Models.Entity.Media image = null;
-        //        if (image == null && !string.IsNullOrEmpty(this.ProductCode))
-        //            image = _owinContext.Medias.Where(m => m.ProductCode == this.ProductCode && m.TypeId == GlobalObjects.MediaType_ProductImage_Id).OrderBy(m => m.Name).FirstOrDefault();
-
-        //        if (image != null)
-        //            imagePath = Path.Combine(GlobalObjects.MediaImageFolderPath, image.FilePath);
-
-        //        return imagePath;
-        //    }
-        //}
-
-        //private string imageThumbPath;
-        //[Display(Name = "Image", ResourceType = typeof(Commons))]
-        //public string ImageThumbPath
-        //{
-        //    get
-        //    {
-        //        imageThumbPath = Path.Combine(GlobalObjects.MediaImageFolderPath, GlobalObjects.Media_NoImageThumb_Path);
-
-        //        TinaShopV2.Models.Entity.Media image = null;
-        //        if (image == null && !string.IsNullOrEmpty(this.ProductCode))
-        //            image = _owinContext.Medias.Where(m => m.ProductCode == this.ProductCode && m.TypeId == GlobalObjects.MediaType_ProductImage_Id).OrderBy(m => m.Name).FirstOrDefault();
-
-        //        if (image != null)
-        //            imageThumbPath = Path.Combine(GlobalObjects.MediaImageFolderPath, image.ThumbPath);
-
-        //        return imageThumbPath;
-        //    }
-        //}
-
-        //public IEnumerable<TinaShopV2.Models.Entity.Media> GetImages()
-        //{
-        //    if (!string.IsNullOrEmpty(ProductCode))
-        //    {
-        //        var images = _owinContext.Medias.Where(m => m.TypeId == GlobalObjects.MediaType_ProductImage_Id && m.ProductCode == ProductCode).OrderBy(m => m.Name);
-        //        if (images.Count() > 0)
-        //            return images;
-        //    }
-        //    return new List<TinaShopV2.Models.Entity.Media>() { GlobalObjects.Media_NoImage };
-        //}
-
         [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(Errors))]
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "ProductCode", ResourceType = typeof(Commons))]
@@ -178,11 +138,6 @@ namespace TinaShopV2.Areas.Administration.Models.Product
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(Errors))]
         [Display(Name = "Brand", ResourceType = typeof(Commons))]
         public string BrandCode { get; set; }
-
-        //public TinaShopV2.Models.Entity.Brand GetBrand()
-        //{
-        //    return _owinContext.Brands.Find(BrandCode);
-        //}
 
         [Display(Name = "CanSale", ResourceType = typeof(Commons))]
         public bool CanSale { get; set; }

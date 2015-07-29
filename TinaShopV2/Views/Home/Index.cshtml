@@ -3,42 +3,9 @@
     Layout = "~/Views/Shared/_LimoLayout.cshtml";
 }
 
-<!--Hero Slider-->
-<section class="hero-slider">
-    <div class="master-slider" id="hero-slider">
+@Html.Action("Sliders", "Home", null)
 
-        <!--Slide 1-->
-        <div class="ms-slide" data-delay="7">
-            <div class="overlay"></div>
-            <img src="Content/LIMO/masterslider/blank.gif" data-src="Content/LIMO/img/hero/slideshow/slide_1.jpg" alt="" />
-            <h2 style="width: 456px; left: 110px; top: 110px;" class="dark-color ms-layer" data-effect="top(50,true)" data-duration="700" data-delay="250" data-ease="easeOutQuad">Look for all bags at our shop!</h2>
-            <p style="width: 456px; left: 110px; top: 210px;" class="dark-color ms-layer" data-effect="back(500)" data-duration="700" data-delay="500" data-ease="easeOutQuad">In this slider (which works both on touch screen and desktop devices) you can change the title, the description and button texts. It's all that you need to demonstrate your top rated products. </p>
-            <div style="left: 110px; top: 300px;" class="ms-layer button" data-effect="left(50,true)" data-duration="500" data-delay="750" data-ease="easeOutQuad"><a class="btn btn-black" href="#">Go to catalog</a></div>
-            <div style="left: 350px; top: 300px;" class="ms-layer button" data-effect="bottom(50,true)" data-duration="700" data-delay="950" data-ease="easeOutQuad"><a class="btn btn-primary" href="#">Browse all</a></div>
-        </div>
-
-        <!--Slide 2-->
-        <div class="ms-slide" data-delay="7">
-            <span class="overlay"></span>
-            <img src="Content/LIMO/masterslider/blank.gif" data-src="Content/LIMO/img/hero/slideshow/slide_2.jpg" alt="Necessaire" />
-            <h2 style="width: 456px; left: 110px; top: 110px;" class="dark-color ms-layer" data-effect="bottom(50,true)" data-duration="700" data-delay="250" data-ease="easeOutQuad">Necessaire</h2>
-            <p style="width: 456px; left: 110px; top: 210px;" class="dark-color ms-layer" data-effect="bottom(50,true)" data-duration="700" data-delay="500" data-ease="easeOutQuad">In this slider (which works both on touch screen and desktop devices) you can change the title, the description and button texts. It's all that you need to demonstrate your top rated products. </p>
-            <div style="left: 110px; top: 330px;" class="ms-layer button" data-effect="left(50,true)" data-duration="500" data-delay="750" data-ease="easeOutQuad"><a class="btn btn-black" href="#">Go to catalog</a></div>
-            <div style="left: 350px; top: 330px;" class="ms-layer button" data-effect="bottom(50,true)" data-duration="700" data-delay="950" data-ease="easeOutQuad"><a class="btn btn-primary" href="#">Browse all</a></div>
-        </div>
-
-        <!--Slide 3-->
-        <div class="ms-slide" data-delay="7">
-            <div class="overlay"></div>
-            <img src="Content/LIMO/masterslider/blank.gif" data-src="Content/LIMO/img/hero/slideshow/slide_2.jpg" alt="Crescent" />
-            <h2 style="width: 456px; left: 110px; top: 110px;" class="dark-color ms-layer" data-effect="left(50,true)" data-duration="700" data-delay="250" data-ease="easeOutQuad">Crescent</h2>
-            <p style="width: 456px; left: 110px; top: 210px;" class="dark-color ms-layer" data-effect="left(50,true)" data-duration="700" data-delay="500" data-ease="easeOutQuad">In this slider (which works both on touch screen and desktop devices) you can change the title, the description and button texts. It's all that you need to demonstrate your top rated products. </p>
-            <div style="left: 110px; top: 330px;" class="ms-layer button" data-effect="left(50,true)" data-duration="500" data-delay="750" data-ease="easeOutQuad"><a class="btn btn-black" href="#">Go to catalog</a></div>
-            <div style="left: 350px; top: 330px;" class="ms-layer button" data-effect="bottom(50,true)" data-duration="700" data-delay="950" data-ease="easeOutQuad"><a class="btn btn-primary" href="#">Browse all</a></div>
-        </div>
-
-    </div>
-</section><!--Hero Slider Close-->
+@*
 <!--Categories-->
 <section class="cat-tiles">
     <div class="container">
@@ -47,48 +14,49 @@
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>Leather belt</p>
                 </a>
             </div>
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>Wallet</p>
                 </a>
             </div>
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>Gloves</p>
                 </a>
             </div>
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>City bag</p>
                 </a>
             </div>
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>Backpack</p>
                 </a>
             </div>
             <!--Category-->
             <div class="category col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="#">
-                    <img src="Content/LIMO/img/categories/1.png" alt="1" />
+                    <img src="/Content/LIMO/img/categories/1.png" alt="1" />
                     <p>Belts</p>
                 </a>
             </div>
         </div>
     </div>
 </section><!--Categories Close-->
+
 <!--Catalog Grid-->
 <section class="catalog-grid">
     <div class="container">
@@ -102,7 +70,7 @@
                     </div>
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -121,7 +89,7 @@
                     <div class="price-label">715,00 $</div>
                     <div class="price-label old-price">920,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -139,7 +107,7 @@
                     </div>
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -154,7 +122,7 @@
                 <div class="tile">
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -169,7 +137,7 @@
                 <div class="tile">
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -185,7 +153,7 @@
                     <div class="price-label">715,00 $</div>
                     <div class="price-label old-price">920,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -200,7 +168,7 @@
                 <div class="tile">
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -215,7 +183,7 @@
                 <div class="tile">
                     <div class="price-label">715,00 $</div>
                     <a href="#">
-                        <img src="Content/LIMO/img/catalog/1.png" alt="1" />
+                        <img src="/Content/LIMO/img/catalog/1.png" alt="1" />
                         <span class="tile-overlay"></span>
                     </a>
                     <div class="footer">
@@ -228,6 +196,7 @@
         </div>
     </div>
 </section><!--Catalog Grid Close-->
+
 <!--Tabs Widget-->
 <section class="tabs-widget">
     <!-- Nav tabs -->
@@ -244,7 +213,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$14.95</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/1.jpg" alt="1" />
+                            <img src="/Content/LIMO/img/media/1.jpg" alt="1" />
                         </a>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-5">
@@ -252,7 +221,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$19.40</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/2.jpg" alt="2" />
+                            <img src="/Content/LIMO/img/media/2.jpg" alt="2" />
                         </a>
                     </div>
                 </div>
@@ -262,7 +231,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$24.15</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/3.jpg" alt="3" />
+                            <img src="/Content/LIMO/img/media/3.jpg" alt="3" />
                         </a>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-5">
@@ -270,7 +239,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$24.15</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/4.jpg" alt="4" />
+                            <img src="/Content/LIMO/img/media/4.jpg" alt="4" />
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
@@ -278,7 +247,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$24.15</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/5.jpg" alt="5" />
+                            <img src="/Content/LIMO/img/media/5.jpg" alt="5" />
                         </a>
                     </div>
                 </div>
@@ -292,7 +261,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$14.95</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/6.jpg" alt="1" />
+                            <img src="/Content/LIMO/img/media/6.jpg" alt="1" />
                         </a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -300,7 +269,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$19.40</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/6.jpg" alt="2" />
+                            <img src="/Content/LIMO/img/media/6.jpg" alt="2" />
                         </a>
                     </div>
                 </div>
@@ -310,7 +279,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$24.15</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/6.jpg" alt="3" />
+                            <img src="/Content/LIMO/img/media/6.jpg" alt="3" />
                         </a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -318,7 +287,7 @@
                             <div class="overlay">
                                 <div class="descr"><div>Product Name<span>$24.15</span></div></div>
                             </div>
-                            <img src="Content/LIMO/img/media/6.jpg" alt="4" />
+                            <img src="/Content/LIMO/img/media/6.jpg" alt="4" />
                         </a>
                     </div>
                 </div>
@@ -326,6 +295,7 @@
         </div>
     </div>
 </section><!--Tabs Widget Close-->
+
 <!--Posts/Twitter Widget-->
 <section class="posts-widget">
     <div class="tw-bg"></div>
@@ -341,7 +311,7 @@
                         <!--Post-->
                         <div class="post row">
                             <div class="col-lg-6 col-sm-6">
-                                <a href="#"><img src="Content/LIMO/img/posts-widget/1.jpg" alt="1" /></a>
+                                <a href="#"><img src="/Content/LIMO/img/posts-widget/1.jpg" alt="1" /></a>
                             </div>
                             <div class="col-lg-6 col-sm-6">
                                 <h3><a href="#">An interesting post</a></h3>
@@ -353,7 +323,7 @@
                         <!--Post-->
                         <div class="post row">
                             <div class="col-lg-6 col-sm-6">
-                                <a href="#"><img src="Content/LIMO/img/posts-widget/1.jpg" alt="2" /></a>
+                                <a href="#"><img src="/Content/LIMO/img/posts-widget/1.jpg" alt="2" /></a>
                             </div>
                             <div class="col-lg-6 col-sm-6">
                                 <h3><a href="#">Review post</a></h3>
@@ -414,62 +384,48 @@
         </div>
         <div class="gallery-grid">
             <!--Item-->
-            <div class="gallery-item" data-groups='["City bags"]' data-src="Content/LIMO/img/gallery-widget/1.jpg">
+            <div class="gallery-item" data-groups='["City bags"]' data-src="/Content/LIMO/img/gallery-widget/1.jpg">
                 <a href="img/gallery-widget/1.jpg">
                     <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/1.jpg" alt="1" />
+                    <img src="/Content/LIMO/img/gallery-widget/1.jpg" alt="1" />
                 </a>
             </div>
             <!--Item-->
-            <div class="gallery-item" data-groups='["City bags"]' data-src="Content/LIMO/img/gallery-widget/2.jpg">
+            <div class="gallery-item" data-groups='["City bags"]' data-src="/Content/LIMO/img/gallery-widget/2.jpg">
                 <a href="img/gallery-widget/2.jpg">
                     <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/2.jpg" alt="2" />
+                    <img src="/Content/LIMO/img/gallery-widget/2.jpg" alt="2" />
                 </a>
             </div>
             <!--Item-->
             <div class="gallery-item" data-groups='["video"]' data-src="https://www.youtube.com/watch?v=AZ3AVR7VnqA">
                 <a href="https://www.youtube.com/watch?v=hdEAWW7tZSA">
                     <div class="overlay"><span><i class="icon-music-play"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/5.jpg" alt="3" />
+                    <img src="/Content/LIMO/img/gallery-widget/5.jpg" alt="3" />
                 </a>
             </div>
             <!--Item-->
-            <div class="gallery-item" data-groups='["Belts"]' data-src="Content/LIMO/img/gallery-widget/4.jpg">
+            <div class="gallery-item" data-groups='["Belts"]' data-src="/Content/LIMO/img/gallery-widget/4.jpg">
                 <a href="img/gallery-widget/4.jpg">
                     <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/4.jpg" alt="4" />
+                    <img src="/Content/LIMO/img/gallery-widget/4.jpg" alt="4" />
                 </a>
             </div>
             <!--Item-->
-            <div class="gallery-item" data-groups='["Gloves"]' data-src="Content/LIMO/img/gallery-widget/5.jpg">
+            <div class="gallery-item" data-groups='["Gloves"]' data-src="/Content/LIMO/img/gallery-widget/5.jpg">
                 <a href="img/gallery-widget/5.jpg">
                     <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/5.jpg" alt="5" />
+                    <img src="/Content/LIMO/img/gallery-widget/5.jpg" alt="5" />
                 </a>
             </div>
             <!--Item-->
-            <div class="gallery-item" data-groups='["Gloves"]' data-src="Content/LIMO/img/gallery-widget/5.jpg">
+            <div class="gallery-item" data-groups='["Gloves"]' data-src="/Content/LIMO/img/gallery-widget/5.jpg">
                 <a href="img/gallery-widget/5.jpg">
                     <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                    <img src="Content/LIMO/img/gallery-widget/5.jpg" alt="6" />
+                    <img src="/Content/LIMO/img/gallery-widget/5.jpg" alt="6" />
                 </a>
             </div>
         </div>
     </div>
 </section><!--Gallery Widget Close-->
-<!--Brands Carousel Widget-->
-<section class="brand-carousel">
-    <div class="container">
-        <h2>Brands in our shop</h2>
-        <div class="inner">
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-            <a class="item" href="#"><img src="Content/LIMO/img/brands/1.png" alt="1" /></a>
-        </div>
-    </div>
-</section><!--Brands Carousel Close-->
+*@

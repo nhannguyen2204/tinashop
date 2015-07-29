@@ -229,6 +229,7 @@
     <Compile Include="Areas\Administration\Controllers\AccountController.cs" />
     <Compile Include="Areas\Administration\Controllers\AddressesController.cs" />
     <Compile Include="Areas\Administration\Controllers\BrandsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\CatalogsController.cs" />
     <Compile Include="Areas\Administration\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Administration\Controllers\ColorsController.cs" />
     <Compile Include="Areas\Administration\Controllers\ErrorsController.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Areas\Administration\Models\AccountViewModels.cs" />
     <Compile Include="Areas\Administration\Models\Address\AddressViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Brand\BrandViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\Catalog\CatalogViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Category\CategoryViewModel.cs" />
     <Compile Include="Areas\Administration\Models\Color\ColorViewModel.cs" />
     <Compile Include="Areas\Administration\Models\CustomControls\PagerViewModel.cs" />
@@ -279,12 +281,14 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Common\GlobalObjects.cs" />
     <Compile Include="Common\Attributes\InternationalizationAttribute.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\BasicJsonResponse.cs" />
     <Compile Include="Models\Entity\Address.cs" />
     <Compile Include="Models\Entity\Bill.cs" />
     <Compile Include="Models\Entity\BillDetail.cs" />
@@ -321,6 +325,8 @@
     <Compile Include="Models\Entity\TinaMenu.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MessageSummary.cs" />
+    <Compile Include="Models\ProductFilterIndexViewModel.cs" />
+    <Compile Include="Models\ProductFOViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -531,6 +537,7 @@
     <Content Include="Content\LIMO\css\colors\color-scheme5.css" />
     <Content Include="Content\LIMO\css\colors\color-scheme6.css" />
     <Content Include="Content\LIMO\css\colors\color-scheme7.css" />
+    <Content Include="Content\LIMO\css\MyStyles.css" />
     <Content Include="Content\LIMO\css\styles.css" />
     <Content Include="Content\LIMO\delivery.html" />
     <Content Include="Content\LIMO\favicon.ico" />
@@ -607,6 +614,7 @@
     <Content Include="Content\LIMO\img\offers\special-offer-bg.png" />
     <Content Include="Content\LIMO\img\offers\special-offer.png" />
     <Content Include="Content\LIMO\img\offers\th_1.png" />
+    <Content Include="Content\LIMO\img\official-logo-white.png" />
     <Content Include="Content\LIMO\img\overlays\overlay-primary-color2.png" />
     <Content Include="Content\LIMO\img\overlays\overlay-primary-color3.png" />
     <Content Include="Content\LIMO\img\overlays\overlay-primary-color4.png" />
@@ -625,11 +633,13 @@
     <Content Include="Content\LIMO\index.html" />
     <Content Include="Content\LIMO\js\404.js" />
     <Content Include="Content\LIMO\js\coming-soon.js" />
+    <Content Include="Content\LIMO\js\HeadScripts.js" />
     <Content Include="Content\LIMO\js\libs\jquery-1.11.1.min.js" />
     <Content Include="Content\LIMO\js\libs\jquery-ui-1.10.4.custom.min.js" />
     <Content Include="Content\LIMO\js\libs\jquery.easing.min.js" />
     <Content Include="Content\LIMO\js\libs\modernizr.custom.js" />
     <Content Include="Content\LIMO\js\min\404.min.js" />
+    <Content Include="Content\LIMO\js\MyScripts.js" />
     <Content Include="Content\LIMO\js\plugins\bootstrap.min.js" />
     <Content Include="Content\LIMO\js\plugins\icheck.min.js" />
     <Content Include="Content\LIMO\js\plugins\jquery.countdown.min.js" />
@@ -1488,7 +1498,6 @@
     <Content Include="bundles\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="bundles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="bundles\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Areas\Administration\Views\Shared\CustomControls\_PagerPartial.cshtml" />
     <Content Include="Areas\Administration\Views\Category\Index.cshtml" />
     <Content Include="Areas\Administration\Views\Category\Details.cshtml" />
     <Content Include="Areas\Administration\Views\Category\Create.cshtml" />
@@ -1499,6 +1508,11 @@
     <Content Include="Areas\Administration\Views\Sliders\Create.cshtml" />
     <Content Include="Areas\Administration\Views\Sliders\Edit.cshtml" />
     <Content Include="Areas\Administration\Views\Sliders\Delete.cshtml" />
+    <Content Include="Areas\Administration\Views\Catalogs\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Catalogs\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Catalogs\Create.cshtml" />
+    <Content Include="Areas\Administration\Views\Catalogs\Edit.cshtml" />
+    <Content Include="Areas\Administration\Views\Catalogs\Delete.cshtml" />
     <None Include="connectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -1761,6 +1775,22 @@
     <Content Include="Views\Errors\Http404.cshtml" />
     <Content Include="Views\Home\ComingSoon.cshtml" />
     <Content Include="Views\Shared\_LimoLayout.cshtml" />
+    <Content Include="Views\Shared\_CategoryMenuPartial.cshtml" />
+    <Content Include="Views\Home\_SlidersPartial.cshtml" />
+    <Content Include="Views\Home\Products.cshtml" />
+    <Content Include="Views\Shared\_MainMenuPartial.cshtml" />
+    <Content Include="Views\Shared\_MainToolbarPartial.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Shared\_BrandsPartial.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
+    <Content Include="Views\Products\_ProductListingPartial.cshtml" />
+    <Content Include="Views\Products\_BrandListingPartial.cshtml" />
+    <Content Include="Views\Products\_CategoryListingPartial.cshtml" />
+    <Content Include="Views\Products\_ColorListingPartial.cshtml" />
+    <Content Include="Views\Products\_PriceFilterPartial.cshtml" />
+    <Content Include="Views\Products\Details.cshtml" />
+    <Content Include="Views\Shared\_ProductListingFOPagerPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

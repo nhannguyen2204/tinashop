@@ -1,0 +1,22 @@
+﻿.menu .catalog li .submenu {
+    width: 230px;
+    min-height: 0px;
+}
+
+    .menu .catalog li .submenu .sub-submenu {
+        background-color: white;
+        border-color: #56a09c;
+    }
+
+.product-tile-container {
+    height: 260px;
+    overflow: hidden;
+}
+
+.selected {
+    font-weight: bold;
+}
+
+#LoadingModal .modal-backdrop {
+    height: 0;
+}

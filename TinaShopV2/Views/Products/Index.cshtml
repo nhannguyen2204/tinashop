@@ -1,0 +1,37 @@
+﻿@using TinaShopV2.Common;
+
+@model TinaShopV2.Models.ProductFilterIndexViewModel
+
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Views/Shared/_LimoLayout.cshtml";
+}
+
+@section Header{
+<!--Filters Modal-->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button></div>
+            <div class="modal-body">
+                <!--Here goes filters dynamically pasted by jQuery-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Filters Toggle-->
+<div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><i class="fa fa-filter"></i></div>
+}
+
+<!--Breadcrumbs-->
+<ol class="breadcrumb">
+    <li><a href="/">Trang chủ</a></li>
+    <li>@ViewBag.Title</li>
+</ol><!--Breadcrumbs Close-->
+<!--Catalog Grid-->
+<section class="catalog-grid">
+    <div class="container" id="product-listing-container">
+        @Html.Action("ProductListing", "Products", Model)
+    </div>
+</section><!--Catalog Grid Close-->

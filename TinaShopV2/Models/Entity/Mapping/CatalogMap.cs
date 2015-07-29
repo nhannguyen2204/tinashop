@@ -10,9 +10,9 @@ namespace TinaShopV2.Models.Entity.Mapping
             // Primary Key
             this.HasKey(t => t.Id);
 
-            // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            //// Properties
+            //this.Property(t => t.Id)
+            //    .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.Name)
                 .IsRequired()
@@ -31,6 +31,7 @@ namespace TinaShopV2.Models.Entity.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.MediaId).HasColumnName("MediaId");
+            this.Property(t => t.IsPublished).HasColumnName("IsPublished");
             this.Property(t => t.CreatedUserId).HasColumnName("CreatedUserId");
             this.Property(t => t.UpdatedUserId).HasColumnName("UpdatedUserId");
             this.Property(t => t.CreatedDatetime).HasColumnName("CreatedDatetime");
